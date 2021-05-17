@@ -1,50 +1,75 @@
 import React from 'react';
+import clsx from 'clsx';
 
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import { useTheme } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
+import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu';
+import Drawer from '@material-ui/core/Drawer';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import Divider from '@material-ui/core/Divider';
+import HomeIcon from '@material-ui/icons/Home'
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import { Omit } from '@material-ui/types';
 
+import { HashRouter as Router, Switch, Route, Link as RouterLink, LinkProps as RouterLinkProps, Redirect } from 'react-router-dom';
 import { QueryClientProvider } from 'react-query'
 import { ReactQueryDevtools } from 'react-query/devtools'
 
 import './App.css';
 import logo from './aiida-logo.svg';
-import { queryClient, AiidaSettingsContext } from './aiidaClient';
-import { AiidaXTree } from './tree';
+import { AiidaSettingsContext, queryClient } from './aiidaClient';
+import { RocketIcon } from './icons'
+import { PageHome } from './PageHome';
+import { PageProcesses } from './PageProcesses';
+import { useStyles } from './styles';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      flexGrow: 1,
-    },
-    title: {
-      flexGrow: 1,
-    },
-    input: {
-      marginRight: theme.spacing(2)
-    },
-    logo: {
-      maxHeight: 40
-    },
-    mainGrid: {
-      paddingTop: theme.spacing(1),
-      paddingLeft: theme.spacing(10),
-      paddingRight: theme.spacing(10)
-    },
-    paper: {
-      padding: theme.spacing(2),
-      color: theme.palette.text.secondary,
-    }
-  }),
-);
+interface ListItemLinkProps {
+  icon?: React.ReactElement;
+  primary: string;
+  to: string;
+}
+
+function ListItemLink(props: ListItemLinkProps) {
+  const { icon, primary, to } = props;
+
+  const renderLink = React.useMemo(
+    () =>
+      React.forwardRef<any, Omit<RouterLinkProps, 'to'>>((itemProps, ref) => (
+        <RouterLink to={to} ref={ref} {...itemProps} />
+      )),
+    [to],
+  );
+
+  return (
+    <li>
+      <ListItem button component={renderLink} >
+        {icon ? <ListItemIcon>{icon}</ListItemIcon> : null}
+        <ListItemText primary={primary} />
+      </ListItem>
+    </li>
+  );
+}
 
 
 export function App() {
   const classes = useStyles();
+  const theme = useTheme();
+
+  const [drawerOpen, setDrawerOpen] = React.useState(false);
+  const handleDrawerOpen = () => {
+    setDrawerOpen(true);
+  };
+  const handleDrawerClose = () => {
+    setDrawerOpen(false);
+  };
 
   const urlPattern = new RegExp('^https?:\\/\\/')
   let [baseUrl, setBaseUrl] = React.useState({ value: 'http://0.0.0.0:5000', error: false });
@@ -53,70 +78,100 @@ export function App() {
   };
 
   return (
-    <div className={classes.root}>
+    <Router>
 
-      <AppBar position="static">
-        <Toolbar>
-          <Typography variant="h6" className={classes.title}>AiiDA Dashboard</Typography>
-          <TextField
-            id="rest-url"
-            className={classes.input}
-            label="REST URL"
-            value={baseUrl.value}
-            error={baseUrl.error}
-            onChange={handleUrlChange}
-          />
-          <img src={logo} alt="aiida-logo" className={classes.logo} />
-        </Toolbar>
-      </AppBar>
+      <div className={classes.root}>
 
-      <QueryClientProvider client={queryClient}>
+        <AppBar
+          position="sticky"
+          className={clsx(classes.appBar, {
+            [classes.appBarShift]: drawerOpen,
+          })}
+        >
+          <Toolbar>
+            <IconButton
+              edge="start"
+              onClick={handleDrawerOpen}
+              className={clsx(classes.menuButton, {
+                [classes.hide]: drawerOpen,
+              })}
+              color="inherit"
+              aria-label="open drawer">
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" className={classes.title}>AiiDA Dashboard</Typography>
+            <TextField
+              id="rest-url"
+              className={classes.inputRestUrl}
+              label="REST URL"
+              value={baseUrl.value}
+              error={baseUrl.error}
+              onChange={handleUrlChange}
+              autoComplete="http://0.0.0.0:5000"
+              InputProps={{
+                className: classes.inputRestUrlText
+              }}
+            />
+            <img src={logo} alt="AiiDA" className={classes.toolbarLogo} />
+          </Toolbar>
+        </AppBar>
 
-        <Grid container spacing={2} className={classes.mainGrid}>
+        <Drawer
+          variant="permanent"
+          className={clsx(classes.drawer, {
+            [classes.drawerOpen]: drawerOpen,
+            [classes.drawerClose]: !drawerOpen,
+          })}
+          classes={{
+            paper: clsx({
+              [classes.drawerOpen]: drawerOpen,
+              [classes.drawerClose]: !drawerOpen,
+            }),
+          }}
+        >
+          <div className={classes.toolbar}>
+            <IconButton onClick={handleDrawerClose}>
+              {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+            </IconButton>
+          </div>
+          <Divider />
 
-          <Grid item xs={12} sm={6}>
-            <Paper variant="outlined" className={classes.paper}>
-              <InfoBox />
-            </Paper>
-          </Grid>
+          {/* TODO signify which page is selected */}
+          <List>
+            <ListItemLink to="/" primary="Home" icon={<HomeIcon />} />
+            <ListItemLink to="/process" primary="Processes" icon={<RocketIcon />} />
+          </List>
 
-          <Grid item xs={12} sm={6}>
-            <Paper variant="outlined" className={classes.paper}>
-              <h2>AiiDA Processes</h2>
-              <AiidaSettingsContext.Provider value={{ baseUrl: baseUrl.value, enabled: !baseUrl.error }}>
-                <AiidaXTree />
-              </AiidaSettingsContext.Provider>
-            </Paper>
-          </Grid>
+        </Drawer>
 
-        </Grid>
+        <QueryClientProvider client={queryClient}>
 
-        <ReactQueryDevtools initialIsOpen={false} />
-      </QueryClientProvider>
+          <AiidaSettingsContext.Provider value={{ baseUrl: baseUrl.value, enabled: !baseUrl.error }}>
+            <Switch>
+              <Route exact path="/" component={PageHome} />
+              <Route path="/process" component={() => PageProcesses(baseUrl)} />
+              <Route path="/404" component={NotFound} />
+              <Redirect to="/404" />
+            </Switch>
+          </AiidaSettingsContext.Provider>
 
-    </div>
+          <ReactQueryDevtools initialIsOpen={false} />
+        </QueryClientProvider>
+
+      </div>
+
+    </Router>
   );
 }
 
-export function InfoBox(): JSX.Element {
+function NotFound(): JSX.Element {
+  // TODO Offset
   return (
-    <aside>
-      <h2>Introduction</h2>
-      <p>
-        This is a demonstration of the AiiDA Dashboard:<br />
-        A web-based UI for interfacing with AiiDA.
-      </p>
-      <p>
-        AiiDA Dashboard uses industry leading libraries, to create a beautiful and responsive UI:
-      </p>
-      <ul>
-        <li><a href="https://reactjs.org/">React</a>: A library for building user interfaces, maintained by Facebook and with users including Whatsapp, Dropbox and Netflix.</li>
-        <li><a href="https://material-ui.com">Material-UI</a>: A React component library that implements <a href="https://material.io/design">Google’s Material Design</a> guidelines.</li>
-        <li><a href="https://react-query.tanstack.com/">react-query</a>: A React component for synchronizing server data (from AiiDA) with the UI.</li>
-      </ul>
-      <p>
-        AiiDA Dashboard can be used as a standalone Web UI, or it also provides React components and facilitates wrapping into a JupyterLab <a href="https://jupyterlab.readthedocs.io/en/stable/extension/virtualdom.html">extension widget</a>.
-      </p>
-    </aside>
+    <div>
+      <h1>404 - Not Found!</h1>
+      <RouterLink to="/">
+        Go Home
+      </RouterLink>
+    </div>
   )
 }
