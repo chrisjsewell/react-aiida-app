@@ -1,8 +1,31 @@
-# Getting Started with Create React App
+# react-aiida-app
+
+This project is a continuation of [jlab_aiidatree](https://github.com/chrisjsewell/jlab_aiidatree),
+in which we built a working prototype for a JupyterLab extension.
+
+During this development it was noted that you can embed [React components](https://reactjs.org/) inside of JupyterLab (see [JupyterLab/React](https://jupyterlab.readthedocs.io/en/stable/extension/virtualdom.html)).
+
+The hope, therefore, is that we can develop this package as a standalone app
+(which could can used utilised directly via a web server),
+but also use it as a dependency to generate most of the JupyterLab extension, via React components.
+
+React is an industry leading library, for creating beautiful and responsive UIs,
+maintained by Facebook and with users including Whatsapp, Dropbox and Netflix.
+We also utilise other "best-practice" React components:
+
+- [Material-UI](https://material-ui.com): A React component library that implements Google’s [Material Design guidelines](https://material.io/design)
+- [react-query](https://react-query.tanstack.com/): A React component for synchronizing server data (from AiiDA) with the UI.
+
+The benefit of also using JupyterLab, is (a) it provides a framework within which to run the app,
+and (b) it allows us an alternate route to interface with AiiDA:
+via the "private" REST API interface between the JupyterLab backend and frontend.
+
+Using this REST API, will allow us easy access to parts of the AiiDA API that are yet to be exposed in REST, whilst maintaining that formal protocol (enforcing separation of concerns).
+We can then use this to essentially prototype additions to the AiiDA REST API.
+
+## Project initialisation with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-## Available Scripts
 
 In the project directory, you can run:
 
@@ -46,31 +69,31 @@ You can learn more in the [Create React App documentation](https://facebook.gith
 To learn React, check out the [React documentation](https://reactjs.org/).
 
 
-## Development
+## Development Notes
 
 ### Initial creation of the app
 
 cd ~/Documents/GitHub
 (install nodejs)
-npx create-react-app react-aiida-tree --template typescript
-cd react-aiida-tree
+npx create-react-app react-aiida-app --template typescript
+cd react-aiida-app
 (see https://stackoverflow.com/a/39604469/5033292 for having code available in PATH)
 code .
 npm start
 
 ### Creating an AiiDA REST API test server
 
-docker run -d -p 5001:5001 --name react-aiida-dashboard aiidateam/aiida-core:1.6.3
-docker exec -t react-aiida-dashboard wait-for-services
+docker run -d -p 5001:5001 --name react-aiida-app aiidateam/aiida-core:1.6.3
+docker exec -t react-aiida-app wait-for-services
 
 In other tab, as root:
 
-docker exec -it react-aiida-dashboard bash
+docker exec -it react-aiida-app bash
 conda install flask-cors~=3.0 flask-restful~=0.3.7 flask~=1.1 pyparsing~=2.4 python-memcached~=1.59
 
 Then with user:
 
-docker exec -it --user aiida react-aiida-dashboard bash
+docker exec -it --user aiida react-aiida-app bash
 
 Too big for container import:
 verdi archive import "https://archive.materialscloud.org/record/file?filename=two_dimensional_database.aiida&file_id=98f1789b-d68e-46db-9c67-4ef8dd8c1ebf&record_id=648"

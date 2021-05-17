@@ -24,6 +24,7 @@ export interface IAiidaRestNode {
         | 'excepted'
         | 'killed'
         process_label?: string
+        exit_status?: number
     }
 }
 
@@ -39,11 +40,11 @@ export interface IAiidaRestResponse {
 }
 
 
-export async function fetchProcesses(baseUrl: string, page: number): Promise<{ nodes: IAiidaRestNode[], totalCount: number, perPage: number }> {
+export async function fetchNodes(baseUrl: string, nodeType: string, page: number): Promise<{ nodes: IAiidaRestNode[], totalCount: number, perPage: number }> {
     const perPage = 20
     // processState: 'attributes.process_state'
     // TODO better url join
-    const response = await fetch(`${baseUrl}/api/v4/nodes/page/${page}?perpage=${perPage}&orderby=-mtime&node_type=like=%22process%%22&attributes=true&attributes_filter=process_label,process_state`)
+    const response = await fetch(`${baseUrl}/api/v4/nodes/page/${page}?perpage=${perPage}&orderby=-mtime&node_type=like=%22${nodeType}%%22&attributes=true&attributes_filter=process_label,process_state,exit_status`)
     // TODO handle errors
     const totalCount = parseInt(response.headers.get('x-total-count') || '0')
     const responseJson = (await response.json()) as IAiidaRestResponse

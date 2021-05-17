@@ -1,23 +1,22 @@
 import React, { useContext } from 'react'
 
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
+import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
+import Collapse from '@material-ui/core/Collapse';
+import Divider from '@material-ui/core/Divider';
+import * as MuiIcons from '@material-ui/icons';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import Avatar from '@material-ui/core/Avatar';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
-import Pagination from '@material-ui/lab/Pagination';
 // import Typography from '@material-ui/core/Typography';
-import Collapse from '@material-ui/core/Collapse';
-import Divider from '@material-ui/core/Divider';
+
 import Alert from '@material-ui/lab/Alert';
+import Pagination from '@material-ui/lab/Pagination';
 
 import CircularProgress from '@material-ui/core/CircularProgress'
-import { ArrowBack, ArrowForward, DeviceUnknown, Inbox, Refresh, SyncDisabled } from '@material-ui/icons';
 
 import Tooltip from '@material-ui/core/Tooltip';
 import Chip from '@material-ui/core/Chip';
@@ -27,16 +26,18 @@ import MenuItem from '@material-ui/core/MenuItem';
 
 import { useQuery } from 'react-query'
 
-
-import { AiidaSettingsContext, fetchProcesses } from './aiidaClient'
-import { RocketIcon } from './icons'
+import { AiidaSettingsContext, fetchNodes } from './aiidaClient'
+import { GitBranchIcon, RocketIcon } from './icons'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         tree: {
             width: '100%',
-            maxWidth: 420,
+            maxWidth: 520,
             backgroundColor: theme.palette.background.paper,
+        },
+        refresh: {
+            marginRight: theme.spacing(1),
         },
         pagination: {
             paddingTop: theme.spacing(2),
@@ -44,10 +45,11 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         listChip: {
             marginLeft: theme.spacing(1),
-            marginBottom: theme.spacing(1)
+            marginBottom: theme.spacing(1),
+            float: "right"
         },
         item: {
-            maxWidth: 380,
+            maxWidth: 480,
             overflow: "hidden",
         },
         nested: {
@@ -67,17 +69,19 @@ interface IAiidaXElementProps {
     elementName?: string
     info?: string
     tooltip?: string
-    state?:
+    procLabel?: string
+    procState?:
     | 'created'
     | 'running'
     | 'waiting'
     | 'finished'
     | 'excepted'
     | 'killed'
+    procExit?: number
 }
 
 
-export function AiidaXTree(): JSX.Element {
+export function AiidaXNodeTree({nodePrefix}:{nodePrefix: string}): JSX.Element {
     /**
      * a React component housing a list of AiiDA elements
     */
@@ -89,7 +93,7 @@ export function AiidaXTree(): JSX.Element {
     };
     const aiidaSettings = useContext(AiidaSettingsContext)
     // TODO usePaginationQuery
-    const result = useQuery([aiidaSettings.baseUrl, 'processes', page], () => fetchProcesses(aiidaSettings.baseUrl, page), { enabled: aiidaSettings.enabled })
+    const result = useQuery([aiidaSettings.baseUrl, 'nodes', nodePrefix, page], () => fetchNodes(aiidaSettings.baseUrl, nodePrefix, page), { enabled: aiidaSettings.enabled })
 
     let element = <CircularProgress />
     let pages = 1
@@ -100,10 +104,12 @@ export function AiidaXTree(): JSX.Element {
                 {result.data.nodes.map((value) => {
                     return <AiidaXElement
                         pk={value.id}
-                        elementName='process'
-                        info={`${value.mtime}, ${value.node_type}, ${value.process_type}`}
+                        elementName={value.node_type.split(".").slice(0, 2).join(".")}
+                        info={`${value.mtime}, ${value.node_type}, ${value.process_type || ''}`}
                         tooltip={`${value.label}`}
-                        state={value.attributes?.process_state}
+                        procLabel={value.attributes?.process_label}
+                        procState={value.attributes?.process_state}
+                        procExit={value.attributes?.exit_status}
                     />
                 })}
             </List>
@@ -112,7 +118,12 @@ export function AiidaXTree(): JSX.Element {
         const error = result.error as { message: string }
         element = <Alert severity="error">{error.message}</Alert>
     } else if (result.isIdle) {
-        element = <Alert severity="info" icon={<SyncDisabled />}>Disabled</Alert>
+        element = <Alert severity="info" icon={<MuiIcons.SyncDisabled />}>Disabled</Alert>
+    }
+    let updateInfo = <span></span>
+    if (!!result.dataUpdatedAt) {
+        const date = new Date(result.dataUpdatedAt)
+        updateInfo = <span>Updated: {date.toLocaleString()}</span>
     }
 
     return (
@@ -120,11 +131,13 @@ export function AiidaXTree(): JSX.Element {
             <Button
                 variant="outlined"
                 color="primary"
-                startIcon={<Refresh />}
+                className={classes.refresh}
+                startIcon={<MuiIcons.Refresh />}
                 onClick={() => { result.refetch() }}
             >
                 Refresh
             </Button>
+            {updateInfo}
             <Pagination
                 className={classes.pagination}
                 color="primary"
@@ -138,9 +151,25 @@ export function AiidaXTree(): JSX.Element {
 
 // TODO better value type, custom icons (https://primer.style/octicons/packages/react)
 const ElementIconMap: { [key: string]: JSX.Element } = {
-    'default': <DeviceUnknown />,
-    'folder': <Inbox />,
-    'process': <RocketIcon />
+    'default': <MuiIcons.DeviceUnknown />,
+    'folder': <MuiIcons.Inbox />,
+    'data.array': <MuiIcons.GridOn />,
+    'data.bool': <MuiIcons.CheckCircle />,
+    'data.cif': <MuiIcons.ScatterPlot />,
+    'data.code': <MuiIcons.Code />,
+    'data.dict': <MuiIcons.ViewList />,
+    'data.float': <MuiIcons.AllInclusive />,
+    'data.folder': <MuiIcons.Inbox />,
+    'data.int': <MuiIcons.LooksOne />,
+    'data.list': <MuiIcons.List />,
+    'data.numeric': <MuiIcons.PlusOne />,
+    'data.orbital': <MuiIcons.BlurOn />,
+    'data.remote': <MuiIcons.OpenInNew />,
+    'data.str': <MuiIcons.FormatColorText />,
+    'data.structure': <MuiIcons.Grain />,
+    'process.calculation': <RocketIcon />,
+    'process.process': <RocketIcon />,
+    'process.workflow': <GitBranchIcon />,  // <MuiIcons.Share />,
 }
 
 
@@ -149,7 +178,7 @@ function AiidaXElement(props: IAiidaXElementProps): JSX.Element {
     const classes = useStyles();
 
     const key = props.elementName === undefined ? 'default' : props.elementName
-    let icon = ElementIconMap[key] || <DeviceUnknown />
+    let icon = ElementIconMap[key] || <MuiIcons.DeviceUnknown />
 
     const [open, setOpen] = React.useState(false);
     const handleClick = () => {
@@ -190,11 +219,11 @@ function AiidaXElement(props: IAiidaXElementProps): JSX.Element {
         )
     }
 
-    let title = <span>{props.pk}</span>
-    if (['excepted', 'killed'].includes(props.state || '')) {
-        title = <span>{props.pk}<Chip className={classes.listChip} label={props.state} variant="outlined" color="secondary" /></span>
-    } else if (props.state !== undefined) {
-        title = <span>{props.pk}<Chip className={classes.listChip} label={props.state} variant="outlined" color="primary" /></span>
+    let title = <span>{props.pk} {props.procLabel || ''}</span>
+    if (['excepted', 'killed'].includes(props.procState || '')) {
+        title = <span>{props.pk} {props.procLabel || ''}<Chip className={classes.listChip} label={`${props.procState} [${props.procExit}]`} variant="outlined" color="secondary" /></span>
+    } else if (!!props.procState) {
+        title = <span>{props.pk} {props.procLabel || ''}<Chip className={classes.listChip} label={`${props.procState} [${props.procExit}]`} variant="outlined" color="primary" /></span>
     }
 
 
@@ -227,25 +256,25 @@ function AiidaXElement(props: IAiidaXElementProps): JSX.Element {
                     <MenuItem onClick={handleContextClose}>Open Data</MenuItem>
                     <MenuItem onClick={handleContextClose}>Add to Group</MenuItem>
                 </Menu>
-                {open ? <ExpandMore /> : <ExpandLess />}
+                {open ? <MuiIcons.ExpandMore /> : <MuiIcons.ExpandLess />}
             </ListItem>
             <Collapse in={open} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
                     <ListItem button className={classes.nested}>
                         <ListItemIcon>
-                            <Inbox />
+                            <MuiIcons.Inbox />
                         </ListItemIcon>
                         <ListItemText primary="Repository" />
                     </ListItem>
                     <ListItem button className={classes.nested}>
                         <ListItemIcon>
-                            <ArrowForward />
+                            <MuiIcons.ArrowForward />
                         </ListItemIcon>
                         <ListItemText primary="Incoming" />
                     </ListItem>
                     <ListItem button className={classes.nested}>
                         <ListItemIcon>
-                            <ArrowBack />
+                            <MuiIcons.ArrowBack />
                         </ListItemIcon>
                         <ListItemText primary="Outgoing" />
                     </ListItem>

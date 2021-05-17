@@ -7,16 +7,13 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
-import HomeIcon from '@material-ui/icons/Home'
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import * as MuiIcons from '@material-ui/icons';
 import { Omit } from '@material-ui/types';
 
 import { HashRouter as Router, Switch, Route, Link as RouterLink, LinkProps as RouterLinkProps, Redirect } from 'react-router-dom';
@@ -26,9 +23,8 @@ import { ReactQueryDevtools } from 'react-query/devtools'
 import './App.css';
 import logo from './aiida-logo.svg';
 import { AiidaSettingsContext, queryClient } from './aiidaClient';
-import { RocketIcon } from './icons'
 import { PageHome } from './PageHome';
-import { PageProcesses } from './PageProcesses';
+import { PageProcesses } from './PageNodes';
 import { useStyles } from './styles';
 
 interface ListItemLinkProps {
@@ -97,7 +93,7 @@ export function App() {
               })}
               color="inherit"
               aria-label="open drawer">
-              <MenuIcon />
+              <MuiIcons.Menu />
             </IconButton>
             <Typography variant="h6" className={classes.title}>AiiDA Dashboard</Typography>
             <TextField
@@ -131,15 +127,15 @@ export function App() {
         >
           <div className={classes.toolbar}>
             <IconButton onClick={handleDrawerClose}>
-              {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+              {theme.direction === 'rtl' ? <MuiIcons.ChevronRight /> : <MuiIcons.ChevronLeft />}
             </IconButton>
           </div>
           <Divider />
 
           {/* TODO signify which page is selected */}
           <List>
-            <ListItemLink to="/" primary="Home" icon={<HomeIcon />} />
-            <ListItemLink to="/process" primary="Processes" icon={<RocketIcon />} />
+            <ListItemLink to="/" primary="Home" icon={<MuiIcons.Home />} />
+            <ListItemLink to="/process" primary="Node Explorer" icon={<MuiIcons.Explore />} />
           </List>
 
         </Drawer>
@@ -149,7 +145,7 @@ export function App() {
           <AiidaSettingsContext.Provider value={{ baseUrl: baseUrl.value, enabled: !baseUrl.error }}>
             <Switch>
               <Route exact path="/" component={PageHome} />
-              <Route path="/process" component={() => PageProcesses(baseUrl)} />
+              <Route path="/process" component={PageProcesses} />
               <Route path="/404" component={NotFound} />
               <Redirect to="/404" />
             </Switch>
