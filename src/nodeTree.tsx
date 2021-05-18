@@ -259,7 +259,7 @@ function AiidaXElement(props: IAiidaXElementProps): JSX.Element {
                 </Menu>
                 {open ? <MuiIcons.ExpandMore /> : <MuiIcons.ExpandLess />}
             </ListItem>
-            <Collapse in={open} timeout="auto" unmountOnExit>
+            <Collapse in={open} timeout="auto">
                 <List component="div" disablePadding>
                     <ListItem button className={classes.nested}>
                         <ListItemIcon>
