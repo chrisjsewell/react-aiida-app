@@ -55,9 +55,12 @@ function ListItemLink(props: ListItemLinkProps) {
 
 
 export function App({ showDevTools = true }): JSX.Element {
+
+  // style hooks
   const classes = useStyles();
   const theme = useTheme();
 
+  // component state for the left menu
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const handleDrawerOpen = () => {
     setDrawerOpen(true);
@@ -66,11 +69,16 @@ export function App({ showDevTools = true }): JSX.Element {
     setDrawerOpen(false);
   };
 
-  const urlPattern = new RegExp('^https?:\\/\\/')
-  let [baseUrl, setBaseUrl] = React.useState({ value: 'http://0.0.0.0:5000', error: false });
+  // component state for the AiiDA REST URL
+  // the URL is is stored, so that it persists between sessions and page refreshes
+  // we also validate to only allow http/https schema, and no ? which start the query string
+  // TODO better URL validation (to guard against attacks)
+  const urlPattern = new RegExp('^https?:\\/\\/[^\\?]+$')
+  let [restUrlBase, setRestUrlBase] = React.useState(localStorage.getItem('react-aiida-rest-url') || 'http://0.0.0.0:5000');
   const handleUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setBaseUrl({ value: event.target.value, error: !urlPattern.test(event.target.value) });
-  };
+    localStorage.setItem('react-aiida-rest-url', event.target.value)
+    setRestUrlBase(event.target.value);
+  }; 
 
   return (
     <Router>
@@ -99,8 +107,9 @@ export function App({ showDevTools = true }): JSX.Element {
               id="rest-url"
               className={classes.inputRestUrl}
               label="REST URL"
-              value={baseUrl.value}
-              error={baseUrl.error}
+              value={restUrlBase}
+              error={!urlPattern.test(restUrlBase)}
+              helperText={urlPattern.test(restUrlBase)? undefined : 'Invalid URL'}
               onChange={handleUrlChange}
               autoComplete="http://0.0.0.0:5000"
               InputProps={{
@@ -142,7 +151,7 @@ export function App({ showDevTools = true }): JSX.Element {
 
         <QueryClientProvider client={queryClient}>
 
-          <AiidaSettingsContext.Provider value={{ baseUrl: baseUrl.value, enabled: !baseUrl.error }}>
+          <AiidaSettingsContext.Provider value={{baseUrl: urlPattern.test(restUrlBase)? restUrlBase: null}}>
             <Switch>
               <Route exact path="/" component={PageHome} />
               <Route path="/process" component={PageProcesses} />

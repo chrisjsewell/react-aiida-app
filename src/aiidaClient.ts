@@ -2,7 +2,7 @@ import React from 'react';
 import { QueryClient } from 'react-query'
 
 export const queryClient = new QueryClient()
-export const AiidaSettingsContext = React.createContext({baseUrl: "http://0.0.0.0:5000", enabled: true})
+export const AiidaSettingsContext = React.createContext({baseUrl: "http://0.0.0.0:5000"} as {baseUrl: null | string})
 
 
 export interface IAiidaRestNode {
@@ -40,10 +40,12 @@ export interface IAiidaRestResponse {
 }
 
 
-export async function fetchNodes(baseUrl: string, nodeType: string, page: number): Promise<{ nodes: IAiidaRestNode[], totalCount: number, perPage: number }> {
+export async function fetchNodes(baseUrl: string | null, nodeType: string, page: number): Promise<null | { nodes: IAiidaRestNode[], totalCount: number, perPage: number }> {
+    if (baseUrl === null) {
+        return null
+    }
     const perPage = 20
-    // processState: 'attributes.process_state'
-    // TODO better url join
+    // TODO better url join?
     const response = await fetch(`${baseUrl}/api/v4/nodes/page/${page}?perpage=${perPage}&orderby=-mtime&node_type=like=%22${nodeType}%%22&attributes=true&attributes_filter=process_label,process_state,exit_status`)
     // TODO handle errors
     const totalCount = parseInt(response.headers.get('x-total-count') || '0')

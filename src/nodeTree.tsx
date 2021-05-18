@@ -94,11 +94,13 @@ export function AiidaXNodeTree({ nodePrefix }: { nodePrefix: string }): JSX.Elem
     };
     const aiidaSettings = useContext(AiidaSettingsContext)
     // TODO usePaginationQuery
-    const result = useQuery([aiidaSettings.baseUrl, 'nodes', nodePrefix, page], () => fetchNodes(aiidaSettings.baseUrl, nodePrefix, page), { enabled: aiidaSettings.enabled })
+    const result = useQuery([aiidaSettings.baseUrl, 'nodes', nodePrefix, page], () => fetchNodes(aiidaSettings.baseUrl, nodePrefix, page), {enabled: aiidaSettings.baseUrl !== null})
 
     let element = <CircularProgress />
     let pages = 1
-    if (result.data !== undefined) {
+    if (result.isIdle || result.data === null) {
+        element = <Alert severity="info" icon={<MuiIcons.SyncDisabled />}>Disabled</Alert>
+    } else if (result.data !== undefined) {
         pages = Math.ceil(result.data.totalCount / result.data.perPage)
         element = (
             <List component="nav" aria-label="main aiida tree">
@@ -118,8 +120,6 @@ export function AiidaXNodeTree({ nodePrefix }: { nodePrefix: string }): JSX.Elem
     } else if (result.isError) {
         const error = result.error as { message: string }
         element = <Alert severity="error">{error.message}</Alert>
-    } else if (result.isIdle) {
-        element = <Alert severity="info" icon={<MuiIcons.SyncDisabled />}>Disabled</Alert>
     }
     let updateInfo = <span></span>
     if (!!result.dataUpdatedAt) {
