@@ -103,3 +103,21 @@ verdi archive import "https://archive.materialscloud.org/record/file?filename=Hi
 verdi archive import "https://archive.materialscloud.org/record/file?filename=HiCond_AuIh.aiida&file_id=8bb2d7d9-384b-4bdc-b917-76fa02fbd497&record_id=477"
 
 verdi -p default restapi -P 5001 -H 0.0.0.0
+
+
+# TODO
+
+- Improve package build/packaging tooling for use as module in JupyterLab:
+  - Currently I'm just copying the `.ts[x]` files into the JupyterLab `src/reactApp` folder and that works, but like to have it as a seperate module for install from npm.
+  - the react-app packages the app to be run as a standalone web-site and so (a) includes all the types and testing libraries in dependencie (see <https://github.com/facebook/create-react-app/issues/6180>)  (b) does not compile the JS into a place that is automatically used by `npm publish` (i.e. installing from npm does not give you the package as a module)
+  - also there is no prettier configuration for formatting and the eslint seems quite permissive
+  - See: <https://reactjs.org/docs/code-splitting.html>
+  - Need to eject project? See: <https://medium.com/curated-by-versett/dont-eject-your-create-react-app-b123c5247741>
+  - For moving packages, see: <https://stackoverflow.com/questions/18875674/whats-the-difference-between-dependencies-devdependencies-and-peerdependencies/22004559#22004559>
+  - alternatively, could create a separate package to house the reusable components
+
+- material-ui `Drawer` is not (automatically) compatible with JupyterLab extension, where it needs to be constrained within the extension window (see <https://github.com/mui-org/material-ui/issues/11749> for potential fixes)
+
+- Add a plugin system for adding additional pages
+  - Ideally it would work like Python entry points, with the core app requiring no knowledge of the extensions: <https://stackoverflow.com/questions/67562146/javascript-typescript-equivalent-of-python-entry-points-for-plugin-system>
+  - Possibly it is not available by default, and you have to search the node modules yourself (but will this work in jupyter extension). See <https://github.com/flowscripter/esm-dynamic-plugins/blob/master/src/repository/NodeModulesPluginRepository.ts>
