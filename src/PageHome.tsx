@@ -21,6 +21,11 @@ export function PageHome(): JSX.Element {
           <GettingStartedBox />
         </Paper>
       </Grid>
+      <Grid item xs={12} sm={12} md={12}>
+        <Paper variant="outlined" className={classes.paper}>
+          <DetailedBox />
+        </Paper>
+      </Grid>
     </Grid>
   );
 }
@@ -37,7 +42,7 @@ export function IntroBox(): JSX.Element {
         AiiDA Dashboard uses industry leading libraries, to create a beautiful and responsive UI:
       </p>
       <ul>
-        <li><a href="https://reactjs.org/">React</a>: A library for building user interfaces, maintained by Facebook and with users including Whatsapp, Dropbox and Netflix.</li>
+        <li><a href="https://reactjs.org/">React</a>: A library for building user interfaces, maintained by Facebook and with users including Whatsapp, Dropbox, Uber and Netflix.</li>
         <li><a href="https://material-ui.com">Material-UI</a>: A React component library that implements <a href="https://material.io/design">Google’s Material Design</a> guidelines.</li>
         <li><a href="https://react-query.tanstack.com/">react-query</a>: A React component for synchronizing server data (from AiiDA) with the UI.</li>
       </ul>
@@ -82,3 +87,58 @@ export function GettingStartedBox(): JSX.Element {
   )
 }
 
+export function DetailedBox(): JSX.Element {
+  return (
+    <div>
+      <h2>Project Discussion</h2>
+      <p>This project is a continuation of <a href="https://github.com/chrisjsewell/jlab_aiidatree">jlab_aiidatree</a>, in which we built a working prototype for a JupyterLab extension to interact with AiiDA.</p>
+      <p>During development of <code>jlab_aiidatree</code> it was noted that you can embed <a href="https://reactjs.org/">React components</a> inside of JupyterLab (see <a href="https://jupyterlab.readthedocs.io/en/stable/extension/virtualdom.html">JupyterLab/React</a>).</p>
+      <p>The goal, therefore, is that we can develop this package as a standalone app (which could also be utilised directly via a web server), but also use it as a dependency to generate most of the JupyterLab extension, via React components.</p>
+      <p>The benefit of also using th app within JupyterLab, is:</p>
+      <ol type="1">
+        <li>It provides a platform within which to run the app locally, without having to host it directly</li>
+        <li>It allows us an alternate route to interface with AiiDA: via the “private” REST API interface between the JupyterLab backend and frontend. Using this REST API, will allow us easy access to parts of the AiiDA API that are yet to be exposed in REST, whilst maintaining that formal protocol (enforcing separation of concerns). We can then use this to essentially prototype additions to the AiiDA REST API.</li>
+        <li>It provides the possible to integrate with other aspects of the Jupyter framework (e.g. Notebooks)</li>
+      </ol>
+      <h3 id="about-react">About React</h3>
+      <p>React is an industry leading library, for creating beautiful and responsive UIs, maintained by Facebook and with users including Whatsapp, Dropbox, Uber and Netflix. We also utilise other “best-practice” React components:</p>
+      <ul>
+        <li><a href="https://material-ui.com">Material-UI</a>: A React component library that implements Google’s <a href="https://material.io/design">Material Design guidelines</a></li>
+        <li><a href="https://react-query.tanstack.com/">react-query</a>: A React component for synchronizing server data (from AiiDA) with the UI.</li>
+      </ul>
+      <p>React itself is really user-friendly to get started with, even with only a small familiarity with HTML and JavaScript, see <a href="https://reactjs.org/tutorial/tutorial.html">https://reactjs.org/tutorial/tutorial.html</a>. Once learned, it is also incredibly intuitive to generate web elements with, using the <a href="https://reactjs.org/docs/introducing-jsx.html"><code>.jsx</code> file format</a>. For example a simple React component would look like:</p>
+      <SyntaxHighlighter language="jsx">
+        {
+          `function MyComponent(props) {
+  return (
+    <div>
+      <h1>Hello, world!</h1>
+      <p>Here is a dynamic value: {props.value}</p>
+    </div>
+  )
+}`
+        }
+      </SyntaxHighlighter>
+      <h3 id="this-app-vs-materials-cloud-explore">This app vs Materials Cloud Explore</h3>
+      <p>Note, initial features of this app are quite similar to <a href="https://www.materialscloud.org/explore/connect">https://www.materialscloud.org/explore/connect</a>: using the AiiDA REST API as a backend for visualising its data. However, this is built with <a href="https://angularjs.org/">https://angularjs.org/</a> which, although also well used in industry, has two major drawbacks for our use case:</p>
+      <ol type="1">
+        <li>You cannot integrate it with JupyterLab (see benefits above)</li>
+        <li>It does not have the re-usable component infrastructure of React, which should allow us to eventually build an extensible app with “pluggable” extensions.</li>
+      </ol>
+      <h3 id="this-app-vs-aiidalab">This app vs AiiDALab</h3>
+      <p><a href="https://www.materialscloud.org/work/aiidalab">AiiDALab</a> uses the Jupyter Notebook server to build its frontend, via <a href="https://ipywidgets.readthedocs.io">ipywidgets</a>, which dynamically generates the HTML/Javascript from python code cells, and appmode/voila which executes the Notebook on page load, then converts the notebook interface to look more like a web app (hiding code cells, etc). Note, despite its name, it does not use JupyterLab per se.</p>
+      <p>The benefits of this approach, is that:</p>
+      <ol type="1">
+        <li>You can code everything in Python/Jupyter Notebooks, which is obviously the background of many working on AiiDA (being a Python package), albeit that, if you want to do anything substantial with these apps you inevitably have to learn some HTML/JavaScript.</li>
+        <li>You can interface directly with the AiiDA Python API</li>
+      </ol>
+      <p>The disadvantage though is that the apps which it creates are substantially limited in the user interfaces (UI) and user experience (UX) they can create.</p>
+      <ol type="1">
+        <li>On every page load you need to first execute the notebook, then render it, meaning loads times are extremely poor by web standards.</li>
+        <li>You are restricted by the semantics/layout of the Notebook, i.e. each app has to be a set of separate pages and in each page you have a set of vertically sequential cells.</li>
+        <li>You are restricted by the semantics/functionality of ipywidgets, by industry standard, a very niche/bespoke tool. In practice, you end up taking a lot of time to learn/create a lot of HTML widgets that have little to no practical reusability, rather than being able to utilise the massive React ecosystem of libraries and components.</li>
+      </ol>
+
+    </div>
+  )
+}

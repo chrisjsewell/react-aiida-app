@@ -104,6 +104,7 @@ export function App({ showDevTools = true }): JSX.Element {
                 <MuiIcons.Menu />
               </IconButton>
               <Typography variant="h6" className={classes.title}>AiiDA Dashboard</Typography>
+              {/* TODO periodically update connection status */}
               <RestUrlConnection url={urlPattern.test(restUrlBase) ? restUrlBase: null } className={classes.inputRestUrlIcon} />
               <TextField
                 id="rest-url"
