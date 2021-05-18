@@ -2,7 +2,8 @@ import React from 'react';
 import { QueryClient } from 'react-query'
 
 export const queryClient = new QueryClient()
-export const AiidaSettingsContext = React.createContext({baseUrl: "http://127.0.0.1:5000"} as {baseUrl: null | string})
+export const defaultRestUrl = "http://127.0.0.1:5000/api/v4"
+export const AiidaSettingsContext = React.createContext({baseUrl: defaultRestUrl} as {baseUrl: null | string})
 
 
 export interface IAiidaRestNode {
@@ -43,7 +44,7 @@ export async function isConnected(baseUrl: string | null): Promise<boolean> {
     if (baseUrl === null) {
         return false
     }
-    const response = await fetch(`${baseUrl}/api/v4`)
+    const response = await fetch(`${baseUrl}`)
     return response.ok
 }
 
@@ -54,7 +55,7 @@ export async function fetchNodes(baseUrl: string | null, nodeType: string, page:
     }
     const perPage = 20
     // TODO better url join?
-    const response = await fetch(`${baseUrl}/api/v4/nodes/page/${page}?perpage=${perPage}&orderby=-mtime&node_type=like=%22${nodeType}%%22&attributes=true&attributes_filter=process_label,process_state,exit_status`)
+    const response = await fetch(`${baseUrl}/nodes/page/${page}?perpage=${perPage}&orderby=-mtime&node_type=like=%22${nodeType}%%22&attributes=true&attributes_filter=process_label,process_state,exit_status`)
     // TODO handle errors
     const totalCount = parseInt(response.headers.get('x-total-count') || '0')
     const responseJson = (await response.json()) as IAiidaRestResponse

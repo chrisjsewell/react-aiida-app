@@ -20,7 +20,7 @@ import { HashRouter as Router, Switch, Route, Link as RouterLink, LinkProps as R
 import { QueryClientProvider, useQuery } from 'react-query'
 import { ReactQueryDevtools } from 'react-query/devtools'
 
-import { AiidaSettingsContext, isConnected, queryClient } from './aiidaClient';
+import { AiidaSettingsContext, defaultRestUrl, isConnected, queryClient } from './aiidaClient';
 import { PageHome } from './PageHome';
 import { PageProcesses } from './PageNodes';
 import { useStyles } from './styles';
@@ -74,7 +74,7 @@ export function App({ showDevTools = true }): JSX.Element {
   // we also validate to only allow http/https schema, and no ? which start the query string
   // TODO better URL validation (to guard against attacks)
   const urlPattern = new RegExp('^https?:\\/\\/[^\\?]+$')
-  let [restUrlBase, setRestUrlBase] = React.useState(localStorage.getItem('react-aiida-rest-url') || 'http://127.0.0.1:5000');
+  let [restUrlBase, setRestUrlBase] = React.useState(localStorage.getItem('react-aiida-rest-url') || defaultRestUrl);
   const handleUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     localStorage.setItem('react-aiida-rest-url', event.target.value)
     setRestUrlBase(event.target.value);
@@ -113,7 +113,7 @@ export function App({ showDevTools = true }): JSX.Element {
                 error={!urlPattern.test(restUrlBase)}
                 helperText={urlPattern.test(restUrlBase) ? undefined : 'Invalid URL'}
                 onChange={handleUrlChange}
-                autoComplete="http://127.0.0.1:5000"
+                autoComplete={defaultRestUrl}
                 InputProps={{
                   className: classes.inputRestUrlText
                 }}

@@ -34,7 +34,8 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginRight: theme.spacing(1)
     },
     inputRestUrl: {
-      marginRight: theme.spacing(2)
+      marginRight: theme.spacing(2),
+      minWidth: 200,
     },
     inputRestUrlText: {
       color: "white"
@@ -86,5 +87,9 @@ export const useStyles = makeStyles((theme: Theme) =>
         margin: theme.spacing(1),
         minWidth: 200,
     },
+    InlineIcon: {
+      verticalAlign: 'middle',
+      display: 'inline-flex',
+    }
   }),
 );
