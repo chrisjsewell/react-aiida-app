@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/react-aiida-app/static/css/main.6dea0f05.chunk.css",
-    "main.js": "/react-aiida-app/static/js/main.2ae89c89.chunk.js",
-    "main.js.map": "/react-aiida-app/static/js/main.2ae89c89.chunk.js.map",
+    "main.js": "/react-aiida-app/static/js/main.7c6b989f.chunk.js",
+    "main.js.map": "/react-aiida-app/static/js/main.7c6b989f.chunk.js.map",
     "runtime-main.js": "/react-aiida-app/static/js/runtime-main.0f07fe8d.js",
     "runtime-main.js.map": "/react-aiida-app/static/js/runtime-main.0f07fe8d.js.map",
     "static/js/2.6bb31c9e.chunk.js": "/react-aiida-app/static/js/2.6bb31c9e.chunk.js",
@@ -17,6 +17,6 @@
     "static/js/runtime-main.0f07fe8d.js",
     "static/js/2.6bb31c9e.chunk.js",
     "static/css/main.6dea0f05.chunk.css",
-    "static/js/main.2ae89c89.chunk.js"
+    "static/js/main.7c6b989f.chunk.js"
   ]
 }
