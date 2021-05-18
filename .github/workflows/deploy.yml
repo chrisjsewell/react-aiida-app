@@ -27,5 +27,8 @@ jobs:
     - name: Run the tests
       run: npm test
 
-    - name: Run the build
-      run: npm run deploy
+    - name: Run the build and deployment
+      run: |
+        git config --global user.name $user_name
+        git config --global user.email $user_email
+        npm run deploy
