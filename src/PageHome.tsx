@@ -36,6 +36,9 @@ export function InfoBox(): JSX.Element {
       <p>
         AiiDA Dashboard can be used as a standalone Web UI, or it also provides React components and facilitates wrapping into a JupyterLab <a href="https://jupyterlab.readthedocs.io/en/stable/extension/virtualdom.html">extension widget</a>.
       </p>
+      <p>
+        See the app repository for more details: <a href="https://github.com/chrisjsewell/react-aiida-app">https://github.com/chrisjsewell/react-aiida-app</a>
+      </p>
     </aside>
   )
 }
