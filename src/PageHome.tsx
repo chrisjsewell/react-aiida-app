@@ -49,9 +49,6 @@ export function IntroBox(): JSX.Element {
       <p>
         AiiDA Dashboard can be used as a standalone Web UI, or it also provides React components and facilitates wrapping into a JupyterLab <a href="https://jupyterlab.readthedocs.io/en/stable/extension/virtualdom.html">extension widget</a>.
       </p>
-      <p>
-        See the app repository for more details: <a href="https://github.com/chrisjsewell/react-aiida-app">https://github.com/chrisjsewell/react-aiida-app</a>
-      </p>
     </div>
   )
 }
@@ -91,6 +88,9 @@ export function DetailedBox(): JSX.Element {
   return (
     <div>
       <h2>Project Discussion</h2>
+      <p>
+        Source repository: <a href="https://github.com/chrisjsewell/react-aiida-app">https://github.com/chrisjsewell/react-aiida-app</a>
+      </p>
       <p>This project is a continuation of <a href="https://github.com/chrisjsewell/jlab_aiidatree">jlab_aiidatree</a>, in which we built a working prototype for a JupyterLab extension to interact with AiiDA.</p>
       <p>During development of <code>jlab_aiidatree</code> it was noted that you can embed <a href="https://reactjs.org/">React components</a> inside of JupyterLab (see <a href="https://jupyterlab.readthedocs.io/en/stable/extension/virtualdom.html">JupyterLab/React</a>).</p>
       <p>The goal, therefore, is that we can develop this package as a standalone app (which could also be utilised directly via a web server), but also use it as a dependency to generate most of the JupyterLab extension, via React components.</p>
