@@ -2,7 +2,7 @@ import React from 'react';
 import { QueryClient } from 'react-query'
 
 export const queryClient = new QueryClient()
-export const AiidaSettingsContext = React.createContext({baseUrl: "http://0.0.0.0:5000"} as {baseUrl: null | string})
+export const AiidaSettingsContext = React.createContext({baseUrl: "http://127.0.0.1:5000"} as {baseUrl: null | string})
 
 
 export interface IAiidaRestNode {
