@@ -103,7 +103,7 @@ export function App({ showDevTools = true }): JSX.Element {
                 aria-label="open drawer">
                 <MuiIcons.Menu />
               </IconButton>
-              <Typography variant="h6" className={classes.title}>AiiDA Dashboard</Typography>
+              <Typography variant="h6" className={classes.title} id="app-header">AiiDA Dashboard</Typography>
               {/* TODO periodically update connection status */}
               <RestUrlConnection url={urlPattern.test(restUrlBase) ? restUrlBase: null } className={classes.inputRestUrlIcon} />
               <TextField
@@ -195,3 +195,5 @@ function RestUrlConnection({url, className = undefined}: {url: string | null, cl
   }
   return < MuiIcons.Cancel color="error" className={className} />
 }
+
+export default App;

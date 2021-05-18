@@ -4,6 +4,6 @@ import App from './App';
 
 test('renders learn react link', () => {
   render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
+  const linkElement = screen.getByText(/AiiDA Dashboard/i, {selector: "#app-header"});
   expect(linkElement).toBeInTheDocument();
 });
