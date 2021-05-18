@@ -58,10 +58,11 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
+
 const initialMouseState = {
     mouseX: null,
-    mouseY: null,
-};
+    mouseY: null
+} as { mouseX: null | number; mouseY: null | number }
 
 
 interface IAiidaXElementProps {
@@ -81,7 +82,7 @@ interface IAiidaXElementProps {
 }
 
 
-export function AiidaXNodeTree({nodePrefix}:{nodePrefix: string}): JSX.Element {
+export function AiidaXNodeTree({ nodePrefix }: { nodePrefix: string }): JSX.Element {
     /**
      * a React component housing a list of AiiDA elements
     */

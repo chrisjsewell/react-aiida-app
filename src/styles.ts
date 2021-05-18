@@ -34,9 +34,6 @@ export const useStyles = makeStyles((theme: Theme) =>
     inputRestUrlText: {
       color: "white"
     },
-    toolbarLogo: {
-      maxHeight: 40
-    },
     hide: {
       display: 'none',
     },
@@ -82,7 +79,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     formControl: {
         margin: theme.spacing(1),
-        minWidth: 240,
+        minWidth: 200,
     },
   }),
 );

@@ -20,12 +20,11 @@ import { HashRouter as Router, Switch, Route, Link as RouterLink, LinkProps as R
 import { QueryClientProvider } from 'react-query'
 import { ReactQueryDevtools } from 'react-query/devtools'
 
-import './App.css';
-import logo from './aiida-logo.svg';
 import { AiidaSettingsContext, queryClient } from './aiidaClient';
 import { PageHome } from './PageHome';
 import { PageProcesses } from './PageNodes';
 import { useStyles } from './styles';
+import { AiiDAIcon200 } from './icons'
 
 interface ListItemLinkProps {
   icon?: React.ReactElement;
@@ -55,7 +54,7 @@ function ListItemLink(props: ListItemLinkProps) {
 }
 
 
-export function App() {
+export function App({ showDevTools = true }): JSX.Element {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -108,12 +107,13 @@ export function App() {
                 className: classes.inputRestUrlText
               }}
             />
-            <img src={logo} alt="AiiDA" className={classes.toolbarLogo} />
+            <AiiDAIcon200 width={40} height={40} />
           </Toolbar>
         </AppBar>
 
         <Drawer
           variant="permanent"
+
           className={clsx(classes.drawer, {
             [classes.drawerOpen]: drawerOpen,
             [classes.drawerClose]: !drawerOpen,
@@ -151,7 +151,7 @@ export function App() {
             </Switch>
           </AiidaSettingsContext.Provider>
 
-          <ReactQueryDevtools initialIsOpen={false} />
+          {showDevTools ? <ReactQueryDevtools initialIsOpen={false} /> : null}
         </QueryClientProvider>
 
       </div>
