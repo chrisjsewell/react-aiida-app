@@ -1,5 +1,8 @@
 # react-aiida-app
 
+[![Github-CI][github-ci]][github-link]
+[![Coverage Status][codecov-badge]][codecov-link]
+
 This project is a continuation of [jlab_aiidatree](https://github.com/chrisjsewell/jlab_aiidatree),
 in which we built a working prototype for a JupyterLab extension to interact with AiiDA.
 
@@ -166,3 +169,8 @@ verdi -p default restapi -P 5001 -H 0.0.0.0
 - Add a plugin system for adding additional pages
   - Ideally it would work like Python entry points, with the core app requiring no knowledge of the extensions: <https://stackoverflow.com/questions/67562146/javascript-typescript-equivalent-of-python-entry-points-for-plugin-system>
   - Possibly it is not available by default, and you have to search the node modules yourself (but will this work in jupyter extension). See <https://github.com/flowscripter/esm-dynamic-plugins/blob/master/src/repository/NodeModulesPluginRepository.ts>
+
+[github-ci]: https://github.com/chrisjsewell/react-aiida-app/workflows/CI/badge.svg?branch=master
+[github-link]: https://github.com/chrisjsewell/react-aiida-app
+[codecov-badge]: https://codecov.io/gh/chrisjsewell/react-aiida-app/branch/master/graph/badge.svg
+[codecov-link]: https://codecov.io/gh/chrisjsewell/react-aiida-app
