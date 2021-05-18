@@ -191,7 +191,7 @@ function RestUrlConnection({url, className = undefined}: {url: string | null, cl
   const result = useQuery([url, 'connected'], () => isConnected(url))
   // TODO hover over info/error?
   if (result.data) {
-    return < MuiIcons.CheckCircle color="primary" className={className} />
+    return < MuiIcons.CheckCircle className={className} />
   }
   return < MuiIcons.Cancel color="error" className={className} />
 }

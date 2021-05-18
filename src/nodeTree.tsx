@@ -26,7 +26,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 
 import { useQuery } from 'react-query'
 
-import { AiidaSettingsContext, fetchNodes } from './aiidaClient'
+import { AiidaSettingsContext, getNodes } from './aiidaClient'
 import { GitBranchIcon, RocketIcon } from './icons'
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -94,7 +94,7 @@ export function AiidaXNodeTree({ nodePrefix }: { nodePrefix: string }): JSX.Elem
     };
     const aiidaSettings = useContext(AiidaSettingsContext)
     // TODO usePaginationQuery
-    const result = useQuery([aiidaSettings.baseUrl, 'nodes', nodePrefix, page], () => fetchNodes(aiidaSettings.baseUrl, nodePrefix, page), {enabled: aiidaSettings.baseUrl !== null})
+    const result = useQuery([aiidaSettings.baseUrl, 'nodes', nodePrefix, page], () => getNodes(aiidaSettings.baseUrl, nodePrefix, page), {enabled: aiidaSettings.baseUrl !== null})
 
     let element = <CircularProgress />
     let pages = 1
