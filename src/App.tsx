@@ -17,10 +17,10 @@ import * as MuiIcons from '@material-ui/icons';
 import { Omit } from '@material-ui/types';
 
 import { HashRouter as Router, Switch, Route, Link as RouterLink, LinkProps as RouterLinkProps, Redirect } from 'react-router-dom';
-import { QueryClientProvider } from 'react-query'
+import { QueryClientProvider, useQuery } from 'react-query'
 import { ReactQueryDevtools } from 'react-query/devtools'
 
-import { AiidaSettingsContext, queryClient } from './aiidaClient';
+import { AiidaSettingsContext, isConnected, queryClient } from './aiidaClient';
 import { PageHome } from './PageHome';
 import { PageProcesses } from './PageNodes';
 import { useStyles } from './styles';
@@ -78,86 +78,88 @@ export function App({ showDevTools = true }): JSX.Element {
   const handleUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     localStorage.setItem('react-aiida-rest-url', event.target.value)
     setRestUrlBase(event.target.value);
-  }; 
+  };
 
   return (
     <Router>
 
       <div className={classes.root}>
-
-        <AppBar
-          position="sticky"
-          className={clsx(classes.appBar, {
-            [classes.appBarShift]: drawerOpen,
-          })}
-        >
-          <Toolbar>
-            <IconButton
-              edge="start"
-              onClick={handleDrawerOpen}
-              className={clsx(classes.menuButton, {
-                [classes.hide]: drawerOpen,
-              })}
-              color="inherit"
-              aria-label="open drawer">
-              <MuiIcons.Menu />
-            </IconButton>
-            <Typography variant="h6" className={classes.title}>AiiDA Dashboard</Typography>
-            <TextField
-              id="rest-url"
-              className={classes.inputRestUrl}
-              label="REST URL"
-              value={restUrlBase}
-              error={!urlPattern.test(restUrlBase)}
-              helperText={urlPattern.test(restUrlBase)? undefined : 'Invalid URL'}
-              onChange={handleUrlChange}
-              autoComplete="http://0.0.0.0:5000"
-              InputProps={{
-                className: classes.inputRestUrlText
-              }}
-            />
-            <AiiDAIcon200 width={40} height={40} />
-          </Toolbar>
-        </AppBar>
-
-        <Drawer
-          variant="permanent"
-
-          className={clsx(classes.drawer, {
-            [classes.drawerOpen]: drawerOpen,
-            [classes.drawerClose]: !drawerOpen,
-          })}
-          classes={{
-            paper: clsx({
-              [classes.drawerOpen]: drawerOpen,
-              [classes.drawerClose]: !drawerOpen,
-            }),
-          }}
-        >
-          <div className={classes.toolbar}>
-            <IconButton onClick={handleDrawerClose}>
-              {theme.direction === 'rtl' ? <MuiIcons.ChevronRight /> : <MuiIcons.ChevronLeft />}
-            </IconButton>
-          </div>
-          <Divider />
-
-          {/* TODO signify which page is selected */}
-          <List>
-            <ListItemLink to="/" primary="Home" icon={<MuiIcons.Home />} />
-            <ListItemLink to="/process" primary="Node Explorer" icon={<MuiIcons.Explore />} />
-          </List>
-
-        </Drawer>
-
         <QueryClientProvider client={queryClient}>
 
-          <AiidaSettingsContext.Provider value={{baseUrl: urlPattern.test(restUrlBase)? restUrlBase: null}}>
+          <AppBar
+            position="sticky"
+            className={clsx(classes.appBar, {
+              [classes.appBarShift]: drawerOpen,
+            })}
+          >
+            <Toolbar>
+              <IconButton
+                edge="start"
+                onClick={handleDrawerOpen}
+                className={clsx(classes.menuButton, {
+                  [classes.hide]: drawerOpen,
+                })}
+                color="inherit"
+                aria-label="open drawer">
+                <MuiIcons.Menu />
+              </IconButton>
+              <Typography variant="h6" className={classes.title}>AiiDA Dashboard</Typography>
+              <RestUrlConnection url={urlPattern.test(restUrlBase) ? restUrlBase: null } className={classes.inputRestUrlIcon} />
+              <TextField
+                id="rest-url"
+                className={classes.inputRestUrl}
+                label="REST URL"
+                value={restUrlBase}
+                error={!urlPattern.test(restUrlBase)}
+                helperText={urlPattern.test(restUrlBase) ? undefined : 'Invalid URL'}
+                onChange={handleUrlChange}
+                autoComplete="http://0.0.0.0:5000"
+                InputProps={{
+                  className: classes.inputRestUrlText
+                }}
+              />
+              <AiiDAIcon200 width={40} height={40} />
+            </Toolbar>
+          </AppBar>
+
+          <Drawer
+            variant="permanent"
+
+            className={clsx(classes.drawer, {
+              [classes.drawerOpen]: drawerOpen,
+              [classes.drawerClose]: !drawerOpen,
+            })}
+            classes={{
+              paper: clsx({
+                [classes.drawerOpen]: drawerOpen,
+                [classes.drawerClose]: !drawerOpen,
+              }),
+            }}
+          >
+            <div className={classes.toolbar}>
+              <IconButton onClick={handleDrawerClose}>
+                {theme.direction === 'rtl' ? <MuiIcons.ChevronRight /> : <MuiIcons.ChevronLeft />}
+              </IconButton>
+            </div>
+            <Divider />
+
+            {/* TODO signify which page is selected */}
+            <List>
+              <ListItemLink to="/" primary="Home" icon={<MuiIcons.Home />} />
+              <ListItemLink to="/process" primary="Node Explorer" icon={<MuiIcons.Explore />} />
+            </List>
+
+          </Drawer>
+
+          <AiidaSettingsContext.Provider value={{ baseUrl: urlPattern.test(restUrlBase) ? restUrlBase : null }}>
+
             <Switch>
               <Route exact path="/" component={PageHome} />
               <Route path="/process" component={PageProcesses} />
               <Route path="/404" component={NotFound} />
               <Redirect to="/404" />
             </Switch>
+
           </AiidaSettingsContext.Provider>
 
           {showDevTools ? <ReactQueryDevtools initialIsOpen={false} /> : null}
@@ -179,4 +181,16 @@ function NotFound(): JSX.Element {
       </RouterLink>
     </div>
   )
+}
+
+
+
+function RestUrlConnection({url, className = undefined}: {url: string | null, className?: string}): JSX.Element {
+
+  const result = useQuery([url, 'connected'], () => isConnected(url))
+  // TODO hover over info/error?
+  if (result.data) {
+    return < MuiIcons.CheckCircle color="primary" className={className} />
+  }
+  return < MuiIcons.Cancel color="error" className={className} />
 }

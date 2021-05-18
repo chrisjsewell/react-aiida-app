@@ -39,6 +39,14 @@ export interface IAiidaRestResponse {
     url_root: string
 }
 
+export async function isConnected(baseUrl: string | null): Promise<boolean> {
+    if (baseUrl === null) {
+        return false
+    }
+    const response = await fetch(`${baseUrl}/api/v4`)
+    return response.ok
+}
+
 
 export async function fetchNodes(baseUrl: string | null, nodeType: string, page: number): Promise<null | { nodes: IAiidaRestNode[], totalCount: number, perPage: number }> {
     if (baseUrl === null) {

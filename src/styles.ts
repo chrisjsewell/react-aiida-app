@@ -2,6 +2,8 @@ import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 
 const drawerWidth = 240;
 
+// TODO use a spacer component instead of margins etc
+
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -27,6 +29,9 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     title: {
       flexGrow: 1,
+    },
+    inputRestUrlIcon: {
+      marginRight: theme.spacing(1)
     },
     inputRestUrl: {
       marginRight: theme.spacing(2)
