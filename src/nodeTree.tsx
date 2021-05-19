@@ -69,7 +69,7 @@ const initialMouseState = {
 } as { mouseX: null | number; mouseY: null | number }
 
 
-interface IAiidaXElementProps {
+interface IAiidaTreeElementProps {
     pk: number
     uuid: string
     elementName?: string
@@ -183,7 +183,7 @@ const ElementIconMap: { [key: string]: JSX.Element } = {
 }
 
 
-function AiidaTreeElement(props: IAiidaXElementProps): JSX.Element {
+function AiidaTreeElement(props: IAiidaTreeElementProps): JSX.Element {
 
     const classes = useStyles();
 
@@ -276,14 +276,14 @@ function AiidaTreeElement(props: IAiidaXElementProps): JSX.Element {
                 </Menu>
                 {props.nested ? null : (open ? <MuiIcons.ExpandMore /> : <MuiIcons.ExpandLess />)}
             </ListItem>
-            {props.nested ? null : <NodeChildren nodeUUID={props.uuid} open={open} />}
+            {props.nested ? null : <AiidaNodeChildren nodeUUID={props.uuid} open={open} />}
             <Divider light />
         </React.Fragment>
     )
 }
 
 
-function NodeChildren({ nodeUUID, open }: { nodeUUID: string | null, open: boolean }): JSX.Element {
+function AiidaNodeChildren({ nodeUUID, open }: { nodeUUID: string | null, open: boolean }): JSX.Element {
     const classes = useStyles();
     const [openRepo, setOpenRepo] = React.useState(false);
     const handleRepoClick = () => {
