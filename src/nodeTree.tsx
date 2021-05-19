@@ -27,7 +27,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import { useQuery } from 'react-query'
 import copy from 'copy-to-clipboard';
 
-import { AiidaSettingsContext, getNodes } from './aiidaClient'
+import { AiidaSettingsContext, getNodes, getNodeIncoming, getNodeOutgoing, getNodeRepoList } from './aiidaClient'
 import { GitBranchIcon, RocketIcon } from './icons'
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -53,8 +53,11 @@ const useStyles = makeStyles((theme: Theme) =>
             maxWidth: 480,
             overflow: "hidden",
         },
-        nested: {
+        nested1: {
             paddingLeft: theme.spacing(4),
+        },
+        nested2: {
+            paddingLeft: theme.spacing(8),
         },
     }),
 );
@@ -70,6 +73,7 @@ interface IAiidaXElementProps {
     pk: number
     uuid: string
     elementName?: string
+    header: string
     info?: string
     tooltip?: string
     procLabel?: string
@@ -81,10 +85,11 @@ interface IAiidaXElementProps {
     | 'excepted'
     | 'killed'
     procExit?: number
+    nested?: boolean
 }
 
 
-export function AiidaXNodeTree({ nodePrefix }: { nodePrefix: string }): JSX.Element {
+export function AiidaNodeTree({ nodePrefix }: { nodePrefix: string }): JSX.Element {
     /**
      * a React component housing a list of AiiDA elements
     */
@@ -96,7 +101,7 @@ export function AiidaXNodeTree({ nodePrefix }: { nodePrefix: string }): JSX.Elem
     };
     const aiidaSettings = useContext(AiidaSettingsContext)
     // TODO usePaginationQuery
-    const result = useQuery([aiidaSettings.baseUrl, 'nodes', nodePrefix, page], () => getNodes(aiidaSettings.baseUrl, nodePrefix, page), {enabled: aiidaSettings.baseUrl !== null})
+    const result = useQuery([aiidaSettings.baseUrl, 'nodes', nodePrefix, page], () => getNodes(aiidaSettings.baseUrl, nodePrefix, page), { enabled: aiidaSettings.baseUrl !== null })
 
     let element = <CircularProgress />
     let pages = 1
@@ -107,9 +112,10 @@ export function AiidaXNodeTree({ nodePrefix }: { nodePrefix: string }): JSX.Elem
         element = (
             <List component="nav" aria-label="main aiida tree">
                 {result.data.nodes.map((value) => {
-                    return <AiidaXElement
+                    return <AiidaTreeElement
                         pk={value.id}
                         uuid={value.uuid}
+                        header={`${value.id} ${value.attributes?.process_label || ''}`}
                         elementName={value.node_type.split(".").slice(0, 2).join(".")}
                         info={`${value.mtime}, ${value.node_type}, ${value.process_type || ''}`}
                         tooltip={`UUID: ${value.uuid}`}
@@ -177,7 +183,7 @@ const ElementIconMap: { [key: string]: JSX.Element } = {
 }
 
 
-function AiidaXElement(props: IAiidaXElementProps): JSX.Element {
+function AiidaTreeElement(props: IAiidaXElementProps): JSX.Element {
 
     const classes = useStyles();
 
@@ -188,6 +194,7 @@ function AiidaXElement(props: IAiidaXElementProps): JSX.Element {
     const handleClick = () => {
         setOpen(!open);
     };
+
     const [contextPosition, setContextPosition] = React.useState<{
         mouseX: null | number;
         mouseY: null | number;
@@ -229,16 +236,16 @@ function AiidaXElement(props: IAiidaXElementProps): JSX.Element {
         )
     }
 
-    let title = <span>{props.pk} {props.procLabel || ''}</span>
+    let title = <span>{props.header}</span>
     if (['excepted', 'killed'].includes(props.procState || '')) {
-        title = <span>{props.pk} {props.procLabel || ''}<Chip className={classes.listChip} label={`${props.procState} [${props.procExit}]`} variant="outlined" color="secondary" /></span>
+        title = <span>{props.header}<Chip className={classes.listChip} label={`${props.procState} [${props.procExit}]`} variant="outlined" color="secondary" /></span>
     } else if (!!props.procState) {
-        title = <span>{props.pk} {props.procLabel || ''}<Chip className={classes.listChip} label={`${props.procState} [${props.procExit}]`} variant="outlined" color="primary" /></span>
+        title = <span>{props.header}<Chip className={classes.listChip} label={`${props.procState} [${props.procExit}]`} variant="outlined" color="primary" /></span>
     }
 
     return (
         <React.Fragment>
-            <ListItem key={props.pk} button onClick={handleClick} onContextMenu={handleRightClick} >
+            <ListItem key={props.pk} button onClick={handleClick} onContextMenu={handleRightClick} className={props.nested ? classes.nested2 : undefined} >
                 <ListItemAvatar>
                     <Avatar>
                         {icon}
@@ -267,31 +274,166 @@ function AiidaXElement(props: IAiidaXElementProps): JSX.Element {
                     {/* <MenuItem onClick={handleContextClose}>Open Data</MenuItem>
                     <MenuItem onClick={handleContextClose}>Add to Group</MenuItem> */}
                 </Menu>
-                {open ? <MuiIcons.ExpandMore /> : <MuiIcons.ExpandLess />}
+                {props.nested ? null : (open ? <MuiIcons.ExpandMore /> : <MuiIcons.ExpandLess />)}
             </ListItem>
-            <Collapse in={open} timeout="auto">
-                <List component="div" disablePadding>
-                    <ListItem button className={classes.nested}>
-                        <ListItemIcon>
-                            <MuiIcons.Inbox />
-                        </ListItemIcon>
-                        <ListItemText primary="Repository" />
-                    </ListItem>
-                    <ListItem button className={classes.nested}>
-                        <ListItemIcon>
-                            <MuiIcons.ArrowForward />
-                        </ListItemIcon>
-                        <ListItemText primary="Incoming" />
-                    </ListItem>
-                    <ListItem button className={classes.nested}>
-                        <ListItemIcon>
-                            <MuiIcons.ArrowBack />
-                        </ListItemIcon>
-                        <ListItemText primary="Outgoing" />
-                    </ListItem>
-                </List>
-            </Collapse>
+            {props.nested ? null : <NodeChildren nodeUUID={props.uuid} open={open} />}
             <Divider light />
         </React.Fragment>
     )
 }
+
+
+function NodeChildren({ nodeUUID, open }: { nodeUUID: string | null, open: boolean }): JSX.Element {
+    const classes = useStyles();
+    const [openRepo, setOpenRepo] = React.useState(false);
+    const handleRepoClick = () => {
+        setOpenRepo(!openRepo);
+    };
+    const [openIncoming, setOpenIncoming] = React.useState(false);
+    const handleIncomingClick = () => {
+        setOpenIncoming(!openIncoming);
+    };
+    const [openOutgoing, setOpenOutgoing] = React.useState(false);
+    const handleOutgoingClick = () => {
+        setOpenOutgoing(!openOutgoing);
+    };
+    return (
+        <Collapse in={open} timeout="auto">
+            <List component="div" disablePadding>
+                <ListItem button onClick={handleRepoClick} className={classes.nested1}>
+                    <ListItemIcon>
+                        <MuiIcons.Inbox />
+                    </ListItemIcon>
+                    <ListItemText primary="Repository" />
+                    {openRepo ? <MuiIcons.ExpandMore /> : <MuiIcons.ExpandLess />}
+                </ListItem>
+                <Collapse in={openRepo} mountOnEnter>
+                    <AiidaRepoList nodeUUID={nodeUUID} />
+                </Collapse>
+                <ListItem button onClick={handleIncomingClick} className={classes.nested1}>
+                    <ListItemIcon>
+                        <MuiIcons.ArrowForward />
+                    </ListItemIcon>
+                    <ListItemText primary="Incoming" />
+                    {openIncoming ? <MuiIcons.ExpandMore /> : <MuiIcons.ExpandLess />}
+                </ListItem>
+                <Collapse in={openIncoming} mountOnEnter>
+                    <AiidaLinkIncomingList nodeUUID={nodeUUID} />
+                </Collapse>
+                <ListItem button onClick={handleOutgoingClick} className={classes.nested1}>
+                    <ListItemIcon>
+                        <MuiIcons.ArrowBack />
+                    </ListItemIcon>
+                    <ListItemText primary="Outgoing" />
+                    {openOutgoing ? <MuiIcons.ExpandMore /> : <MuiIcons.ExpandLess />}
+                </ListItem>
+                <Collapse in={openOutgoing} mountOnEnter>
+                    <AiidaLinkOutgoingList nodeUUID={nodeUUID} />
+                </Collapse>
+            </List>
+        </Collapse>
+    )
+}
+
+
+function AiidaRepoList({ nodeUUID }: { nodeUUID: string | null }): JSX.Element {
+    const classes = useStyles();
+    const aiidaSettings = useContext(AiidaSettingsContext)
+    // TODO usePaginationQuery
+    const result = useQuery([aiidaSettings.baseUrl, 'nodeRepolist', nodeUUID], () => getNodeRepoList(aiidaSettings.baseUrl, nodeUUID), { enabled: aiidaSettings.baseUrl !== null })
+
+    let element = <CircularProgress />
+    if (result.isIdle || result.data === null) {
+        element = <Alert severity="info" icon={<MuiIcons.SyncDisabled />}>Disabled</Alert>
+    } else if (result.data !== undefined) {
+        element = (
+            <List component="nav" aria-label="main aiida repo">
+                {result.data.map((value) => {
+                    return (
+                        <ListItem className={classes.nested2}>
+                            <ListItemIcon>
+                                {value.type === "DIRECTORY" ? <MuiIcons.Folder /> : <MuiIcons.Description />}
+                            </ListItemIcon>
+                            <ListItemText primary={value.name} />
+                        </ListItem>
+                    )
+                })}
+            </List>
+        )
+    } else if (result.isError) {
+        const error = result.error as { message: string }
+        element = <Alert severity="error">{error.message}</Alert>
+    }
+
+    return element
+}
+
+
+function AiidaLinkIncomingList({ nodeUUID }: { nodeUUID: string | null }): JSX.Element {
+
+    const aiidaSettings = useContext(AiidaSettingsContext)
+    const result = useQuery([aiidaSettings.baseUrl, 'nodeIncoming', nodeUUID], () => getNodeIncoming(aiidaSettings.baseUrl, nodeUUID), { enabled: aiidaSettings.baseUrl !== null })
+
+    let element = <CircularProgress />
+    if (result.isIdle || result.data === null) {
+        element = <Alert severity="info" icon={<MuiIcons.SyncDisabled />}>Disabled</Alert>
+    } else if (result.data !== undefined) {
+        element = (
+            <List component="nav" aria-label="main aiida incoming">
+                {result.data.map((value) => {
+                    return (
+                        <AiidaTreeElement
+                            nested={true}
+                            pk={value.id}
+                            uuid={value.uuid}
+                            header={`${value.id} ${value.link_type.toUpperCase()} ${value.link_label}`}
+                            elementName={value.node_type.split(".").slice(0, 2).join(".")}
+                            info={`${value.mtime}, ${value.node_type}, ${value.process_type || ''}`}
+                            tooltip={`UUID: ${value.uuid}`}
+                        />
+                    )
+                })}
+            </List>
+        )
+    } else if (result.isError) {
+        const error = result.error as { message: string }
+        element = <Alert severity="error">{error.message}</Alert>
+    }
+
+    return element
+}
+
+function AiidaLinkOutgoingList({ nodeUUID }: { nodeUUID: string | null }): JSX.Element {
+
+    const aiidaSettings = useContext(AiidaSettingsContext)
+    const result = useQuery([aiidaSettings.baseUrl, 'nodeOutgoing', nodeUUID], () => getNodeOutgoing(aiidaSettings.baseUrl, nodeUUID), { enabled: aiidaSettings.baseUrl !== null })
+
+    let element = <CircularProgress />
+    if (result.isIdle || result.data === null) {
+        element = <Alert severity="info" icon={<MuiIcons.SyncDisabled />}>Disabled</Alert>
+    } else if (result.data !== undefined) {
+        element = (
+            <List component="nav" aria-label="main aiida incoming">
+                {result.data.map((value) => {
+                    return (
+                        <AiidaTreeElement
+                            nested={true}
+                            pk={value.id}
+                            uuid={value.uuid}
+                            header={`${value.id} ${value.link_type.toUpperCase()} ${value.link_label}`}
+                            elementName={value.node_type.split(".").slice(0, 2).join(".")}
+                            info={`${value.mtime}, ${value.node_type}, ${value.process_type || ''}`}
+                            tooltip={`UUID: ${value.uuid}`}
+                        />
+                    )
+                })}
+            </List>
+        )
+    } else if (result.isError) {
+        const error = result.error as { message: string }
+        element = <Alert severity="error">{error.message}</Alert>
+    }
+
+    return element
+}
+

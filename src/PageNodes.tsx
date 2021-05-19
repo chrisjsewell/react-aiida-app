@@ -17,7 +17,7 @@ import TextField from '@material-ui/core/TextField';
 import { useQuery } from 'react-query'
 import ReactJson from 'react-json-view'
 
-import { AiidaXNodeTree } from './nodeTree';
+import { AiidaNodeTree } from './nodeTree';
 import { useStyles } from './styles';
 import { AiidaSettingsContext, getNodeStatistics, getNode } from './aiidaClient'
 
@@ -49,7 +49,7 @@ export function PageProcesses(): JSX.Element {
           </Accordion>
           <Accordion>
             <AccordionSummary expandIcon={<ExpandMoreIcon />}><h3>File Contents</h3></AccordionSummary>
-            <AccordionDetails>a</AccordionDetails>
+            <AccordionDetails>TODO ...</AccordionDetails>
           </Accordion>
 
         </Paper>
@@ -57,7 +57,7 @@ export function PageProcesses(): JSX.Element {
 
       <Grid item xs={12} sm={12} md={6}>
         <Paper variant="outlined" className={classes.paper}>
-          <AiidaXNodeTree nodePrefix={nodePrefix} />
+          <AiidaNodeTree nodePrefix={nodePrefix} />
         </Paper>
       </Grid>
 

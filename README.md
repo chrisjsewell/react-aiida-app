@@ -166,6 +166,8 @@ verdi -p default restapi -P 5001 -H 0.0.0.0
 
 - material-ui `Drawer` is not (automatically) compatible with JupyterLab extension, where it needs to be constrained within the extension window (see <https://github.com/mui-org/material-ui/issues/11749> for potential fixes)
 
+- Persist state between route switches (e.g. currently going back to home, wipes all filters on node explorer)
+
 - Add a plugin system for adding additional pages
   - Ideally it would work like Python entry points, with the core app requiring no knowledge of the extensions: <https://stackoverflow.com/questions/67562146/javascript-typescript-equivalent-of-python-entry-points-for-plugin-system>
   - Possibly it is not available by default, and you have to search the node modules yourself (but will this work in jupyter extension). See <https://github.com/flowscripter/esm-dynamic-plugins/blob/master/src/repository/NodeModulesPluginRepository.ts>

@@ -102,3 +102,72 @@ export async function getNode(baseUrl: string | null, uuid: string | null): Prom
     const responseJson = (await response.json()) as IAiidaRestResponse
     return responseJson.data?.nodes === undefined ? null : Object.values(responseJson.data?.nodes)[0] as IAiidaRestNode
 }
+
+export interface IAiidaRestNodeRepoListItem {
+    name: string
+    type: "FILE" | "DIRECTORY"
+}
+
+export interface IAiidaRestResponseNodeRepoList extends IAiidaRestResponse  {
+    data: { repo_list: {[key: number]: IAiidaRestNodeRepoListItem} }
+}
+
+export async function getNodeRepoList(baseUrl: string | null, uuid: string | null): Promise<null | IAiidaRestNodeRepoListItem[]> {
+    if (baseUrl === null || !uuid) {
+        return null
+    }
+    if (!uuidPattern.test(uuid)) {
+        throw new TypeError('UUID does not match required format')
+    }
+    const response = await fetch(`${baseUrl}/nodes/${uuid}/repo/list`)
+    const responseJson = (await response.json()) as IAiidaRestResponseNodeRepoList
+    return responseJson.data?.repo_list === undefined ? null : Object.values(responseJson.data?.repo_list) as IAiidaRestNodeRepoListItem[]
+}
+
+export interface IAiidaRestNodeLinkItem {
+    ctime: string
+    full_type: string
+    id: number
+    label: string
+    mtime: string
+    node_type: string
+    process_type: string
+    user_id: number
+    uuid: string
+    link_label: string
+    link_type: string
+}
+
+export interface IAiidaRestResponseNodeIncoming extends IAiidaRestResponse  {
+    data: { incoming: {[key: number]: IAiidaRestNodeLinkItem} }
+}
+
+export async function getNodeIncoming(baseUrl: string | null, uuid: string | null): Promise<null | IAiidaRestNodeLinkItem[]> {
+    if (baseUrl === null || !uuid) {
+        return null
+    }
+    if (!uuidPattern.test(uuid)) {
+        throw new TypeError('UUID does not match required format')
+    }
+    // TODO deal with pagination
+    const response = await fetch(`${baseUrl}/nodes/${uuid}/links/incoming/page/1`)
+    const responseJson = (await response.json()) as IAiidaRestResponseNodeIncoming
+    return responseJson.data?.incoming === undefined ? null : Object.values(responseJson.data?.incoming) as IAiidaRestNodeLinkItem[]
+}
+
+export interface IAiidaRestResponseNodeOutgoing extends IAiidaRestResponse  {
+    data: { outgoing: {[key: number]: IAiidaRestNodeLinkItem} }
+}
+
+export async function getNodeOutgoing(baseUrl: string | null, uuid: string | null): Promise<null | IAiidaRestNodeLinkItem[]> {
+    if (baseUrl === null || !uuid) {
+        return null
+    }
+    if (!uuidPattern.test(uuid)) {
+        throw new TypeError('UUID does not match required format')
+    }
+    // TODO deal with pagination
+    const response = await fetch(`${baseUrl}/nodes/${uuid}/links/outgoing/page/1`)
+    const responseJson = (await response.json()) as IAiidaRestResponseNodeOutgoing
+    return responseJson.data?.outgoing === undefined ? null : Object.values(responseJson.data?.outgoing) as IAiidaRestNodeLinkItem[]
+}
