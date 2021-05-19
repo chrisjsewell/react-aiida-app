@@ -25,6 +25,7 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 
 import { useQuery } from 'react-query'
+import copy from 'copy-to-clipboard';
 
 import { AiidaSettingsContext, getNodes } from './aiidaClient'
 import { GitBranchIcon, RocketIcon } from './icons'
@@ -67,6 +68,7 @@ const initialMouseState = {
 
 interface IAiidaXElementProps {
     pk: number
+    uuid: string
     elementName?: string
     info?: string
     tooltip?: string
@@ -107,9 +109,10 @@ export function AiidaXNodeTree({ nodePrefix }: { nodePrefix: string }): JSX.Elem
                 {result.data.nodes.map((value) => {
                     return <AiidaXElement
                         pk={value.id}
+                        uuid={value.uuid}
                         elementName={value.node_type.split(".").slice(0, 2).join(".")}
                         info={`${value.mtime}, ${value.node_type}, ${value.process_type || ''}`}
-                        tooltip={`${value.label}`}
+                        tooltip={`UUID: ${value.uuid}`}
                         procLabel={value.attributes?.process_label}
                         procState={value.attributes?.process_state}
                         procExit={value.attributes?.exit_status}
@@ -206,16 +209,22 @@ function AiidaXElement(props: IAiidaXElementProps): JSX.Element {
         event.stopPropagation();
         setContextPosition(initialMouseState);
     };
+    const copyUUIDtoClipboard = (event: React.MouseEvent) => {
+        event.preventDefault();
+        event.stopPropagation();
+        setContextPosition(initialMouseState);
+        copy(`${props.uuid}`)
+    }
 
     // TODO react-markdown for tooltip
-    if (props.tooltip) {
+    if (props.tooltip !== undefined) {
         icon = (
             <Tooltip title={
                 <React.Fragment>
                     <p>{props.tooltip}</p>
                 </React.Fragment>
             }>
-                {icon}
+                <span>{icon}</span>
             </Tooltip>
         )
     }
@@ -226,7 +235,6 @@ function AiidaXElement(props: IAiidaXElementProps): JSX.Element {
     } else if (!!props.procState) {
         title = <span>{props.pk} {props.procLabel || ''}<Chip className={classes.listChip} label={`${props.procState} [${props.procExit}]`} variant="outlined" color="primary" /></span>
     }
-
 
     return (
         <React.Fragment>
@@ -241,8 +249,8 @@ function AiidaXElement(props: IAiidaXElementProps): JSX.Element {
                     primary={title}
                     secondary={props.info}
                 />
+                {/* TODO context menu does not close on a right-click not over the node */}
                 <Menu
-                    hidden
                     keepMounted
                     open={contextPosition.mouseY !== null}
                     onClose={handleContextClose}
@@ -254,8 +262,10 @@ function AiidaXElement(props: IAiidaXElementProps): JSX.Element {
                     }
                 >
                     <ListItem><b>PK {props.pk} Menu</b></ListItem>
-                    <MenuItem onClick={handleContextClose}>Open Data</MenuItem>
-                    <MenuItem onClick={handleContextClose}>Add to Group</MenuItem>
+                    <MenuItem onClick={copyUUIDtoClipboard}>Copy UUID to Clipboard</MenuItem>
+                    <MenuItem onClick={handleContextClose}>Close</MenuItem>
+                    {/* <MenuItem onClick={handleContextClose}>Open Data</MenuItem>
+                    <MenuItem onClick={handleContextClose}>Add to Group</MenuItem> */}
                 </Menu>
                 {open ? <MuiIcons.ExpandMore /> : <MuiIcons.ExpandLess />}
             </ListItem>

@@ -20,7 +20,7 @@ import { HashRouter as Router, Switch, Route, Link as RouterLink, LinkProps as R
 import { QueryClientProvider, useQuery } from 'react-query'
 import { ReactQueryDevtools } from 'react-query/devtools'
 
-import { AiidaSettingsContext, defaultRestUrl, isConnected, queryClient } from './aiidaClient';
+import { AiidaSettingsContext, defaultRestUrl, isConnected, queryClient, urlPattern } from './aiidaClient';
 import { PageHome } from './PageHome';
 import { PageProcesses } from './PageNodes';
 import { useStyles } from './styles';
@@ -73,7 +73,6 @@ export function App({ showDevTools = true }): JSX.Element {
   // the URL is is stored, so that it persists between sessions and page refreshes
   // we also validate to only allow http/https schema, and no ? which start the query string
   // TODO better URL validation (to guard against attacks)
-  const urlPattern = new RegExp('^https?:\\/\\/[^\\?]+$')
   let [restUrlBase, setRestUrlBase] = React.useState(localStorage.getItem('react-aiida-rest-url') || defaultRestUrl);
   const handleUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     localStorage.setItem('react-aiida-rest-url', event.target.value)

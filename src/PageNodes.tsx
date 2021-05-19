@@ -10,18 +10,22 @@ import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import CircularProgress from '@material-ui/core/CircularProgress'
+// import Box from '@material-ui/core/Box';
+import TextField from '@material-ui/core/TextField';
 
 import { useQuery } from 'react-query'
+import ReactJson from 'react-json-view'
 
 import { AiidaXNodeTree } from './nodeTree';
 import { useStyles } from './styles';
-import { AiidaSettingsContext, getNodeStatistics } from './aiidaClient'
+import { AiidaSettingsContext, getNodeStatistics, getNode } from './aiidaClient'
 
 
 export function PageProcesses(): JSX.Element {
   const classes = useStyles();
   const [nodePrefix, setnodePrefix] = React.useState("process.");
-  // const [nodeFieldsId, setnodeFieldsId] = React.useState("process.");
+  const [nodeFieldsUUID, setnodeFieldsUUID] = React.useState(null as string | null);
 
   return (
     <Grid container spacing={2} className={classes.mainGrid} direction="row-reverse">
@@ -41,7 +45,7 @@ export function PageProcesses(): JSX.Element {
           </Accordion>
           <Accordion>
             <AccordionSummary expandIcon={<ExpandMoreIcon />}><h3>Database Fields</h3></AccordionSummary>
-            <AccordionDetails>a</AccordionDetails>
+            <AccordionDetails className={classes.overflowAuto}><NodeExplorerAttributes nodeFieldsUUID={nodeFieldsUUID} setnodeFieldsUUID={setnodeFieldsUUID} /></AccordionDetails>
           </Accordion>
           <Accordion>
             <AccordionSummary expandIcon={<ExpandMoreIcon />}><h3>File Contents</h3></AccordionSummary>
@@ -68,6 +72,11 @@ export function NodeExplorerIntroduction(): JSX.Element {
       <div>
         <p>The node explorer allows you to visualise the nodes in your AiiDA profile as a filtered tree.</p>
         <p>Use the filter section below to select which node type you want to explore.</p>
+        <p>
+          You can right-click on a node to see additional actions, 
+          including copying its UUID to the clipboard.
+          You can use this to show all of if its content in the "Database Fields" section.
+          </p>
       </div>
     </React.Fragment>
   )
@@ -78,7 +87,7 @@ const nodePrefixesDefault = {
   "data.float.": null, "data.folder.": null, "data.int.": null, "data.list.": null, "data.numeric.": null,
   "data.orbital.": null, "data.remote.": null, "data.structure.": null,
   "process.": null, "process.calculation.": null, "process.workflow.": null
-} as {[key: string]: null | number}
+} as { [key: string]: null | number }
 
 export function NodeExplorerFilters({ nodePrefix, setnodePrefix }: { nodePrefix: string, setnodePrefix: React.Dispatch<React.SetStateAction<string>> }): JSX.Element {
   const classes = useStyles();
@@ -107,11 +116,43 @@ export function NodeExplorerFilters({ nodePrefix, setnodePrefix }: { nodePrefix:
         >
           {Object.entries(nodePrefixes).sort().map(([name, count]) => (
             <MenuItem value={name}>
-              {count===null? name: `${name} (${count})`}
+              {count === null ? name : `${name} (${count})`}
             </MenuItem>
           ))}
         </Select>
       </FormControl>
     </React.Fragment>
+  )
+}
+
+export function NodeExplorerAttributes({ nodeFieldsUUID, setnodeFieldsUUID }: { nodeFieldsUUID: null | string, setnodeFieldsUUID: React.Dispatch<React.SetStateAction<string | null>> }): JSX.Element {
+  const classes = useStyles();
+  const aiidaSettings = useContext(AiidaSettingsContext)
+  const result = useQuery([aiidaSettings.baseUrl, 'node', nodeFieldsUUID], () => getNode(aiidaSettings.baseUrl, nodeFieldsUUID), { enabled: aiidaSettings.baseUrl !== null })
+  const handleUUIDChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setnodeFieldsUUID(event.target.value);
+  }
+  let view = null as null | JSX.Element
+  if (result.data) {
+    view = <ReactJson src={result.data} collapseStringsAfterLength={40} />
+  } else if (result.isFetching) {
+    view = <CircularProgress />
+  }
+  return (
+    <Grid container>
+      <Grid xs={12}>
+        <TextField 
+        label="UUID" 
+        value={nodeFieldsUUID} 
+        onChange={handleUUIDChange} 
+        error={!!result.error}
+        helperText={!result.error ? undefined : `${result.error}`}
+        fullWidth 
+        />
+      </Grid>
+      <Grid xs={12} className={classes.padTop}>
+          {view}
+      </Grid>
+    </Grid>
   )
 }

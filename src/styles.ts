@@ -43,6 +43,9 @@ export const useStyles = makeStyles((theme: Theme) =>
     hide: {
       display: 'none',
     },
+    overflowAuto: {
+      overflow: 'auto',
+    },
     drawer: {
       width: drawerWidth,
       flexShrink: 0,
@@ -90,6 +93,9 @@ export const useStyles = makeStyles((theme: Theme) =>
     InlineIcon: {
       verticalAlign: 'middle',
       display: 'inline-flex',
+    },
+    padTop: {
+      paddingTop: theme.spacing(2),
     }
   }),
 );
