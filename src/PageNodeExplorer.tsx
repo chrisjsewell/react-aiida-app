@@ -22,7 +22,7 @@ import { useStyles } from './styles';
 import { AiidaSettingsContext, getNodeStatistics, getNode } from './aiidaClient'
 
 
-export function PageProcesses(): JSX.Element {
+export function PageNodeExplorer(): JSX.Element {
   const classes = useStyles();
   const [nodePrefix, setnodePrefix] = React.useState("process.");
   const [nodeFieldsUUID, setnodeFieldsUUID] = React.useState(null as string | null);

@@ -21,10 +21,11 @@ import { QueryClientProvider, useQuery } from 'react-query'
 import { ReactQueryDevtools } from 'react-query/devtools'
 
 import { AiidaSettingsContext, defaultRestUrl, isConnected, queryClient, urlPattern } from './aiidaClient';
-import { PageHome } from './PageHome';
-import { PageProcesses } from './PageNodes';
 import { useStyles } from './styles';
-import { AiiDAIcon200 } from './icons'
+import { AiiDAIcon200, GitBranchIcon } from './icons'
+import { PageHome } from './PageHome';
+import { PageNodeExplorer } from './PageNodeExplorer';
+import { PageNodeGraph } from './PageNodeGraph';
 
 interface ListItemLinkProps {
   icon?: React.ReactElement;
@@ -146,7 +147,8 @@ export function App({ showDevTools = true }): JSX.Element {
             {/* TODO signify which page is selected */}
             <List>
               <ListItemLink to="/" primary="Home" icon={<MuiIcons.Home />} />
-              <ListItemLink to="/process" primary="Node Explorer" icon={<MuiIcons.Explore />} />
+              <ListItemLink to="/nodes" primary="Node Explorer" icon={<MuiIcons.Explore />} />
+              <ListItemLink to="/graph" primary="Node Graph" icon={<GitBranchIcon />} />
             </List>
 
           </Drawer>
@@ -155,7 +157,8 @@ export function App({ showDevTools = true }): JSX.Element {
 
             <Switch>
               <Route exact path="/" component={PageHome} />
-              <Route path="/process" component={PageProcesses} />
+              <Route path="/nodes" component={PageNodeExplorer} />
+              <Route path="/graph" component={PageNodeGraph} />
               <Route path="/404" component={NotFound} />
               <Redirect to="/404" />
             </Switch>
@@ -182,7 +185,6 @@ function NotFound(): JSX.Element {
     </div>
   )
 }
-
 
 
 function RestUrlConnection({url, className = undefined}: {url: string | null, className?: string}): JSX.Element {

@@ -1,0 +1,13 @@
+diff --git a/node_modules/force-graph/dist/force-graph.module.js b/node_modules/force-graph/dist/force-graph.module.js
+index f4870fa..e8b7916 100644
+--- a/node_modules/force-graph/dist/force-graph.module.js
++++ b/node_modules/force-graph/dist/force-graph.module.js
+@@ -8,7 +8,7 @@ import Kapsule from 'kapsule';
+ import accessorFn from 'accessor-fn';
+ import ColorTracker from 'canvas-color-tracker';
+ import { forceSimulation, forceLink, forceManyBody, forceCenter, forceRadial } from 'd3-force-3d';
+-import { Bezier } from 'bezier-js';
++import Bezier from 'bezier-js';
+ import indexBy from 'index-array-by';
+ import { scaleOrdinal } from 'd3-scale';
+ import { schemePaired } from 'd3-scale-chromatic';
