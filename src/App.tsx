@@ -26,6 +26,7 @@ import { AiiDAIcon200, GitBranchIcon } from './icons'
 import { PageHome } from './PageHome';
 import { PageNodeExplorer } from './PageNodeExplorer';
 import { PageProvenanceGraph } from './PageProvenanceGraph';
+import { useLocalStorage } from './utils'
 
 interface ListItemLinkProps {
   icon?: React.ReactElement;
@@ -74,9 +75,8 @@ export function App({ showDevTools = true }): JSX.Element {
   // the URL is is stored, so that it persists between sessions and page refreshes
   // we also validate to only allow http/https schema, and no ? which start the query string
   // TODO better URL validation (to guard against attacks)
-  let [restUrlBase, setRestUrlBase] = React.useState(localStorage.getItem('react-aiida-rest-url') || defaultRestUrl);
+  let [restUrlBase, setRestUrlBase] = useLocalStorage('react-aiida-rest-url', defaultRestUrl);
   const handleUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    localStorage.setItem('react-aiida-rest-url', event.target.value)
     setRestUrlBase(event.target.value);
   };
 

@@ -51,6 +51,11 @@ export function IntroBox(): JSX.Element {
       <p>
         AiiDA Dashboard can be used as a standalone Web UI, or it also provides React components and facilitates wrapping into a JupyterLab <a href="https://jupyterlab.readthedocs.io/en/stable/extension/virtualdom.html">extension widget</a>.
       </p>
+      <p>
+          Alongside work on an <a href="https://github.com/aiidateam/AEP/pull/24">Extended REST API</a>,
+        it is hoped that this will offer not just ways to explore your profiles, but also to actively interact them:
+        creating/adding to groups, composing/running workchains, etc.
+      </p>
     </div>
   )
 }
@@ -64,7 +69,8 @@ export function GettingStartedBox(): JSX.Element {
         To use this application, you need to be able to connect to a running AiiDA REST API server.
       </p>
       <Alert variant="outlined" severity="info">
-        If you want to try out this app but don't have your own AiiDA profile, then you can use this demonstration server: <a href="http://15.188.110.176:5000/api/v4">http://15.188.110.176:5000/api/v4</a>
+        If you want to try out this app but don't have your own AiiDA profile, you can use this demonstration server: <a href="https://15.188.110.176:5000/api/v4">https://15.188.110.176:5000/api/v4</a>,
+        although note currently you will first need to open this address in a separate tab and accept the security certificate (under Advanced).
       </Alert>
       <p>
         To start a server for your own profile, you must have aiida-core installed with the REST dependencies:

@@ -209,6 +209,8 @@ $ sudo systemctl start aiidarest
 $ sudo systemctl enable aiidarest
 ```
 
+**NOTE** I had to patch `venv/lib/python3.8/site-packages/aiida/restapi/run_api.py` to add `ssl_context='adhoc'` (see https://blog.miguelgrinberg.com/post/running-your-flask-application-over-https)
+
 **TODO:** How to properly set up this as a production server?
 (see e.g., <https://medium.com/techfront/step-by-step-visual-guide-on-deploying-a-flask-application-on-aws-ec2-8e3e8b82c4f7>, <https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-uswgi-and-nginx-on-ubuntu-18-04>)
 
@@ -243,19 +245,20 @@ As discussed [here](https://dev.to/timlrx/a-comparison-of-javascript-graph-netwo
 - Algorithms: Available APIs to perform graph operations
 - Components: Out-of-the-box UI components
 
-Library | Licence | Rendering Engine | Algorithms | Components | TypeScript
-------- | ------- | ---------------- | ---------- | ---------- | -------
+Library | Licence | Rendering Engine | Algorithms | Components | TypeScript | NPM Downloads
+------- | ------- | ---------------- | ---------- | ---------- | ------- | -------
 D3 | BSD | SVG / Canvas | Low | Low
 Keylines | Commercial | Canvas / WebGL | High | Medium
 Vis.js | MIT | Canvas | Middle | Low
 Sigma.js | MIT | Canvas / WebGL | Middle | Low
 Ogma | Commercial | Canvas / WebGL | High | Low
-G6 | MIT | Canvas | High | High
+[G6](https://g6.antv.vision/) | MIT | Canvas | High | High | yes | 3,737
 Ngraph | MIT | WebGL | Middle | Low
-React-force-graph | MIT | WebGL | Low | Low | built-in
+[React-force-graph](https://github.com/vasturiano/react-force-graph) | MIT | Canvas (2D) / WebGL (3D) | Low | Low | yes | 27,868
 react-tree-graph | MIT | SVG | Low | Low
 
 For initial development I have chosen [React-force-graph](https://github.com/vasturiano/react-force-graph), since it appeared to have the best initial integration with React and was quite simple.
+But G6 may be better for a more complete solution?
 
 Development:
 
