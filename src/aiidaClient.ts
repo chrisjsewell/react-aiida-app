@@ -5,6 +5,8 @@ export const queryClient = new QueryClient()
 export const defaultRestUrl = "http://127.0.0.1:5000/api/v4"
 // TODO move validation to aiidaClient functions?
 export const urlPattern = new RegExp('^https?:\\/\\/[^\\?]+$')
+export const uuidPattern = new RegExp('^[-a-zA-Z0-9]+$')
+
 export const AiidaSettingsContext = React.createContext({baseUrl: defaultRestUrl} as {baseUrl: null | string})
 
 export interface IAiidaRestResponse {
@@ -88,8 +90,6 @@ export async function getNodeStatistics(baseUrl: string | null): Promise<null | 
     const responseJson = (await response.json()) as IAiidaRestResponseNodeStatistics
     return responseJson.data
 }
-
-const uuidPattern = new RegExp('^[-a-zA-Z0-9]+$')
 
 export async function getNode(baseUrl: string | null, uuid: string | null): Promise<null | IAiidaRestNode> {
     if (baseUrl === null || !uuid) {

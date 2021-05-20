@@ -47,6 +47,8 @@ function MyComponent(props) {
 
 ## This app vs Materials Cloud Explore
 
+**Update:** Materials Cloud is in fact looking to move to React
+
 Note, initial features of this app are quite similar to <https://www.materialscloud.org/explore/connect>: using the AiiDA REST API as a backend for visualising its data.
 However, this is built with <https://angularjs.org/> which, although also well used in industry, has two major drawbacks for our use case:
 
@@ -69,6 +71,11 @@ The disadvantage though is that the apps which it creates are substantially limi
 2. You are restricted by the semantics/layout of the Notebook, i.e. each app has to be a set of separate pages and in each page you have a set of vertically sequential cells.
 3. You are restricted by the semantics/functionality of ipywidgets, by industry standard, a very niche/bespoke tool.
    In practice, you end up taking a lot of time to learn/create a lot of HTML widgets that have little to no practical reusability, rather than being able to utilise the massive React ecosystem of libraries and components.
+
+[github-ci]: https://github.com/chrisjsewell/react-aiida-app/workflows/CI/badge.svg?branch=master
+[github-link]: https://github.com/chrisjsewell/react-aiida-app
+[codecov-badge]: https://codecov.io/gh/chrisjsewell/react-aiida-app/branch/master/graph/badge.svg
+[codecov-link]: https://codecov.io/gh/chrisjsewell/react-aiida-app
 
 ## Project initialisation with Create React App
 
@@ -151,6 +158,62 @@ verdi archive import "https://archive.materialscloud.org/record/file?filename=Hi
 
 verdi -p default restapi -P 5001 -H 0.0.0.0
 
+### Deployment of test server
+
+I have deployed an example AiiDA REST Server on AWS: <http://15.188.110.176:5000/api/v4>:
+
+1. Select an Ubuntu 20.04 EC2 Instance (since we need python>=3.7)
+2. Allow inbound traffic on port: `5000` and `22`, protocol: `TCP`, source: `0.0.0.0/0, ::/0`
+3. Set up an elastic IP
+4. SSH into the instance:
+
+```console
+$ sudo apt update
+$ sudo apt install python3-venv postgresql postgresql-server-dev-all postgresql-client
+$ python3 -m pip venv venv
+$ source venv/bin/activate
+$ pip install -U pip wheel
+$ pip install aiida-core[rest]~=1.6.3
+$ verdi quicksetup
+...
+$ verdi archive import "https://archive.materialscloud.org/record/file?filename=HiCond_bands_calculations.aiida&file_id=ee287780-ac04-4b8b-b03c-3cea6e446f9d&record_id=477"
+$ verdi archive import "https://archive.materialscloud.org/record/file?filename=HiCond_AuIh.aiida&file_id=8bb2d7d9-384b-4bdc-b917-76fa02fbd497&record_id=477"
+```
+
+You can then directly test access to the server:
+
+```bash
+$ verdi restapi -H 0.0.0.0 -P 5000
+```
+
+But, for reliability, we can set up a service to ensure it gets reloaded on any failures:
+
+```console
+$ sudo vi /etc/systemd/system/aiidarest.service
+[Unit]
+Description=AiiDA REST API service
+After=network.target
+
+[Service]
+User=ubuntu
+Group=ubuntu
+WorkingDirectory=/home/ubuntu
+ExecStart=/home/ubuntu/venv/bin/verdi restapi -H 0.0.0.0 -P 5000
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+
+$ sudo systemctl daemon-reload
+$ sudo systemctl start aiidarest
+$ sudo systemctl enable aiidarest
+```
+
+**NOTE** I had to patch `venv/lib/python3.8/site-packages/aiida/restapi/run_api.py` to add `ssl_context='adhoc'` (see https://blog.miguelgrinberg.com/post/running-your-flask-application-over-https)
+
+**TODO:** How to properly set up this as a production server?
+(see e.g., <https://medium.com/techfront/step-by-step-visual-guide-on-deploying-a-flask-application-on-aws-ec2-8e3e8b82c4f7>, <https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-uswgi-and-nginx-on-ubuntu-18-04>)
+
 ### TODO
 
 - Create demonstration server deployment
@@ -170,9 +233,46 @@ verdi -p default restapi -P 5001 -H 0.0.0.0
 
 - Add a plugin system for adding additional pages
   - Ideally it would work like Python entry points, with the core app requiring no knowledge of the extensions: <https://stackoverflow.com/questions/67562146/javascript-typescript-equivalent-of-python-entry-points-for-plugin-system>
-  - Possibly it is not available by default, and you have to search the node modules yourself (but will this work in jupyter extension). See <https://github.com/flowscripter/esm-dynamic-plugins/blob/master/src/repository/NodeModulesPluginRepository.ts>
+  - Possibly it is not available by default, and you have to search the node modules yourself (but will this work in jupyter extension). See <https://github.com/flowscripter/esm-dynamic-plugins/blob/master/src/repository/NodeModulesPluginRepository.tsx>
 
-[github-ci]: https://github.com/chrisjsewell/react-aiida-app/workflows/CI/badge.svg?branch=master
-[github-link]: https://github.com/chrisjsewell/react-aiida-app
-[codecov-badge]: https://codecov.io/gh/chrisjsewell/react-aiida-app/branch/master/graph/badge.svg
-[codecov-link]: https://codecov.io/gh/chrisjsewell/react-aiida-app
+### Provenance Graph Visualisation
+
+What library to use?
+
+As discussed [here](https://dev.to/timlrx/a-comparison-of-javascript-graph-network-visualisation-libraries-34a8), there are a number of libraries available, with three primary factors:
+
+- Rendering Engine: WebGL is more performant, but can be more difficult to work with.
+- Algorithms: Available APIs to perform graph operations
+- Components: Out-of-the-box UI components
+
+Library | Licence | Rendering Engine | Algorithms | Components | TypeScript | NPM Downloads
+------- | ------- | ---------------- | ---------- | ---------- | ------- | -------
+D3 | BSD | SVG / Canvas | Low | Low
+Keylines | Commercial | Canvas / WebGL | High | Medium
+Vis.js | MIT | Canvas | Middle | Low
+Sigma.js | MIT | Canvas / WebGL | Middle | Low
+Ogma | Commercial | Canvas / WebGL | High | Low
+[G6](https://g6.antv.vision/) | MIT | Canvas | High | High | yes | 3,737
+Ngraph | MIT | WebGL | Middle | Low
+[React-force-graph](https://github.com/vasturiano/react-force-graph) | MIT | Canvas (2D) / WebGL (3D) | Low | Low | yes | 27,868
+react-tree-graph | MIT | SVG | Low | Low
+
+For initial development I have chosen [React-force-graph](https://github.com/vasturiano/react-force-graph), since it appeared to have the best initial integration with React and was quite simple.
+But G6 may be better for a more complete solution?
+
+Development:
+
+- Currently I have had to add a patch to the install, to make it compatible with the `bezier-js` dependency, see: <https://github.com/vasturiano/react-force-graph/issues/282>
+- `react-sizeme` is required to get the graph to be constrained to the size of the grid that it is in.
+
+
+### Structure Visualisation
+
+TODO ...
+
+### Charts Visualisation
+
+To eventually visualise output data node.
+
+- https://openbase.com/categories/js/best-react-chart-libraries?orderBy=RECOMMENDED&
+- https://recharts.org

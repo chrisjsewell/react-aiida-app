@@ -16,15 +16,17 @@ import Divider from '@material-ui/core/Divider';
 import * as MuiIcons from '@material-ui/icons';
 import { Omit } from '@material-ui/types';
 
-import { HashRouter as Router, Switch, Route, Link as RouterLink, LinkProps as RouterLinkProps, Redirect } from 'react-router-dom';
+import { Switch, Route, Link as RouterLink, LinkProps as RouterLinkProps, Redirect, useLocation } from 'react-router-dom';
 import { QueryClientProvider, useQuery } from 'react-query'
 import { ReactQueryDevtools } from 'react-query/devtools'
 
 import { AiidaSettingsContext, defaultRestUrl, isConnected, queryClient, urlPattern } from './aiidaClient';
-import { PageHome } from './PageHome';
-import { PageProcesses } from './PageNodes';
 import { useStyles } from './styles';
-import { AiiDAIcon200 } from './icons'
+import { AiiDAIcon200, GitBranchIcon } from './icons'
+import { PageHome } from './PageHome';
+import { PageNodeExplorer } from './PageNodeExplorer';
+import { PageProvenanceGraph } from './PageProvenanceGraph';
+import { useLocalStorage } from './utils'
 
 interface ListItemLinkProps {
   icon?: React.ReactElement;
@@ -34,6 +36,7 @@ interface ListItemLinkProps {
 
 function ListItemLink(props: ListItemLinkProps) {
   const { icon, primary, to } = props;
+  const location = useLocation();
 
   const renderLink = React.useMemo(
     () =>
@@ -45,7 +48,7 @@ function ListItemLink(props: ListItemLinkProps) {
 
   return (
     <li>
-      <ListItem button component={renderLink} >
+      <ListItem button component={renderLink} selected={to === location.pathname} >
         {icon ? <ListItemIcon>{icon}</ListItemIcon> : null}
         <ListItemText primary={primary} />
       </ListItem>
@@ -73,15 +76,12 @@ export function App({ showDevTools = true }): JSX.Element {
   // the URL is is stored, so that it persists between sessions and page refreshes
   // we also validate to only allow http/https schema, and no ? which start the query string
   // TODO better URL validation (to guard against attacks)
-  let [restUrlBase, setRestUrlBase] = React.useState(localStorage.getItem('react-aiida-rest-url') || defaultRestUrl);
+  let [restUrlBase, setRestUrlBase] = useLocalStorage('react-aiida-rest-url', defaultRestUrl);
   const handleUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    localStorage.setItem('react-aiida-rest-url', event.target.value)
     setRestUrlBase(event.target.value);
   };
 
   return (
-    <Router>
-
       <div className={classes.root}>
         <QueryClientProvider client={queryClient}>
 
@@ -143,10 +143,10 @@ export function App({ showDevTools = true }): JSX.Element {
             </div>
             <Divider />
 
-            {/* TODO signify which page is selected */}
             <List>
               <ListItemLink to="/" primary="Home" icon={<MuiIcons.Home />} />
-              <ListItemLink to="/process" primary="Node Explorer" icon={<MuiIcons.Explore />} />
+              <ListItemLink to="/nodes" primary="Node Explorer" icon={<MuiIcons.Explore />} />
+              <ListItemLink to="/graph" primary="Provenance Graph" icon={<GitBranchIcon />} />
             </List>
 
           </Drawer>
@@ -155,7 +155,8 @@ export function App({ showDevTools = true }): JSX.Element {
 
             <Switch>
               <Route exact path="/" component={PageHome} />
-              <Route path="/process" component={PageProcesses} />
+              <Route path="/nodes" component={PageNodeExplorer} />
+              <Route path="/graph" component={PageProvenanceGraph} />
               <Route path="/404" component={NotFound} />
               <Redirect to="/404" />
             </Switch>
@@ -166,8 +167,6 @@ export function App({ showDevTools = true }): JSX.Element {
         </QueryClientProvider>
 
       </div>
-
-    </Router>
   );
 }
 
@@ -182,7 +181,6 @@ function NotFound(): JSX.Element {
     </div>
   )
 }
-
 
 
 function RestUrlConnection({url, className = undefined}: {url: string | null, className?: string}): JSX.Element {

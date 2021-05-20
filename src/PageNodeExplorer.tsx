@@ -17,14 +17,15 @@ import TextField from '@material-ui/core/TextField';
 import { useQuery } from 'react-query'
 import ReactJson from 'react-json-view'
 
+import { AiidaSettingsContext, getNodeStatistics, getNode } from './aiidaClient'
 import { AiidaNodeTree } from './nodeTree';
 import { useStyles } from './styles';
-import { AiidaSettingsContext, getNodeStatistics, getNode } from './aiidaClient'
+import { useLocalStorage } from './utils'
 
 
-export function PageProcesses(): JSX.Element {
+export function PageNodeExplorer(): JSX.Element {
   const classes = useStyles();
-  const [nodePrefix, setnodePrefix] = React.useState("process.");
+  const [nodePrefix, setnodePrefix] = useLocalStorage('aiida-node-explorer-type-prefix',  "process.");
   const [nodeFieldsUUID, setnodeFieldsUUID] = React.useState(null as string | null);
 
   return (
@@ -68,17 +69,15 @@ export function PageProcesses(): JSX.Element {
 
 export function NodeExplorerIntroduction(): JSX.Element {
   return (
-    <React.Fragment>
       <div>
         <p>The node explorer allows you to visualise the nodes in your AiiDA profile as a filtered tree.</p>
         <p>Use the filter section below to select which node type you want to explore.</p>
         <p>
-          You can right-click on a node to see additional actions, 
+          You can right-click on a node to see additional actions,
           including copying its UUID to the clipboard.
           You can use this to show all of if its content in the "Database Fields" section.
           </p>
       </div>
-    </React.Fragment>
   )
 }
 
@@ -141,17 +140,17 @@ export function NodeExplorerAttributes({ nodeFieldsUUID, setnodeFieldsUUID }: { 
   return (
     <Grid container>
       <Grid xs={12}>
-        <TextField 
-        label="UUID" 
-        value={nodeFieldsUUID} 
-        onChange={handleUUIDChange} 
-        error={!!result.error}
-        helperText={!result.error ? undefined : `${result.error}`}
-        fullWidth 
+        <TextField
+          label="UUID"
+          value={nodeFieldsUUID}
+          onChange={handleUUIDChange}
+          error={!!result.error}
+          helperText={!result.error ? undefined : `${result.error}`}
+          fullWidth
         />
       </Grid>
       <Grid xs={12} className={classes.padTop}>
-          {view}
+        {view}
       </Grid>
     </Grid>
   )

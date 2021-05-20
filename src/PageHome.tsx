@@ -2,6 +2,8 @@ import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import * as MuiIcons from '@material-ui/icons';
+import Alert from '@material-ui/lab/Alert';
+
 import SyntaxHighlighter from 'react-syntax-highlighter';
 
 import { useStyles } from './styles';
@@ -49,6 +51,11 @@ export function IntroBox(): JSX.Element {
       <p>
         AiiDA Dashboard can be used as a standalone Web UI, or it also provides React components and facilitates wrapping into a JupyterLab <a href="https://jupyterlab.readthedocs.io/en/stable/extension/virtualdom.html">extension widget</a>.
       </p>
+      <p>
+          Alongside work on an <a href="https://github.com/aiidateam/AEP/pull/24">Extended REST API</a>,
+        it is hoped that this will offer not just ways to explore your profiles, but also to actively interact them:
+        creating/adding to groups, composing/running workchains, etc.
+      </p>
     </div>
   )
 }
@@ -61,14 +68,18 @@ export function GettingStartedBox(): JSX.Element {
       <p>
         To use this application, you need to be able to connect to a running AiiDA REST API server.
       </p>
+      <Alert variant="outlined" severity="info">
+        If you want to try out this app but don't have your own AiiDA profile, you can use this demonstration server: <a href="https://15.188.110.176:5000/api/v4">https://15.188.110.176:5000/api/v4</a>,
+        although note currently you will first need to open this address in a separate tab and accept the security certificate (under Advanced).
+      </Alert>
       <p>
-        You must have aiida installed with the REST dependencies:
+        To start a server for your own profile, you must have aiida-core installed with the REST dependencies:
       </p>
       <SyntaxHighlighter language="bash">
         {"$ pip install aiida-core[rest]~=1.6.3"}
       </SyntaxHighlighter>
       <p>
-        Then (after setting up a profile) you can start your REST server:
+        Then you can start your REST server:
       </p>
       <SyntaxHighlighter language="bash">
         {"$ verdi -p myprofile restapi\n * REST API running on http://127.0.0.1:5000/api/v4"}
@@ -120,6 +131,7 @@ export function DetailedBox(): JSX.Element {
         }
       </SyntaxHighlighter>
       <h3 id="this-app-vs-materials-cloud-explore">This app vs Materials Cloud Explore</h3>
+      <p><b>Update:</b> Materials Cloud is in fact now looking to move to React.</p>
       <p>Note, initial features of this app are quite similar to <a href="https://www.materialscloud.org/explore/connect">https://www.materialscloud.org/explore/connect</a>: using the AiiDA REST API as a backend for visualising its data. However, this is built with <a href="https://angularjs.org/">https://angularjs.org/</a> which, although also well used in industry, has two major drawbacks for our use case:</p>
       <ol type="1">
         <li>You cannot integrate it with JupyterLab (see benefits above)</li>
