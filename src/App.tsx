@@ -16,7 +16,7 @@ import Divider from '@material-ui/core/Divider';
 import * as MuiIcons from '@material-ui/icons';
 import { Omit } from '@material-ui/types';
 
-import { HashRouter as Router, Switch, Route, Link as RouterLink, LinkProps as RouterLinkProps, Redirect } from 'react-router-dom';
+import { Switch, Route, Link as RouterLink, LinkProps as RouterLinkProps, Redirect } from 'react-router-dom';
 import { QueryClientProvider, useQuery } from 'react-query'
 import { ReactQueryDevtools } from 'react-query/devtools'
 
@@ -81,8 +81,6 @@ export function App({ showDevTools = true }): JSX.Element {
   };
 
   return (
-    <Router>
-
       <div className={classes.root}>
         <QueryClientProvider client={queryClient}>
 
@@ -169,8 +167,6 @@ export function App({ showDevTools = true }): JSX.Element {
         </QueryClientProvider>
 
       </div>
-
-    </Router>
   );
 }
 
