@@ -25,7 +25,7 @@ import { useStyles } from './styles';
 import { AiiDAIcon200, GitBranchIcon } from './icons'
 import { PageHome } from './PageHome';
 import { PageNodeExplorer } from './PageNodeExplorer';
-import { PageNodeGraph } from './PageNodeGraph';
+import { PageProvenanceGraph } from './PageProvenanceGraph';
 
 interface ListItemLinkProps {
   icon?: React.ReactElement;
@@ -148,7 +148,7 @@ export function App({ showDevTools = true }): JSX.Element {
             <List>
               <ListItemLink to="/" primary="Home" icon={<MuiIcons.Home />} />
               <ListItemLink to="/nodes" primary="Node Explorer" icon={<MuiIcons.Explore />} />
-              <ListItemLink to="/graph" primary="Node Graph" icon={<GitBranchIcon />} />
+              <ListItemLink to="/graph" primary="Provenance Graph" icon={<GitBranchIcon />} />
             </List>
 
           </Drawer>
@@ -158,7 +158,7 @@ export function App({ showDevTools = true }): JSX.Element {
             <Switch>
               <Route exact path="/" component={PageHome} />
               <Route path="/nodes" component={PageNodeExplorer} />
-              <Route path="/graph" component={PageNodeGraph} />
+              <Route path="/graph" component={PageProvenanceGraph} />
               <Route path="/404" component={NotFound} />
               <Redirect to="/404" />
             </Switch>
