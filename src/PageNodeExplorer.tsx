@@ -25,7 +25,7 @@ import { useLocalStorage } from './utils'
 
 export function PageNodeExplorer(): JSX.Element {
   const classes = useStyles();
-  const [nodePrefix, setnodePrefix] = useLocalStorage('aiida-node-explorer-type-prefix',  "process.");
+  const [nodePrefix, setnodePrefix] = useLocalStorage('aiida-node-explorer-type-prefix',  "");
   const [nodeFieldsUUID, setnodeFieldsUUID] = React.useState(null as string | null);
 
   return (
@@ -82,7 +82,7 @@ export function NodeExplorerIntroduction(): JSX.Element {
 }
 
 const nodePrefixesDefault = {
-  "data.": null, "data.array.": null, "data.bool.": null, "data.cif.": null, "data.code.": null, "data.dict.": null,
+  "": null, "data.": null, "data.array.": null, "data.bool.": null, "data.cif.": null, "data.code.": null, "data.dict.": null,
   "data.float.": null, "data.folder.": null, "data.int.": null, "data.list.": null, "data.numeric.": null,
   "data.orbital.": null, "data.remote.": null, "data.structure.": null,
   "process.": null, "process.calculation.": null, "process.workflow.": null
@@ -97,6 +97,7 @@ export function NodeExplorerFilters({ nodePrefix, setnodePrefix }: { nodePrefix:
   if (result.data) {
     nodePrefixes = result.data.types
     // TODO do this programmatically
+    nodePrefixes[""] = result.data.total
     nodePrefixes["data."] = null
     nodePrefixes["process."] = null
     nodePrefixes["process.calculation."] = null
@@ -115,7 +116,7 @@ export function NodeExplorerFilters({ nodePrefix, setnodePrefix }: { nodePrefix:
         >
           {Object.entries(nodePrefixes).sort().map(([name, count]) => (
             <MenuItem value={name}>
-              {count === null ? name : `${name} (${count})`}
+              {count === null ? name : `${name || 'ALL'} (${count})`}
             </MenuItem>
           ))}
         </Select>
