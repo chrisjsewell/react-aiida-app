@@ -115,7 +115,7 @@ export function AiidaNodeTree({ nodePrefix }: { nodePrefix: string }): JSX.Eleme
                     return <AiidaTreeElement
                         pk={value.id}
                         uuid={value.uuid}
-                        header={`${value.id} ${value.attributes?.process_label || ''}`}
+                        header={`${value.id} ${value.attributes?.process_label || value.label || ''}`}
                         elementName={value.node_type.split(".").slice(0, 2).join(".")}
                         info={`${value.mtime}, ${value.node_type}, ${value.process_type || ''}`}
                         tooltip={`UUID: ${value.uuid}`}

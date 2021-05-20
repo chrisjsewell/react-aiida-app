@@ -6,6 +6,10 @@
 This project is a continuation of [jlab_aiidatree](https://github.com/chrisjsewell/jlab_aiidatree),
 in which we built a working prototype for a JupyterLab extension to interact with AiiDA.
 
+Some awesome features:
+
+- Persists aspects of the page in-between tab changes and refreshes
+
 During development of `jlab_aiidatree` it was noted that you can embed [React components](https://reactjs.org/) inside of JupyterLab (see [JupyterLab/React](https://jupyterlab.readthedocs.io/en/stable/extension/virtualdom.html)).
 
 The goal, therefore, is that we can develop this package as a standalone app
