@@ -16,7 +16,7 @@ import Divider from '@material-ui/core/Divider';
 import * as MuiIcons from '@material-ui/icons';
 import { Omit } from '@material-ui/types';
 
-import { Switch, Route, Link as RouterLink, LinkProps as RouterLinkProps, Redirect } from 'react-router-dom';
+import { Switch, Route, Link as RouterLink, LinkProps as RouterLinkProps, Redirect, useLocation } from 'react-router-dom';
 import { QueryClientProvider, useQuery } from 'react-query'
 import { ReactQueryDevtools } from 'react-query/devtools'
 
@@ -36,6 +36,7 @@ interface ListItemLinkProps {
 
 function ListItemLink(props: ListItemLinkProps) {
   const { icon, primary, to } = props;
+  const location = useLocation();
 
   const renderLink = React.useMemo(
     () =>
@@ -47,7 +48,7 @@ function ListItemLink(props: ListItemLinkProps) {
 
   return (
     <li>
-      <ListItem button component={renderLink} >
+      <ListItem button component={renderLink} selected={to === location.pathname} >
         {icon ? <ListItemIcon>{icon}</ListItemIcon> : null}
         <ListItemText primary={primary} />
       </ListItem>
@@ -142,7 +143,6 @@ export function App({ showDevTools = true }): JSX.Element {
             </div>
             <Divider />
 
-            {/* TODO signify which page is selected */}
             <List>
               <ListItemLink to="/" primary="Home" icon={<MuiIcons.Home />} />
               <ListItemLink to="/nodes" primary="Node Explorer" icon={<MuiIcons.Explore />} />
