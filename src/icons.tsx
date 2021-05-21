@@ -2,7 +2,7 @@
 
 import SvgIcon from '@material-ui/core/SvgIcon';
 
-export function AiiDAIcon200({width = 200, height = 200}): JSX.Element {
+export function AiiDAIcon200({ width = 200, height = 200 }): JSX.Element {
     return (<svg width={width} height={height} viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
         {/* <!-- created using https://editor.method.ac --> */}
         <g>
@@ -39,4 +39,199 @@ export function GitBranchIcon(): JSX.Element {
             <path fillRule="evenodd" d="M5.75 21a1.75 1.75 0 110-3.5 1.75 1.75 0 010 3.5zM2.5 19.25a3.25 3.25 0 106.5 0 3.25 3.25 0 00-6.5 0zM5.75 6.5a1.75 1.75 0 110-3.5 1.75 1.75 0 010 3.5zM2.5 4.75a3.25 3.25 0 106.5 0 3.25 3.25 0 00-6.5 0zM18.25 6.5a1.75 1.75 0 110-3.5 1.75 1.75 0 010 3.5zM15 4.75a3.25 3.25 0 106.5 0 3.25 3.25 0 00-6.5 0z"></path><path fillRule="evenodd" d="M5.75 16.75A.75.75 0 006.5 16V8A.75.75 0 005 8v8c0 .414.336.75.75.75z"></path><path fillRule="evenodd" d="M17.5 8.75v-1H19v1a3.75 3.75 0 01-3.75 3.75h-7a1.75 1.75 0 00-1.75 1.75H5A3.25 3.25 0 018.25 11h7a2.25 2.25 0 002.25-2.25z"></path>
         </SvgIcon >
     )
+}
+
+export function OptimadeIcon({ width = 180, height = 180 }): JSX.Element {
+    return <SvgIcon>
+        <svg
+            version="1"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 400 400"
+            width={width}
+            height={height}
+        >
+            <g
+                // transform="matrix(3.5294118,0,0,3.5294118,-5.2941176,-5.2938861)"
+            >
+                <line
+                    y2="7.9474411"
+                    x2="38"
+                    y1="14.5"
+                    x1="27"
+                    style={{ stroke: "#9ed700", strokeWidth: 1.14999998 }} 
+                />
+                <line
+                    y2="46.052559"
+                    x2="38"
+                    y1="33.25"
+                    x1="37.825317"
+                    style={{ stroke: "#00acd9", strokeWidth: 1.14999998 }} 
+                />
+                <line
+                    y2="27"
+                    x2="5"
+                    y1="33.25"
+                    x1="16.174683"
+                    style={{ stroke: "#7a2dd0", strokeWidth: 1.14999998 }} 
+                />
+                <line
+                    y2="46.052559"
+                    x2="38"
+                    y1="27"
+                    x1="49"
+                    style={{ stroke: "#00acd9", strokeWidth: 1.14999998 }} 
+                />
+                <line
+                    y2="46.052559"
+                    x2="16"
+                    y1="46.052559"
+                    x1="38"
+                    style={{ stroke: "#e8e8e8", strokeWidth: 2 }} 
+                />
+                <line
+                    y2="27"
+                    x2="5"
+                    y1="46.052559"
+                    x1="16"
+                    style={{ stroke: "#7a2dd0", strokeWidth: 1.14999998 }} 
+                />
+                <line
+                    y2="7.9474411"
+                    x2="16"
+                    y1="27"
+                    x1="5"
+                    style={{ stroke: "#e8e8e8", strokeWidth: 2 }} 
+                />
+                <line
+                    y2="7.9474411"
+                    x2="38"
+                    y1="7.9474411"
+                    x1="16"
+                    style={{ stroke: "#9ed700", strokeWidth: 1.14999998 }} 
+                />
+                <line
+                    y2="27"
+                    x2="49"
+                    y1="7.9474411"
+                    x1="38"
+                    style={{ stroke: "#e8e8e8", strokeWidth: 2 }} 
+                />
+                <circle
+                    r="3.5"
+                    cy="27"
+                    cx="49"
+                    style={{ fill: "#00acd9" }} 
+                />
+                <circle
+                    r="3.5"
+                    cy="46.052559"
+                    cx="38"
+                    style={{ fill: "#00acd9" }} 
+                />
+                <circle
+                    id="circle367"
+                    r="3.5"
+                    cy="46.052559"
+                    cx="16"
+                    style={{ fill: "#7a2dd0" }} 
+                />
+                <circle
+                    r="3.5"
+                    cy="27"
+                    cx="5"
+                    style={{ fill: "#7a2dd0" }} 
+                />
+                <circle
+                    r="3.5"
+                    cy="7.9474411"
+                    cx="16"
+                    style={{ fill: "#9ed700" }} 
+                />
+                <circle
+                    r="3.5"
+                    cy="7.9474411"
+                    cx="38"
+                    style={{ fill: "#9ed700" }} 
+                />
+                <line
+                    y2="33.25"
+                    x2="16.174683"
+                    y1="39.5"
+                    x1="27"
+                    style={{ stroke: "#ff414d", strokeWidth: 1 }} 
+                />
+                <line
+                    y2="20.75"
+                    x2="16.174683"
+                    y1="33.25"
+                    x1="16.174683"
+                    style={{ stroke: "#ff414d", strokeWidth: 1 }} 
+                />
+                <line
+                    y2="14.5"
+                    x2="27"
+                    y1="20.75"
+                    x1="16.174683"
+                    style={{ stroke: "#ff414d", strokeWidth: 1 }} 
+                />
+                <line
+                    y2="20.75"
+                    x2="37.825317"
+                    y1="14.5"
+                    x1="27"
+                    style={{ stroke: "#ff414d", strokeWidth: 1 }} 
+                />
+                <line
+                    y2="33.25"
+                    x2="37.825317"
+                    y1="20.75"
+                    x1="37.825317"
+                    style={{ stroke: "#ff414d", strokeWidth: 1 }} 
+                />
+                <line
+                    y2="39.5"
+                    x2="27"
+                    y1="33.25"
+                    x1="37.825317"
+                    style={{ stroke: "#ff414d", strokeWidth: 1 }} 
+                />
+                <circle
+                    r="2.5"
+                    cy="39.5"
+                    cx="27"
+                    style={{ fill: "#ff414d" }} 
+                />
+                <circle
+                    r="2.5"
+                    cy="33.25"
+                    cx="16.174683"
+                    style={{ fill: "#ff414d" }} 
+                />
+                <circle
+                    r="2.5"
+                    cy="20.75"
+                    cx="16.174683"
+                    style={{ fill: "#ff414d" }} 
+                />
+                <circle
+                    r="2.5"
+                    cy="14.5"
+                    cx="27"
+                    style={{ fill: "#ff414d" }} 
+                />
+                <circle
+                    r="2.5"
+                    cy="20.75"
+                    cx="37.825317"
+                    style={{ fill: "#ff414d" }} 
+                />
+                <circle
+                    r="2.5"
+                    cy="33.25"
+                    cx="37.825317"
+                    style={{ fill: "#ff414d" }} 
+                />
+            </g>
+        </svg>
+    </SvgIcon>
 }

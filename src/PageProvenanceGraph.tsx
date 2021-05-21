@@ -101,6 +101,7 @@ export function ProvenanceGraphIntroduction(): JSX.Element {
             <p>This is a work in progress!</p>
             <p>Input a root node UUID and you will see a visualisation of its local provenance graph.</p>
             <p>Hover over a node or link to see more information about it (you may have to click on the area first).</p>
+            <p>Eventually it is intended to add features like click-to-expand.</p>
         </div>
     )
 }

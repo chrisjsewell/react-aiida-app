@@ -31,16 +31,20 @@ export interface IAiidaRestNode {
     process_type: string
     user_id: number
     uuid: string
+    attributes: {[key: string]: any}
+}
+
+export interface IAiidaRestProcess extends IAiidaRestNode {
     attributes: {
-        process_state?:
+        process_state:
         | 'created'
         | 'running'
         | 'waiting'
         | 'finished'
         | 'excepted'
         | 'killed'
-        process_label?: string
-        exit_status?: number
+        process_label: string
+        exit_status: number
     }
 }
 

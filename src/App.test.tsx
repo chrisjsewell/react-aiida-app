@@ -5,7 +5,7 @@ import { Router, HashRouter } from 'react-router-dom'
 
 import App from './App';
 
-test('renders learn react link', () => {
+test('renders homepage', () => {
   render(<HashRouter ><App showDevTools={false} /></HashRouter>);
   const linkElement = screen.getByText(/AiiDA Dashboard/i, {selector: "#app-header"});
   expect(linkElement).toBeInTheDocument();
@@ -45,4 +45,16 @@ test('landing on provenance page', () => {
   )
 
   expect(screen.getByText(/Provenance Graph Visualisation/i)).toBeInTheDocument()
+})
+
+test('landing on structure page', () => {
+  const history = createMemoryHistory()
+  history.push('/structures')
+  render(
+    <Router history={history}>
+      <App showDevTools={false} />
+    </Router>
+  )
+
+  expect(screen.getByText(/Structure Visualisation/i)).toBeInTheDocument()
 })
