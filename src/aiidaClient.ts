@@ -68,7 +68,7 @@ export async function isConnected(baseUrl: string | null): Promise<boolean> {
 }
 
 
-export async function getNodes(baseUrl: string | null, nodeType: string, page: number): Promise<null | { nodes: IAiidaRestNode[], totalCount: number, perPage: number }> {
+export async function getNodes(baseUrl: string | null, nodeType: string, latestDate: null | string, page: number): Promise<null | { nodes: IAiidaRestNode[], totalCount: number, perPage: number }> {
     if (baseUrl === null) {
         return null
     }

@@ -85,7 +85,7 @@ export function PageNodeExplorer(): JSX.Element {
 
       <Grid item xs={12} sm={12} md={6}>
         <Paper variant="outlined" className={classes.paper}>
-          <AiidaNodeTree nodePrefix={nodePrefix} selectedLatestDate />
+          <AiidaNodeTree nodePrefix={nodePrefix} selectedLatestDate={selectedLatestDate} />
         </Paper>
       </Grid>
 
