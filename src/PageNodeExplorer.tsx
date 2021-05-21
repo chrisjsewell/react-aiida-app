@@ -25,8 +25,18 @@ import { useLocalStorage } from './utils'
 
 export function PageNodeExplorer(): JSX.Element {
   const classes = useStyles();
-  const [nodePrefix, setnodePrefix] = useLocalStorage('aiida-node-explorer-type-prefix',  "process.");
-  const [nodeFieldsUUID, setnodeFieldsUUID] = React.useState(null as string | null);
+  const [nodePrefix, setnodePrefix] = useLocalStorage('aiida-node-explorer-type-prefix',  "");
+  const [nodeFieldsUUID, setnodeFieldsUUID] = useLocalStorage('aiida-node-explorer-field-uuid', null as string | null);
+  const [expandedTabs, setExpandedTabs] = useLocalStorage('aiida-node-explorer-expanded', ['intro'])
+  function changeExpanded(tab: string, expanded: boolean) {
+    const tabs = new Set(expandedTabs)
+    if (expanded) {
+      tabs.add(tab)
+    } else {
+      tabs.delete(tab)
+    }
+    setExpandedTabs(Array.from(tabs))
+  }
 
   return (
     <Grid container spacing={2} className={classes.mainGrid} direction="row-reverse">
@@ -34,21 +44,33 @@ export function PageNodeExplorer(): JSX.Element {
       <Grid item xs={12} sm={12} md={6}>
         <Paper variant="outlined" className={classes.paper}>
 
-          <Accordion defaultExpanded>
+          <Accordion
+            defaultExpanded={expandedTabs.includes("intro")} 
+            onChange={(event: React.ChangeEvent<{}>, expanded: boolean) => {changeExpanded('intro', expanded)}} 
+          >
             <AccordionSummary expandIcon={<ExpandMoreIcon />}><h3>AiiDA Node Explorer</h3></AccordionSummary>
             <AccordionDetails><NodeExplorerIntroduction /></AccordionDetails>
           </Accordion>
-          <Accordion>
+          <Accordion
+            defaultExpanded={expandedTabs.includes("filters")} 
+            onChange={(event: React.ChangeEvent<{}>, expanded: boolean) => {changeExpanded('filters', expanded)}} 
+          >
             <AccordionSummary expandIcon={<ExpandMoreIcon />}><h3>Filters</h3></AccordionSummary>
             <AccordionDetails>
               <NodeExplorerFilters nodePrefix={nodePrefix} setnodePrefix={setnodePrefix} />
             </AccordionDetails>
           </Accordion>
-          <Accordion>
+          <Accordion
+            defaultExpanded={expandedTabs.includes("fields")} 
+            onChange={(event: React.ChangeEvent<{}>, expanded: boolean) => {changeExpanded('fields', expanded)}} 
+          >
             <AccordionSummary expandIcon={<ExpandMoreIcon />}><h3>Database Fields</h3></AccordionSummary>
             <AccordionDetails className={classes.overflowAuto}><NodeExplorerAttributes nodeFieldsUUID={nodeFieldsUUID} setnodeFieldsUUID={setnodeFieldsUUID} /></AccordionDetails>
           </Accordion>
-          <Accordion>
+          <Accordion
+            defaultExpanded={expandedTabs.includes("files")} 
+            onChange={(event: React.ChangeEvent<{}>, expanded: boolean) => {changeExpanded('files', expanded)}} 
+          >
             <AccordionSummary expandIcon={<ExpandMoreIcon />}><h3>File Contents</h3></AccordionSummary>
             <AccordionDetails>TODO ...</AccordionDetails>
           </Accordion>
@@ -82,7 +104,7 @@ export function NodeExplorerIntroduction(): JSX.Element {
 }
 
 const nodePrefixesDefault = {
-  "data.": null, "data.array.": null, "data.bool.": null, "data.cif.": null, "data.code.": null, "data.dict.": null,
+  "": null, "data.": null, "data.array.": null, "data.bool.": null, "data.cif.": null, "data.code.": null, "data.dict.": null,
   "data.float.": null, "data.folder.": null, "data.int.": null, "data.list.": null, "data.numeric.": null,
   "data.orbital.": null, "data.remote.": null, "data.structure.": null,
   "process.": null, "process.calculation.": null, "process.workflow.": null
@@ -97,6 +119,7 @@ export function NodeExplorerFilters({ nodePrefix, setnodePrefix }: { nodePrefix:
   if (result.data) {
     nodePrefixes = result.data.types
     // TODO do this programmatically
+    nodePrefixes[""] = result.data.total
     nodePrefixes["data."] = null
     nodePrefixes["process."] = null
     nodePrefixes["process.calculation."] = null
@@ -115,7 +138,7 @@ export function NodeExplorerFilters({ nodePrefix, setnodePrefix }: { nodePrefix:
         >
           {Object.entries(nodePrefixes).sort().map(([name, count]) => (
             <MenuItem value={name}>
-              {count === null ? name : `${name} (${count})`}
+              {count === null ? name : `${name || 'ALL'} (${count})`}
             </MenuItem>
           ))}
         </Select>
