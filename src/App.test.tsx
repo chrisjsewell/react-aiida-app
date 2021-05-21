@@ -1,15 +1,21 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
+import React from 'react'
+import { render, screen } from '@testing-library/react'
 import { createMemoryHistory } from 'history'
 import { Router, HashRouter } from 'react-router-dom'
 
-import App from './App';
+import App from './App'
 
 test('renders homepage', () => {
-  render(<HashRouter ><App showDevTools={false} /></HashRouter>);
-  const linkElement = screen.getByText(/AiiDA Dashboard/i, {selector: "#app-header"});
-  expect(linkElement).toBeInTheDocument();
-});
+  render(
+    <HashRouter>
+      <App showDevTools={false} />
+    </HashRouter>
+  )
+  const linkElement = screen.getByText(/AiiDA Dashboard/i, {
+    selector: '#app-header'
+  })
+  expect(linkElement).toBeInTheDocument()
+})
 
 test('landing on a bad page', () => {
   const history = createMemoryHistory()
@@ -44,7 +50,9 @@ test('landing on provenance page', () => {
     </Router>
   )
 
-  expect(screen.getByText(/Provenance Graph Visualisation/i)).toBeInTheDocument()
+  expect(
+    screen.getByText(/Provenance Graph Visualisation/i)
+  ).toBeInTheDocument()
 })
 
 test('landing on structure page', () => {

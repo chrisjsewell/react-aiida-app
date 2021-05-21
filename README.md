@@ -230,6 +230,7 @@ $ sudo systemctl enable aiidarest
   - Need to eject project? See: <https://medium.com/curated-by-versett/dont-eject-your-create-react-app-b123c5247741>
   - For moving packages, see: <https://stackoverflow.com/questions/18875674/whats-the-difference-between-dependencies-devdependencies-and-peerdependencies/22004559#22004559>
   - alternatively, could create a separate package to house the reusable components
+  - Used: https://brygrill.medium.com/create-react-app-with-typescript-eslint-prettier-and-github-actions-f3ce6a571c97
 
 - material-ui `Drawer` is not (automatically) compatible with JupyterLab extension, where it needs to be constrained within the extension window (see <https://github.com/mui-org/material-ui/issues/11749> for potential fixes)
 
