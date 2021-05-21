@@ -22,10 +22,11 @@ import { ReactQueryDevtools } from 'react-query/devtools'
 
 import { AiidaSettingsContext, defaultRestUrl, isConnected, queryClient, urlPattern } from './aiidaClient';
 import { useStyles } from './styles';
-import { AiiDAIcon200, GitBranchIcon } from './icons'
+import { AiiDAIcon200, GitBranchIcon, OptimadeIcon } from './icons'
 import { PageHome } from './PageHome';
 import { PageNodeExplorer } from './PageNodeExplorer';
 import { PageProvenanceGraph } from './PageProvenanceGraph';
+import { PageStructures } from './PageStructures'
 import { useLocalStorage } from './utils'
 
 interface ListItemLinkProps {
@@ -147,6 +148,7 @@ export function App({ showDevTools = true }): JSX.Element {
               <ListItemLink to="/" primary="Home" icon={<MuiIcons.Home />} />
               <ListItemLink to="/nodes" primary="Node Explorer" icon={<MuiIcons.Explore />} />
               <ListItemLink to="/graph" primary="Provenance Graph" icon={<GitBranchIcon />} />
+              <ListItemLink to="/structures" primary="Structure Explorer" icon={<OptimadeIcon />} />
             </List>
 
           </Drawer>
@@ -157,6 +159,7 @@ export function App({ showDevTools = true }): JSX.Element {
               <Route exact path="/" component={PageHome} />
               <Route path="/nodes" component={PageNodeExplorer} />
               <Route path="/graph" component={PageProvenanceGraph} />
+              <Route path="/structures" component={PageStructures} />
               <Route path="/404" component={NotFound} />
               <Redirect to="/404" />
             </Switch>

@@ -272,7 +272,10 @@ Development:
 
 ### Structure Visualisation
 
-TODO ...
+- Looks good but https://github.com/3dmol/3Dmol.js/issues/236 (no typescript)
+- https://github.com/lukasturcani/mol-draw uses threejs, very basic, no typescript
+- https://www.npmjs.com/package/@react-three/fiber + https://github.com/pmndrs/drei looks to be the way, but will have to build the actual viewer
+  - Note: this issue is currently pinning @react-three/drei < 5>: https://github.com/pmndrs/drei/issues/397
 
 ### Charts Visualisation
 
