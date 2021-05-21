@@ -13,9 +13,13 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import CircularProgress from '@material-ui/core/CircularProgress'
 // import Box from '@material-ui/core/Box';
 import TextField from '@material-ui/core/TextField';
+import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
 
 import { useQuery } from 'react-query'
 import ReactJson from 'react-json-view'
+
+import 'date-fns';
+import DateFnsUtils from '@date-io/date-fns';
 
 import { AiidaSettingsContext, getNodeStatistics, getNode } from './aiidaClient'
 import { AiidaNodeTree } from './nodeTree';
@@ -25,9 +29,10 @@ import { useLocalStorage } from './utils'
 
 export function PageNodeExplorer(): JSX.Element {
   const classes = useStyles();
-  const [nodePrefix, setnodePrefix] = useLocalStorage('aiida-node-explorer-type-prefix',  "");
-  const [nodeFieldsUUID, setnodeFieldsUUID] = useLocalStorage('aiida-node-explorer-field-uuid', null as string | null);
   const [expandedTabs, setExpandedTabs] = useLocalStorage('aiida-node-explorer-expanded', ['intro'])
+  const [nodePrefix, setnodePrefix] = useLocalStorage('aiida-node-explorer-type-prefix',  "");
+  const [selectedLatestDate, setSelectedLatestDate] = useLocalStorage<string | null>('aiida-node-explorer-latest-date', null);
+  const [nodeFieldsUUID, setnodeFieldsUUID] = useLocalStorage<string | null>('aiida-node-explorer-field-uuid', null);
   function changeExpanded(tab: string, expanded: boolean) {
     const tabs = new Set(expandedTabs)
     if (expanded) {
@@ -57,7 +62,7 @@ export function PageNodeExplorer(): JSX.Element {
           >
             <AccordionSummary expandIcon={<ExpandMoreIcon />}><h3>Filters</h3></AccordionSummary>
             <AccordionDetails>
-              <NodeExplorerFilters nodePrefix={nodePrefix} setnodePrefix={setnodePrefix} />
+              <NodeExplorerFilters nodePrefix={nodePrefix} setnodePrefix={setnodePrefix} selectedLatestDate={selectedLatestDate} setSelectedLatestDate={setSelectedLatestDate} />
             </AccordionDetails>
           </Accordion>
           <Accordion
@@ -80,7 +85,7 @@ export function PageNodeExplorer(): JSX.Element {
 
       <Grid item xs={12} sm={12} md={6}>
         <Paper variant="outlined" className={classes.paper}>
-          <AiidaNodeTree nodePrefix={nodePrefix} />
+          <AiidaNodeTree nodePrefix={nodePrefix} selectedLatestDate={selectedLatestDate} />
         </Paper>
       </Grid>
 
@@ -110,7 +115,7 @@ const nodePrefixesDefault = {
   "process.": null, "process.calculation.": null, "process.workflow.": null
 } as { [key: string]: null | number }
 
-export function NodeExplorerFilters({ nodePrefix, setnodePrefix }: { nodePrefix: string, setnodePrefix: React.Dispatch<React.SetStateAction<string>> }): JSX.Element {
+export function NodeExplorerFilters({ nodePrefix, setnodePrefix, selectedLatestDate, setSelectedLatestDate }: { nodePrefix: string, setnodePrefix: React.Dispatch<React.SetStateAction<string>>, selectedLatestDate: string | null, setSelectedLatestDate: React.Dispatch<React.SetStateAction<string | null>> }): JSX.Element {
   const classes = useStyles();
   const aiidaSettings = useContext(AiidaSettingsContext)
   const result = useQuery([aiidaSettings.baseUrl, 'statistics'], () => getNodeStatistics(aiidaSettings.baseUrl), { enabled: aiidaSettings.baseUrl !== null })
@@ -124,7 +129,12 @@ export function NodeExplorerFilters({ nodePrefix, setnodePrefix }: { nodePrefix:
     nodePrefixes["process."] = null
     nodePrefixes["process.calculation."] = null
     nodePrefixes["process.workflow."] = null
+    // TODO use result.data.ctime_by_day to set latest date
   }
+  const handleDateChange = (date: Date | null) => {
+    setSelectedLatestDate(date? date.toString(): null);
+  };
+
 
   return (
     <React.Fragment>
@@ -142,6 +152,21 @@ export function NodeExplorerFilters({ nodePrefix, setnodePrefix }: { nodePrefix:
             </MenuItem>
           ))}
         </Select>
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          <KeyboardDatePicker
+            disableToolbar
+            variant="inline"
+            format="MM/dd/yyyy"
+            margin="normal"
+            id="latest-date-picker"
+            label="Latest date"
+            value={selectedLatestDate}
+            onChange={handleDateChange}
+            KeyboardButtonProps={{
+              'aria-label': 'change date',
+            }}
+          />
+        </MuiPickersUtilsProvider>
       </FormControl>
     </React.Fragment>
   )
