@@ -89,7 +89,7 @@ interface IAiidaTreeElementProps {
 }
 
 
-export function AiidaNodeTree({ nodePrefix }: { nodePrefix: string }): JSX.Element {
+export function AiidaNodeTree({ nodePrefix, selectedLatestDate }: { nodePrefix: string, selectedLatestDate: null | string }): JSX.Element {
     /**
      * a React component housing a list of AiiDA elements
     */
@@ -101,7 +101,11 @@ export function AiidaNodeTree({ nodePrefix }: { nodePrefix: string }): JSX.Eleme
     };
     const aiidaSettings = useContext(AiidaSettingsContext)
     // TODO usePaginationQuery
-    const result = useQuery([aiidaSettings.baseUrl, 'nodes', nodePrefix, page], () => getNodes(aiidaSettings.baseUrl, nodePrefix, page), { enabled: aiidaSettings.baseUrl !== null })
+    let latestDate = null as null | string
+    if (selectedLatestDate){
+        latestDate = (new Date(selectedLatestDate)).toISOString().split('T')[0]
+    }
+    const result = useQuery([aiidaSettings.baseUrl, 'nodes', nodePrefix, latestDate, page], () => getNodes(aiidaSettings.baseUrl, nodePrefix, latestDate, page), { enabled: aiidaSettings.baseUrl !== null })
 
     let element = <CircularProgress />
     let pages = 1

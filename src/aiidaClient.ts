@@ -74,8 +74,10 @@ export async function getNodes(baseUrl: string | null, nodeType: string, page: n
     }
     const perPage = 20
     const nodeTypeQuery = nodeType? `node_type=like=%22${nodeType}%%22&` : ''
+    // TODO excepts: https://github.com/aiidateam/aiida-core/issues/4957
+    const dateQuery = latestDate? `mtime%3E=${latestDate}&` : ''
     // TODO better url join?
-    const response = await fetch(`${baseUrl}/nodes/page/${page}?perpage=${perPage}&orderby=-mtime&${nodeTypeQuery}attributes=true&attributes_filter=process_label,process_state,exit_status`)
+    const response = await fetch(`${baseUrl}/nodes/page/${page}?perpage=${perPage}&orderby=-mtime&${nodeTypeQuery}${dateQuery}attributes=true&attributes_filter=process_label,process_state,exit_status`)
     // TODO handle errors
     const totalCount = parseInt(response.headers.get('x-total-count') || '0')
     const responseJson = (await response.json()) as IAiidaRestResponseNode
