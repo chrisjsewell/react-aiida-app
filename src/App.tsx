@@ -20,7 +20,7 @@ import { Switch, Route, Link as RouterLink, LinkProps as RouterLinkProps, Redire
 import { QueryClientProvider, useQuery } from 'react-query'
 import { ReactQueryDevtools } from 'react-query/devtools'
 
-import { AiidaSettingsContext, defaultRestUrl, isConnected, queryClient, urlPattern } from './aiidaClient';
+import { AiidaSettingsContext, defaultRestUrl, isConnected, queryAiidaClient, urlPattern } from './clients/aiidaClient';
 import { useStyles } from './styles';
 import { AiiDAIcon200, GitBranchIcon, OptimadeIcon } from './icons'
 import { PageHome } from './PageHome';
@@ -84,7 +84,7 @@ export function App({ showDevTools = true }): JSX.Element {
 
   return (
       <div className={classes.root}>
-        <QueryClientProvider client={queryClient}>
+        <QueryClientProvider client={queryAiidaClient}>
 
           <AppBar
             position="sticky"

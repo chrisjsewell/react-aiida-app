@@ -224,7 +224,7 @@ $ sudo systemctl enable aiidarest
 
 - Improve package build/packaging tooling for use as module in JupyterLab:
   - Currently I'm just copying the `.ts[x]` files into the JupyterLab `src/reactApp` folder and that works, but like to have it as a seperate module for install from npm.
-  - the react-app packages the app to be run as a standalone web-site and so (a) includes all the types and testing libraries in dependencie (see <https://github.com/facebook/create-react-app/issues/6180>)  (b) does not compile the JS into a place that is automatically used by `npm publish` (i.e. installing from npm does not give you the package as a module)
+  - the react-app packages the app to be run as a standalone web-site and so (a) includes all the types and testing libraries in dependencies (see <https://github.com/facebook/create-react-app/issues/6180>)  (b) does not compile the JS into a place that is automatically used by `npm publish` (i.e. installing from npm does not give you the package as a module)
   - also there is no prettier configuration for formatting and the eslint seems quite permissive
   - See: <https://reactjs.org/docs/code-splitting.html>
   - Need to eject project? See: <https://medium.com/curated-by-versett/dont-eject-your-create-react-app-b123c5247741>
@@ -232,8 +232,6 @@ $ sudo systemctl enable aiidarest
   - alternatively, could create a separate package to house the reusable components
 
 - material-ui `Drawer` is not (automatically) compatible with JupyterLab extension, where it needs to be constrained within the extension window (see <https://github.com/mui-org/material-ui/issues/11749> for potential fixes)
-
-- Persist state between route switches (e.g. currently going back to home, wipes all filters on node explorer)
 
 - Add a plugin system for adding additional pages
   - Ideally it would work like Python entry points, with the core app requiring no knowledge of the extensions: <https://stackoverflow.com/questions/67562146/javascript-typescript-equivalent-of-python-entry-points-for-plugin-system>
@@ -276,6 +274,7 @@ Development:
 - https://github.com/lukasturcani/mol-draw uses threejs, very basic, no typescript
 - https://www.npmjs.com/package/@react-three/fiber + https://github.com/pmndrs/drei looks to be the way, but will have to build the actual viewer
   - Note: this issue is currently pinning @react-three/drei < 5>: https://github.com/pmndrs/drei/issues/397
+  - https://codesandbox.io/s/r3f-multi-view-mdnhl?file=/src/index.js:155-163
 
 ### Charts Visualisation
 

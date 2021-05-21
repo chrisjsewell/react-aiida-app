@@ -27,8 +27,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import { useQuery } from 'react-query'
 import copy from 'copy-to-clipboard';
 
-import { AiidaSettingsContext, getNodes, getNodeIncoming, getNodeOutgoing, getNodeRepoList } from './aiidaClient'
-import { GitBranchIcon, RocketIcon } from './icons'
+import { AiidaSettingsContext, getNodes, getNodeIncoming, getNodeOutgoing, getNodeRepoList } from '../clients/aiidaClient'
+import { GitBranchIcon, RocketIcon } from '../icons'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({

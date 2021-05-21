@@ -1,7 +1,7 @@
 import React from 'react';
 import { QueryClient } from 'react-query'
 
-export const queryClient = new QueryClient()
+export const queryAiidaClient = new QueryClient()
 export const defaultRestUrl = "http://127.0.0.1:5000/api/v4"
 // TODO move validation to aiidaClient functions?
 export const urlPattern = new RegExp('^https?:\\/\\/[^\\?]+$')

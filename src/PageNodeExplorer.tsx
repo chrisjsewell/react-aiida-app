@@ -17,8 +17,8 @@ import TextField from '@material-ui/core/TextField';
 import { useQuery } from 'react-query'
 import ReactJson from 'react-json-view'
 
-import { AiidaSettingsContext, getNodeStatistics, getNode } from './aiidaClient'
-import { AiidaNodeTree } from './nodeTree';
+import { AiidaSettingsContext, getNodeStatistics, getNode } from './clients/aiidaClient'
+import { AiidaNodeTree } from './components/nodeTree';
 import { useStyles } from './styles';
 import { useLocalStorage } from './utils'
 
