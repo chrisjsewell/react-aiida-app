@@ -2,8 +2,9 @@ import { render } from '@testing-library/react'
 
 import { IStructureCell } from './structureUtils'
 import { StructureTable } from './structureTable'
+import { Structure3DViewer } from './structure3DViewer'
 
-describe('StructureTable', () => {
+describe('structure components', () => {
   const exampleStructureData = {
     ctime: '',
     full_type: '',
@@ -43,5 +44,11 @@ describe('StructureTable', () => {
   it('creates table', async () => {
     const { container } = render(<StructureTable data={exampleStructureData} />)
     expect(container.firstChild).toHaveClass('structure-table')
+  })
+  it('creates 3d viewer', async () => {
+    const { container } = render(
+      <Structure3DViewer data={exampleStructureData} />
+    )
+    expect(container.firstChild).toHaveClass('structure-3d-viewer')
   })
 })

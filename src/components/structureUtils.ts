@@ -1,5 +1,5 @@
 import get from 'lodash.get'
-import { Color } from 'three'
+import { Color, Vector3 } from 'three'
 
 import { IAiidaRestNode } from '../clients/aiidaClient'
 
@@ -28,6 +28,12 @@ export interface IStructureData extends IAiidaRestNode {
       position: [number, number, number]
     }[]
   }
+}
+
+/** Get the length of a 3D vector */
+export function vectorLength(point: [number, number, number]): string {
+  const vector = new Vector3(...point)
+  return vector.length().toFixed(2)
 }
 
 /** Convert list of kinds to a mapping of the kind name to the element name.
