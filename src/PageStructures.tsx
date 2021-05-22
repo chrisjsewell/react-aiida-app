@@ -4,7 +4,7 @@ import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
 
 import { useStyles } from './styles'
-import { StructurePanel } from './components/structureViewer'
+import { StructurePanel } from './components/structurePanel'
 
 export function PageStructures(): JSX.Element {
   const classes = useStyles()

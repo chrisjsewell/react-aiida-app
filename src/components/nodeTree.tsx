@@ -128,7 +128,7 @@ export function AiidaNodeTree({
         {result.data.nodes.map(value => {
           return (
             <AiidaTreeElement
-              key={value.id}
+              key={`aiida-tree-el-${value.uuid}`}
               pk={value.id}
               uuid={value.uuid}
               header={`${value.id} ${
