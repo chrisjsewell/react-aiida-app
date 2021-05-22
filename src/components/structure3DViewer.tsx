@@ -13,35 +13,98 @@ import {
 } from './structureUtils'
 
 /** Create a 3D scene for a single StructureData  */
-export function Structure3DViewer({
-  data
-}: {
+export function Structure3DViewer(props: {
   data: IStructureData
+  withBox: boolean
+  images: [number, number, number][]
+  height?: number | undefined
+  width?: number | undefined
 }): JSX.Element {
   // TODO I would like to add a PerspectiveCamera, to change the FoV,
   // but can't work out how to integrate it with the OrbitControls
   // https://github.com/pmndrs/drei/issues/402
   return (
-    <Canvas className="structure-3d-viewer">
+    <Canvas
+      className="structure-3d-viewer"
+      style={{ height: props.height, width: props.width }}
+    >
       <OrbitControls />
 
       <ambientLight />
       <pointLight position={[10, 10, 10]} />
 
       <Center alignTop={false}>
-        <Structure data={data} />
+        <Structure
+          data={props.data}
+          images={props.images}
+          withBox={props.withBox}
+        />
       </Center>
     </Canvas>
   )
 }
 
+Structure3DViewer.defaultProps = {
+  withBox: true,
+  images: [[0, 0, 0]]
+}
+
+/** Render a single AiiDA StructureData */
+export function Structure(props: {
+  data: IStructureData
+  withBox: boolean
+  images: [number, number, number][]
+}): JSX.Element {
+  const [[ax, ay, az], [bx, by, bz], [cx, cy, cz]] = props.data.attributes.cell
+  const sites = props.data.attributes.sites
+  const kindMap = kinds2elMap(props.data.attributes.kinds)
+  let boxes = null
+  if (props.withBox) {
+    boxes = (
+      <React.Fragment>
+        {props.images.map(([na, nb, nc]) => {
+          const newCell = [
+            [ax + ax * na, ay + ay * na, az + az * na],
+            [bx + bx * nb, by + by * nb, bz + bz * nb],
+            [cx + cx * nc, cy + cy * nc, cz + cz * nc]
+          ]
+          return <BoundingBox cell={newCell as IStructureCell} />
+        })}
+      </React.Fragment>
+    )
+  }
+  return (
+    <React.Fragment>
+      {boxes}
+      {props.images.map(([na, nb, nc]) => {
+        return sites.map(site => {
+          const [px, py, pz] = site.position
+          return (
+            <Atom
+              position={
+                new Vector3(
+                  px + ax * na + bx * nb + cx * nc,
+                  py + ay * na + by * nb + cy * nc,
+                  pz + az * na + bz * nb + cz * nc
+                )
+              }
+              radius={element2radius(kindMap[site.kind_name])}
+              color={element2colorThree(kindMap[site.kind_name])}
+            />
+          )
+        })
+      })}
+    </React.Fragment>
+  )
+}
+
+Structure.defaultProps = {
+  withBox: true,
+  images: [[0, 0, 0]]
+}
+
 /** Render a single atoms as a sphere */
-export function Atom({
-  position,
-  radius = 1,
-  color = 'blue',
-  opacity = 0.9
-}: {
+export function Atom(props: {
   position: Vector3
   radius: number
   color: string | number | THREE.Color
@@ -50,19 +113,29 @@ export function Atom({
   // This reference will give us direct access to the mesh
   const mesh = useRef() as any
   return (
-    <mesh ref={mesh} position={position}>
-      <sphereBufferGeometry args={[radius, 30, 30]} />
-      <meshLambertMaterial color={color} transparent={true} opacity={opacity} />
+    <mesh ref={mesh} position={props.position}>
+      <sphereBufferGeometry args={[props.radius, 30, 30]} />
+      <meshLambertMaterial
+        color={props.color}
+        transparent={true}
+        opacity={props.opacity}
+      />
     </mesh>
   )
+}
+
+Atom.defaultProps = {
+  radius: 1,
+  color: 'blue',
+  opacity: 0.9
 }
 
 function add(v1: Vector3, v2: Vector3): Vector3 {
   return new Vector3(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z)
 }
 
-/** Draw the  */
-function Boundary({ cell }: { cell: IStructureCell }): JSX.Element {
+/** Draw the boundary box for the unit cell */
+function BoundingBox({ cell }: { cell: IStructureCell }): JSX.Element {
   const root = new Vector3(0, 0, 0)
   const x = new Vector3(...cell[0])
   const y = new Vector3(...cell[1])
@@ -94,27 +167,6 @@ function Boundary({ cell }: { cell: IStructureCell }): JSX.Element {
         lineWidth={1}
         dashed={true}
       />
-    </React.Fragment>
-  )
-}
-
-/** Render a single AiiDA StructureData */
-export function Structure({ data }: { data: IStructureData }): JSX.Element {
-  const sites = data.attributes.sites
-  const kindMap = kinds2elMap(data.attributes.kinds)
-  return (
-    <React.Fragment>
-      <Boundary cell={data.attributes.cell} />
-      {sites.map(site => {
-        return (
-          <Atom
-            position={new Vector3(...site.position)}
-            radius={element2radius(kindMap[site.kind_name])}
-            color={element2colorThree(kindMap[site.kind_name])}
-            opacity={0.9}
-          />
-        )
-      })}
     </React.Fragment>
   )
 }
