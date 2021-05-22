@@ -4,6 +4,9 @@
 // learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom'
 
+import fetchMock from 'jest-fetch-mock'
+fetchMock.enableMocks()
+
 // required after adding react-three
 // https://stackoverflow.com/questions/64558062/how-to-mock-resizeobserver-to-work-in-unit-tests-using-react-testing-library
 import observer from 'resize-observer-polyfill'
