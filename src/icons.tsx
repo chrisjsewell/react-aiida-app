@@ -31,11 +31,7 @@ export function AiiDAIcon200({
       </g>
       <g>
         <title>Layer 1</title>
-        <g
-          id="svg_1"
-          fill="#000000"
-          transform="translate(0, 200) scale(0.1, -0.1)"
-        >
+        <g id="svg_1" fill="#000000" transform="translate(0, 200) scale(0.1, -0.1)">
           <path
             fill="#84D3DB"
             id="svg_2"
@@ -236,31 +232,11 @@ export function OptimadeIcon({
             style={{ stroke: '#ff414d', strokeWidth: 1 }}
           />
           <circle r="2.5" cy="39.5" cx="27" style={{ fill: '#ff414d' }} />
-          <circle
-            r="2.5"
-            cy="33.25"
-            cx="16.174683"
-            style={{ fill: '#ff414d' }}
-          />
-          <circle
-            r="2.5"
-            cy="20.75"
-            cx="16.174683"
-            style={{ fill: '#ff414d' }}
-          />
+          <circle r="2.5" cy="33.25" cx="16.174683" style={{ fill: '#ff414d' }} />
+          <circle r="2.5" cy="20.75" cx="16.174683" style={{ fill: '#ff414d' }} />
           <circle r="2.5" cy="14.5" cx="27" style={{ fill: '#ff414d' }} />
-          <circle
-            r="2.5"
-            cy="20.75"
-            cx="37.825317"
-            style={{ fill: '#ff414d' }}
-          />
-          <circle
-            r="2.5"
-            cy="33.25"
-            cx="37.825317"
-            style={{ fill: '#ff414d' }}
-          />
+          <circle r="2.5" cy="20.75" cx="37.825317" style={{ fill: '#ff414d' }} />
+          <circle r="2.5" cy="33.25" cx="37.825317" style={{ fill: '#ff414d' }} />
         </g>
       </svg>
     </SvgIcon>

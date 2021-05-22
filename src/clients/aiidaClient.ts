@@ -103,8 +103,7 @@ export async function getNodeStatistics(
     return null
   }
   const response = await fetch(`${baseUrl}/nodes/statistics/`)
-  const responseJson =
-    (await response.json()) as IAiidaRestResponseNodeStatistics
+  const responseJson = (await response.json()) as IAiidaRestResponseNodeStatistics
   return responseJson.data
 }
 
@@ -118,9 +117,7 @@ export async function getNode(
   if (!uuidPattern.test(uuid)) {
     throw new TypeError('UUID does not match required format')
   }
-  const response = await fetch(
-    `${baseUrl}/nodes/${uuid}?attributes=true&extras=true`
-  )
+  const response = await fetch(`${baseUrl}/nodes/${uuid}?attributes=true&extras=true`)
   const responseJson = (await response.json()) as IAiidaRestResponse
   return responseJson.data?.nodes === undefined
     ? null
@@ -150,9 +147,7 @@ export async function getNodeRepoList(
   const responseJson = (await response.json()) as IAiidaRestResponseNodeRepoList
   return responseJson.data?.repo_list === undefined
     ? null
-    : (Object.values(
-        responseJson.data?.repo_list
-      ) as IAiidaRestNodeRepoListItem[])
+    : (Object.values(responseJson.data?.repo_list) as IAiidaRestNodeRepoListItem[])
 }
 
 export interface IAiidaRestNodeLinkItem {

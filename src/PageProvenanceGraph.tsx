@@ -39,12 +39,7 @@ export function PageProvenanceGraph(): JSX.Element {
   }
 
   return (
-    <Grid
-      container
-      spacing={2}
-      className={classes.mainGrid}
-      direction="row-reverse"
-    >
+    <Grid container spacing={2} className={classes.mainGrid} direction="row-reverse">
       <Grid item xs={12} sm={12} md={6}>
         <Paper variant="outlined" className={classes.paper}>
           <Accordion defaultExpanded>
@@ -117,12 +112,12 @@ export function ProvenanceGraphIntroduction(): JSX.Element {
     <div>
       <p>This is a work in progress!</p>
       <p>
-        Input a root node UUID and you will see a visualisation of its local
-        provenance graph.
+        Input a root node UUID and you will see a visualisation of its local provenance
+        graph.
       </p>
       <p>
-        Hover over a node or link to see more information about it (you may have
-        to click on the area first).
+        Hover over a node or link to see more information about it (you may have to
+        click on the area first).
       </p>
       <p>Eventually it is intended to add features like click-to-expand.</p>
     </div>

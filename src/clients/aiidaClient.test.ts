@@ -28,9 +28,7 @@ it('runs getNode query', async () => {
   const output = await getNode('url', 'uuid')
 
   expect(fetch).toHaveBeenCalledTimes(1)
-  expect(fetch.mock.calls[0][0]).toEqual(
-    'url/nodes/uuid?attributes=true&extras=true'
-  )
+  expect(fetch.mock.calls[0][0]).toEqual('url/nodes/uuid?attributes=true&extras=true')
   expect(output).toEqual('result')
 })
 

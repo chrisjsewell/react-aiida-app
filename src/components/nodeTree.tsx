@@ -77,32 +77,19 @@ interface IAiidaTreeElementProps {
   info?: string
   tooltip?: string
   procLabel?: string
-  procState?:
-    | 'created'
-    | 'running'
-    | 'waiting'
-    | 'finished'
-    | 'excepted'
-    | 'killed'
+  procState?: 'created' | 'running' | 'waiting' | 'finished' | 'excepted' | 'killed'
   procExit?: number
   nested?: boolean
 }
 
-export function AiidaNodeTree({
-  nodePrefix
-}: {
-  nodePrefix: string
-}): JSX.Element {
+export function AiidaNodeTree({ nodePrefix }: { nodePrefix: string }): JSX.Element {
   /**
    * a React component housing a list of AiiDA elements
    */
 
   const classes = useStyles()
   const [page, setPage] = React.useState(1)
-  const handlePageChange = (
-    event: React.ChangeEvent<unknown>,
-    value: number
-  ) => {
+  const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value)
   }
   const aiidaSettings = useContext(AiidaSettingsContext)
@@ -135,9 +122,7 @@ export function AiidaNodeTree({
                 value.attributes?.process_label || value.label || ''
               }`}
               elementName={value.node_type.split('.').slice(0, 2).join('.')}
-              info={`${value.mtime}, ${value.node_type}, ${
-                value.process_type || ''
-              }`}
+              info={`${value.mtime}, ${value.node_type}, ${value.process_type || ''}`}
               tooltip={`UUID: ${value.uuid}`}
               procLabel={value.attributes?.process_label}
               procState={value.attributes?.process_state}
@@ -299,11 +284,7 @@ function AiidaTreeElement(props: IAiidaTreeElementProps): JSX.Element {
         <ListItemAvatar>
           <Avatar>{icon}</Avatar>
         </ListItemAvatar>
-        <ListItemText
-          className={classes.item}
-          primary={title}
-          secondary={props.info}
-        />
+        <ListItemText className={classes.item} primary={title} secondary={props.info} />
         {/* TODO context menu does not close on a right-click not over the node */}
         <Menu
           keepMounted
@@ -319,22 +300,14 @@ function AiidaTreeElement(props: IAiidaTreeElementProps): JSX.Element {
           <ListItem>
             <b>PK {props.pk} Menu</b>
           </ListItem>
-          <MenuItem onClick={copyUUIDtoClipboard}>
-            Copy UUID to Clipboard
-          </MenuItem>
+          <MenuItem onClick={copyUUIDtoClipboard}>Copy UUID to Clipboard</MenuItem>
           <MenuItem onClick={handleContextClose}>Close</MenuItem>
           {/* <MenuItem onClick={handleContextClose}>Open Data</MenuItem>
                     <MenuItem onClick={handleContextClose}>Add to Group</MenuItem> */}
         </Menu>
-        {props.nested ? null : open ? (
-          <MuiIcons.ExpandMore />
-        ) : (
-          <MuiIcons.ExpandLess />
-        )}
+        {props.nested ? null : open ? <MuiIcons.ExpandMore /> : <MuiIcons.ExpandLess />}
       </ListItem>
-      {props.nested ? null : (
-        <AiidaNodeChildren nodeUUID={props.uuid} open={open} />
-      )}
+      {props.nested ? null : <AiidaNodeChildren nodeUUID={props.uuid} open={open} />}
       <Divider light />
     </React.Fragment>
   )
@@ -373,11 +346,7 @@ function AiidaNodeChildren({
         <Collapse in={openRepo} mountOnEnter>
           <AiidaRepoList nodeUUID={nodeUUID} />
         </Collapse>
-        <ListItem
-          button
-          onClick={handleIncomingClick}
-          className={classes.nested1}
-        >
+        <ListItem button onClick={handleIncomingClick} className={classes.nested1}>
           <ListItemIcon>
             <MuiIcons.ArrowForward />
           </ListItemIcon>
@@ -387,11 +356,7 @@ function AiidaNodeChildren({
         <Collapse in={openIncoming} mountOnEnter>
           <AiidaLinkIncomingList nodeUUID={nodeUUID} />
         </Collapse>
-        <ListItem
-          button
-          onClick={handleOutgoingClick}
-          className={classes.nested1}
-        >
+        <ListItem button onClick={handleOutgoingClick} className={classes.nested1}>
           <ListItemIcon>
             <MuiIcons.ArrowBack />
           </ListItemIcon>
@@ -450,11 +415,7 @@ function AiidaRepoList({ nodeUUID }: { nodeUUID: string | null }): JSX.Element {
   return element
 }
 
-function AiidaLinkIncomingList({
-  nodeUUID
-}: {
-  nodeUUID: string | null
-}): JSX.Element {
+function AiidaLinkIncomingList({ nodeUUID }: { nodeUUID: string | null }): JSX.Element {
   const aiidaSettings = useContext(AiidaSettingsContext)
   const result = useQuery(
     [aiidaSettings.baseUrl, 'nodeIncoming', nodeUUID],
@@ -482,9 +443,7 @@ function AiidaLinkIncomingList({
                 value.link_label
               }`}
               elementName={value.node_type.split('.').slice(0, 2).join('.')}
-              info={`${value.mtime}, ${value.node_type}, ${
-                value.process_type || ''
-              }`}
+              info={`${value.mtime}, ${value.node_type}, ${value.process_type || ''}`}
               tooltip={`UUID: ${value.uuid}`}
             />
           )
@@ -499,11 +458,7 @@ function AiidaLinkIncomingList({
   return element
 }
 
-function AiidaLinkOutgoingList({
-  nodeUUID
-}: {
-  nodeUUID: string | null
-}): JSX.Element {
+function AiidaLinkOutgoingList({ nodeUUID }: { nodeUUID: string | null }): JSX.Element {
   const aiidaSettings = useContext(AiidaSettingsContext)
   const result = useQuery(
     [aiidaSettings.baseUrl, 'nodeOutgoing', nodeUUID],
@@ -531,9 +486,7 @@ function AiidaLinkOutgoingList({
                 value.link_label
               }`}
               elementName={value.node_type.split('.').slice(0, 2).join('.')}
-              info={`${value.mtime}, ${value.node_type}, ${
-                value.process_type || ''
-              }`}
+              info={`${value.mtime}, ${value.node_type}, ${value.process_type || ''}`}
               tooltip={`UUID: ${value.uuid}`}
             />
           )

@@ -62,11 +62,7 @@ function ListItemLink(props: ListItemLinkProps) {
 
   return (
     <li>
-      <ListItem
-        button
-        component={renderLink}
-        selected={to === location.pathname}
-      >
+      <ListItem button component={renderLink} selected={to === location.pathname}>
         {icon ? <ListItemIcon>{icon}</ListItemIcon> : null}
         <ListItemText primary={primary} />
       </ListItem>
@@ -74,11 +70,7 @@ function ListItemLink(props: ListItemLinkProps) {
   )
 }
 
-export function App({
-  showDevTools = true
-}: {
-  showDevTools?: boolean
-}): JSX.Element {
+export function App({ showDevTools = true }: { showDevTools?: boolean }): JSX.Element {
   // style hooks
   const classes = useStyles()
   const theme = useTheme()
@@ -139,9 +131,7 @@ export function App({
               label="REST URL"
               value={restUrlBase}
               error={!urlPattern.test(restUrlBase)}
-              helperText={
-                urlPattern.test(restUrlBase) ? undefined : 'Invalid URL'
-              }
+              helperText={urlPattern.test(restUrlBase) ? undefined : 'Invalid URL'}
               onChange={handleUrlChange}
               autoComplete={defaultRestUrl}
               InputProps={{

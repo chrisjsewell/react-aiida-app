@@ -50,9 +50,7 @@ export function kinds2elMap(kinds: IStructureKind[]): {
 
 /** Convert element to a color for use with CSS */
 export function element2colorCss(elementName: string): string {
-  const color = new Color(
-    ...get(atomData, elementName, [1, 0, 1, 0]).slice(1, 4)
-  )
+  const color = new Color(...get(atomData, elementName, [1, 0, 1, 0]).slice(1, 4))
   return `rgb(${color.r * 255},${color.g * 255},${color.b * 255})`
 }
 

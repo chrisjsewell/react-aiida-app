@@ -30,15 +30,11 @@ export function Structure3DViewer(props: {
     >
       <OrbitControls />
 
-      <ambientLight />
+      <ambientLight castShadow />
       <pointLight position={[10, 10, 10]} />
 
       <Center alignTop={false}>
-        <Structure
-          data={props.data}
-          images={props.images}
-          withBox={props.withBox}
-        />
+        <Structure data={props.data} images={props.images} withBox={props.withBox} />
       </Center>
     </Canvas>
   )
@@ -158,6 +154,8 @@ function BoundingBox({ cell }: { cell: IStructureCell }): JSX.Element {
         ]}
         color="black"
         lineWidth={1}
+        transparent={true}
+        opacity={0.9}
         dashed={true}
       />
       <Line points={[z, add(y, z)]} color="black" lineWidth={1} dashed={true} />

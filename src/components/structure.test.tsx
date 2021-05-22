@@ -49,9 +49,7 @@ describe('structure components', () => {
   // tried using @react-three/test-renderer (see https://codesandbox.io/s/testing-forked-ptqr2?file=/src/App.test.js:164-170)
   // but getting react Warning about mocking the scheduler, and nothing in the output scene
   it('creates 3d viewer', async () => {
-    const { container } = render(
-      <Structure3DViewer data={exampleStructureData} />
-    )
+    const { container } = render(<Structure3DViewer data={exampleStructureData} />)
     expect(container.firstChild).toHaveClass('structure-3d-viewer')
   })
 })
