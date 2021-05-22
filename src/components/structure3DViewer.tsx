@@ -36,7 +36,7 @@ export function Structure3DViewer({
 }
 
 /** Render a single atoms as a sphere */
-function Atom({
+export function Atom({
   position,
   radius = 1,
   color = 'blue',
@@ -99,7 +99,7 @@ function Boundary({ cell }: { cell: IStructureCell }): JSX.Element {
 }
 
 /** Render a single AiiDA StructureData */
-function Structure({ data }: { data: IStructureData }): JSX.Element {
+export function Structure({ data }: { data: IStructureData }): JSX.Element {
   const sites = data.attributes.sites
   const kindMap = kinds2elMap(data.attributes.kinds)
   return (
