@@ -52,6 +52,7 @@ export function StructurePanel(): JSX.Element {
   const viewerContainer = useRef() as any
 
   let view = null as null | JSX.Element
+  let uuidErrorMessage = null as null | string
   // check the data is actually StructureData
   if (result.data) {
     if (result.data.attributes.cell) {
@@ -114,7 +115,7 @@ export function StructurePanel(): JSX.Element {
         </React.Fragment>
       )
     } else {
-      console.error('Data is not from StructureData')
+      uuidErrorMessage = 'UUID is not a StructureData'
     }
   }
 
@@ -124,8 +125,8 @@ export function StructurePanel(): JSX.Element {
         label="StructureData UUID"
         value={rootUUID || ''}
         onChange={handleUUIDChange}
-        error={rootUUID ? !uuidPattern.test(rootUUID) : false}
-        // helperText={!result.error ? undefined : `${result.error}`}
+        error={rootUUID ? !uuidPattern.test(rootUUID) || !!uuidErrorMessage : false}
+        helperText={uuidErrorMessage ? uuidErrorMessage : undefined}
         fullWidth
         style={{ paddingBottom: 10 }}
       />
