@@ -284,7 +284,6 @@ To eventually visualise output data node.
 - https://openbase.com/categories/js/best-react-chart-libraries?orderBy=RECOMMENDED&
 - https://recharts.org
 
-
 resisizing:
 
 https://stackoverflow.com/a/54841876/5033292

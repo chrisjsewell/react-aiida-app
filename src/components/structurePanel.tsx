@@ -59,7 +59,7 @@ export function StructurePanel(): JSX.Element {
             <RepeatSlider name={'b'} value={bImages} setter={setbImages} />
             <RepeatSlider name={'c'} value={cImages} setter={setcImages} />
           </Grid>
-          <div style={{ marginTop: 10, marginBottom: 10 }}>
+          <div style={{ marginTop: 10, marginBottom: undefined }}>
             <Structure3DViewer
               data={result.data as IStructureData}
               images={images}
