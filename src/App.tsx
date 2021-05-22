@@ -36,6 +36,7 @@ import {
 } from './clients/aiidaClient'
 import { useStyles } from './styles'
 import { AiiDAIcon200, GitBranchIcon, OptimadeIcon } from './icons'
+import PageKeys from './pages'
 import { PageHome } from './PageHome'
 import { PageNodeExplorer } from './PageNodeExplorer'
 import { PageProvenanceGraph } from './PageProvenanceGraph'
@@ -62,11 +63,7 @@ function ListItemLink(props: ListItemLinkProps) {
 
   return (
     <li>
-      <ListItem
-        button
-        component={renderLink}
-        selected={to === location.pathname}
-      >
+      <ListItem button component={renderLink} selected={to === location.pathname}>
         {icon ? <ListItemIcon>{icon}</ListItemIcon> : null}
         <ListItemText primary={primary} />
       </ListItem>
@@ -74,11 +71,7 @@ function ListItemLink(props: ListItemLinkProps) {
   )
 }
 
-export function App({
-  showDevTools = true
-}: {
-  showDevTools?: boolean
-}): JSX.Element {
+export function App({ showDevTools = true }: { showDevTools?: boolean }): JSX.Element {
   // style hooks
   const classes = useStyles()
   const theme = useTheme()
@@ -139,9 +132,7 @@ export function App({
               label="REST URL"
               value={restUrlBase}
               error={!urlPattern.test(restUrlBase)}
-              helperText={
-                urlPattern.test(restUrlBase) ? undefined : 'Invalid URL'
-              }
+              helperText={urlPattern.test(restUrlBase) ? undefined : 'Invalid URL'}
               onChange={handleUrlChange}
               autoComplete={defaultRestUrl}
               InputProps={{
@@ -177,19 +168,19 @@ export function App({
           <Divider />
 
           <List>
-            <ListItemLink to="/" primary="Home" icon={<MuiIcons.Home />} />
+            <ListItemLink to={PageKeys.home} primary="Home" icon={<MuiIcons.Home />} />
             <ListItemLink
-              to="/nodes"
+              to={PageKeys.nodeExplorer}
               primary="Node Explorer"
               icon={<MuiIcons.Explore />}
             />
             <ListItemLink
-              to="/graph"
+              to={PageKeys.provenanceGraph}
               primary="Provenance Graph"
               icon={<GitBranchIcon />}
             />
             <ListItemLink
-              to="/structures"
+              to={PageKeys.structures}
               primary="Structure Explorer"
               icon={<OptimadeIcon />}
             />
@@ -200,12 +191,12 @@ export function App({
           value={{ baseUrl: urlPattern.test(restUrlBase) ? restUrlBase : null }}
         >
           <Switch>
-            <Route exact path="/" component={PageHome} />
-            <Route path="/nodes" component={PageNodeExplorer} />
-            <Route path="/graph" component={PageProvenanceGraph} />
-            <Route path="/structures" component={PageStructures} />
-            <Route path="/404" component={NotFound} />
-            <Redirect to="/404" />
+            <Route exact path={PageKeys.home} component={PageHome} />
+            <Route path={PageKeys.nodeExplorer} component={PageNodeExplorer} />
+            <Route path={PageKeys.provenanceGraph} component={PageProvenanceGraph} />
+            <Route path={PageKeys.structures} component={PageStructures} />
+            <Route path={PageKeys.unknown} component={NotFound} />
+            <Redirect to={PageKeys.unknown} />
           </Switch>
         </AiidaSettingsContext.Provider>
 

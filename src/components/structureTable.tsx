@@ -5,11 +5,7 @@ import Avatar from '@material-ui/core/Avatar'
 import { IStructureData, element2colorCss, kinds2elMap } from './structureUtils'
 
 /** Create a table of the atoms */
-export function StructureTable({
-  data
-}: {
-  data: IStructureData
-}): JSX.Element {
+export function StructureTable({ data }: { data: IStructureData }): JSX.Element {
   const theme = useTheme()
   const kindMap = kinds2elMap(data.attributes.kinds)
   const columns: GridColDef[] = [

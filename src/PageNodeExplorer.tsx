@@ -17,11 +17,7 @@ import TextField from '@material-ui/core/TextField'
 import { useQuery } from 'react-query'
 import ReactJson from 'react-json-view'
 
-import {
-  AiidaSettingsContext,
-  getNodeStatistics,
-  getNode
-} from './clients/aiidaClient'
+import { AiidaSettingsContext, getNodeStatistics, getNode } from './clients/aiidaClient'
 import { AiidaNodeTree } from './components/nodeTree'
 import { useStyles } from './styles'
 import { useLocalStorage } from './utils'
@@ -51,20 +47,12 @@ export function PageNodeExplorer(): JSX.Element {
   }
 
   return (
-    <Grid
-      container
-      spacing={2}
-      className={classes.mainGrid}
-      direction="row-reverse"
-    >
+    <Grid container spacing={2} className={classes.mainGrid} direction="row-reverse">
       <Grid item xs={12} sm={12} md={6}>
         <Paper variant="outlined" className={classes.paper}>
           <Accordion
             defaultExpanded={expandedTabs.includes('intro')}
-            onChange={(
-              event: React.ChangeEvent<unknown>,
-              expanded: boolean
-            ) => {
+            onChange={(event: React.ChangeEvent<unknown>, expanded: boolean) => {
               changeExpanded('intro', expanded)
             }}
           >
@@ -77,10 +65,7 @@ export function PageNodeExplorer(): JSX.Element {
           </Accordion>
           <Accordion
             defaultExpanded={expandedTabs.includes('filters')}
-            onChange={(
-              event: React.ChangeEvent<unknown>,
-              expanded: boolean
-            ) => {
+            onChange={(event: React.ChangeEvent<unknown>, expanded: boolean) => {
               changeExpanded('filters', expanded)
             }}
           >
@@ -96,10 +81,7 @@ export function PageNodeExplorer(): JSX.Element {
           </Accordion>
           <Accordion
             defaultExpanded={expandedTabs.includes('fields')}
-            onChange={(
-              event: React.ChangeEvent<unknown>,
-              expanded: boolean
-            ) => {
+            onChange={(event: React.ChangeEvent<unknown>, expanded: boolean) => {
               changeExpanded('fields', expanded)
             }}
           >
@@ -115,10 +97,7 @@ export function PageNodeExplorer(): JSX.Element {
           </Accordion>
           <Accordion
             defaultExpanded={expandedTabs.includes('files')}
-            onChange={(
-              event: React.ChangeEvent<unknown>,
-              expanded: boolean
-            ) => {
+            onChange={(event: React.ChangeEvent<unknown>, expanded: boolean) => {
               changeExpanded('files', expanded)
             }}
           >
@@ -143,17 +122,14 @@ export function NodeExplorerIntroduction(): JSX.Element {
   return (
     <div>
       <p>
-        The node explorer allows you to visualise the nodes in your AiiDA
-        profile as a filtered tree.
+        The node explorer allows you to visualise the nodes in your AiiDA profile as a
+        filtered tree.
       </p>
+      <p>Use the filter section below to select which node type you want to explore.</p>
       <p>
-        Use the filter section below to select which node type you want to
-        explore.
-      </p>
-      <p>
-        You can right-click on a node to see additional actions, including
-        copying its UUID to the clipboard. You can use this to show all of if
-        its content in the "Database Fields" section.
+        You can right-click on a node to see additional actions, including copying its
+        UUID to the clipboard. You can use this to show all of if its content in the
+        "Database Fields" section.
       </p>
     </div>
   )

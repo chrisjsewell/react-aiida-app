@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useRef } from 'react'
 
 import Checkbox from '@material-ui/core/Checkbox'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
@@ -8,12 +8,9 @@ import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 
 import { useQuery } from 'react-query'
+import { ResizableBox, ResizeCallbackData } from 'react-resizable'
 
-import {
-  AiidaSettingsContext,
-  getNode,
-  uuidPattern
-} from '../clients/aiidaClient'
+import { AiidaSettingsContext, getNode, uuidPattern } from '../clients/aiidaClient'
 import { useLocalStorage } from '../utils'
 import { IStructureData, vectorLength } from './structureUtils'
 import { Structure3DViewer } from './structure3DViewer'
@@ -34,6 +31,8 @@ export function StructurePanel(): JSX.Element {
     () => getNode(aiidaSettings.baseUrl, rootUUID),
     { enabled: aiidaSettings.baseUrl !== null }
   )
+
+  // Structure viewer variables
   const [boundingBox, setboundingBox] = useState(true)
   const [aImages, setaImages] = useState(1)
   const [bImages, setbImages] = useState(1)
@@ -47,7 +46,13 @@ export function StructurePanel(): JSX.Element {
     }
   }
 
+  // TODO set the initial width to the width of the container (and change on window resize)
+  // possibly using useLayoutEffect, but how not to get into infinite feedback loop?
+  const [viewerSize, setviewerSize] = useState({ height: 200, width: 200 })
+  const viewerContainer = useRef() as any
+
   let view = null as null | JSX.Element
+  let uuidErrorMessage = null as null | string
   // check the data is actually StructureData
   if (result.data) {
     if (result.data.attributes.cell) {
@@ -59,12 +64,35 @@ export function StructurePanel(): JSX.Element {
             <RepeatSlider name={'b'} value={bImages} setter={setbImages} />
             <RepeatSlider name={'c'} value={cImages} setter={setcImages} />
           </Grid>
-          <div style={{ marginTop: 10, marginBottom: undefined }}>
-            <Structure3DViewer
-              data={result.data as IStructureData}
-              images={images}
-              withBox={boundingBox}
-            />
+          <div style={{ marginTop: 10, marginBottom: undefined }} ref={viewerContainer}>
+            <ResizableBox
+              width={viewerSize.width}
+              height={viewerSize.height}
+              maxConstraints={[
+                viewerContainer?.current?.offsetWidth
+                  ? viewerContainer.current.offsetWidth
+                  : Infinity,
+                Infinity
+              ]}
+              resizeHandles={['s', 'e', 'se']}
+              onResize={(
+                e: React.SyntheticEvent<Element, Event>,
+                data: ResizeCallbackData
+              ) => {
+                setviewerSize({
+                  width: data.size.width,
+                  height: data.size.height
+                })
+              }}
+            >
+              <Structure3DViewer
+                data={result.data as IStructureData}
+                images={images}
+                withBox={boundingBox}
+                width={viewerSize.width}
+                height={viewerSize.height}
+              />
+            </ResizableBox>
             <FormControlLabel
               control={
                 <Checkbox
@@ -87,7 +115,7 @@ export function StructurePanel(): JSX.Element {
         </React.Fragment>
       )
     } else {
-      console.error('Data is not from StructureData')
+      uuidErrorMessage = 'UUID is not a StructureData'
     }
   }
 
@@ -97,8 +125,8 @@ export function StructurePanel(): JSX.Element {
         label="StructureData UUID"
         value={rootUUID || ''}
         onChange={handleUUIDChange}
-        error={rootUUID ? !uuidPattern.test(rootUUID) : false}
-        // helperText={!result.error ? undefined : `${result.error}`}
+        error={rootUUID ? !uuidPattern.test(rootUUID) || !!uuidErrorMessage : false}
+        helperText={uuidErrorMessage ? uuidErrorMessage : undefined}
         fullWidth
         style={{ paddingBottom: 10 }}
       />
@@ -125,10 +153,7 @@ function RepeatSlider(props: {
         marks
         min={1}
         max={10}
-        onChange={(
-          event: React.ChangeEvent<unknown>,
-          value: number | number[]
-        ) => {
+        onChange={(event: React.ChangeEvent<unknown>, value: number | number[]) => {
           props.setter(value as number)
         }}
       />

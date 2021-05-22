@@ -289,3 +289,4 @@ resisizing:
 https://stackoverflow.com/a/54841876/5033292
 https://github.com/react-grid-layout/react-resizable
 https://github.com/react-grid-layout/react-draggable
+https://github.com/react-grid-layout/react-grid-layout

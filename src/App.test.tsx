@@ -50,9 +50,7 @@ test('landing on provenance page', () => {
     </Router>
   )
 
-  expect(
-    screen.getByText(/Provenance Graph Visualisation/i)
-  ).toBeInTheDocument()
+  expect(screen.getByText(/Provenance Graph Visualisation/i)).toBeInTheDocument()
 })
 
 test('landing on structure page', () => {
