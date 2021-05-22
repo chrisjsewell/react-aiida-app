@@ -283,3 +283,9 @@ To eventually visualise output data node.
 
 - https://openbase.com/categories/js/best-react-chart-libraries?orderBy=RECOMMENDED&
 - https://recharts.org
+
+resisizing:
+
+https://stackoverflow.com/a/54841876/5033292
+https://github.com/react-grid-layout/react-resizable
+https://github.com/react-grid-layout/react-draggable
