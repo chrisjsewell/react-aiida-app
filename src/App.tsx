@@ -74,7 +74,11 @@ function ListItemLink(props: ListItemLinkProps) {
   )
 }
 
-export function App({ showDevTools = true }): JSX.Element {
+export function App({
+  showDevTools = true
+}: {
+  showDevTools?: boolean
+}): JSX.Element {
   // style hooks
   const classes = useStyles()
   const theme = useTheme()

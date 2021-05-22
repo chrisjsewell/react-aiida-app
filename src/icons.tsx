@@ -2,7 +2,13 @@
 
 import SvgIcon from '@material-ui/core/SvgIcon'
 
-export function AiiDAIcon200({ width = 200, height = 200 }): JSX.Element {
+export function AiiDAIcon200({
+  width = 200,
+  height = 200
+}: {
+  width: number
+  height: number
+}): JSX.Element {
   return (
     <svg
       width={width}
@@ -93,7 +99,13 @@ export function GitBranchIcon(): JSX.Element {
   )
 }
 
-export function OptimadeIcon({ width = 180, height = 180 }): JSX.Element {
+export function OptimadeIcon({
+  width = 180,
+  height = 180
+}: {
+  width?: number
+  height?: number
+}): JSX.Element {
   return (
     <SvgIcon>
       <svg

@@ -4,7 +4,10 @@ import { useState } from 'react'
  * A wrapper for useState, which syncs the state to local storage,
  * so that it persists through a page change/refresh
  */
-export function useLocalStorage<T>(key: string, initialValue: T) {
+export function useLocalStorage<T>(
+  key: string,
+  initialValue: T
+): readonly [T, (value: T | ((val: T) => T)) => void] {
   // see https://usehooks.com/useLocalStorage/
   // State to store our value
   // Pass initial state function to useState so logic is only executed once
