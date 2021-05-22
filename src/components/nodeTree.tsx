@@ -128,6 +128,7 @@ export function AiidaNodeTree({
         {result.data.nodes.map(value => {
           return (
             <AiidaTreeElement
+              key={value.id}
               pk={value.id}
               uuid={value.uuid}
               header={`${value.id} ${
@@ -290,7 +291,6 @@ function AiidaTreeElement(props: IAiidaTreeElementProps): JSX.Element {
   return (
     <React.Fragment>
       <ListItem
-        key={props.pk}
         button
         onClick={handleClick}
         onContextMenu={handleRightClick}
