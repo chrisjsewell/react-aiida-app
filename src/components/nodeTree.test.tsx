@@ -24,8 +24,27 @@ describe('AiidaNodeTree', () => {
     attributes: {}
   }
 
+  const exampleProcessNode = {
+    ctime: '',
+    full_type: '',
+    id: 1,
+    label: '',
+    mtime: '',
+    node_type: '',
+    process_type: '',
+    user_id: 1,
+    uuid: 'uuid1',
+    attributes: {
+      process_state: 'finished',
+      process_label: 'label',
+      exit_status: 0
+    }
+  }
+
   it('queries for nodes', async () => {
-    fetch.mockResponseOnce(JSON.stringify({ data: { nodes: [exampleNode] } }))
+    fetch.mockResponseOnce(
+      JSON.stringify({ data: { nodes: [exampleNode, exampleProcessNode] } })
+    )
 
     render(
       <QueryClientProvider client={queryClient}>
