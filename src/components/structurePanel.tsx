@@ -29,8 +29,8 @@ import { StructureTable } from './structureTable'
 import OptimadeClient from '../clients/optimadeClient'
 
 /** Selector for a structure, plus visualisers */
-export function StructurePanel(): JSX.Element {
-  const [tabIndex, setTabIndex] = React.useState(0)
+export function StructurePanel({ initTab }: { initTab?: number }): JSX.Element {
+  const [tabIndex, setTabIndex] = React.useState(initTab || 0)
 
   const handleChange = (event: React.ChangeEvent<any>, value: number) => {
     setTabIndex(value)
@@ -85,7 +85,7 @@ function TabPanel(props: TabPanelProps) {
   )
 }
 
-function StructurePanelAiiDA(): JSX.Element {
+export function StructurePanelAiiDA(): JSX.Element {
   const [rootUUID, setrootUUID] = useLocalStorage(
     'aiida-structure-uuid',
     null as null | string
@@ -133,7 +133,7 @@ function StructurePanelAiiDA(): JSX.Element {
   )
 }
 
-function StructurePanelOptimade(): JSX.Element {
+export function StructurePanelOptimade(): JSX.Element {
   const classes = useStyles()
 
   const [provider, setProvider] = useLocalStorage('optimade-structure-provider', '')
@@ -149,7 +149,9 @@ function StructurePanelOptimade(): JSX.Element {
   let providerItems = [] as JSX.Element[]
   if (resultProviders.data) {
     providerItems = resultProviders.data.map(value => (
-      <MenuItem value={value.id}>{value.attributes.name}</MenuItem>
+      <MenuItem key={value.id} value={value.id}>
+        {value.attributes.name}
+      </MenuItem>
     ))
   }
 
@@ -191,7 +193,7 @@ function StructurePanelOptimade(): JSX.Element {
       <Grid container spacing={4} alignItems="center">
         <Grid item sm={6}>
           <FormControl className={classes.formControl} fullWidth>
-            <InputLabel id="optimade-provider-view-select">Provider</InputLabel>
+            <InputLabel id="optimade-provider-view-select-label">Provider</InputLabel>
             <Select
               id="optimade-provider-view-select"
               value={provider || ''}

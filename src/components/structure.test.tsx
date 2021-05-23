@@ -1,8 +1,12 @@
 import { render } from '@testing-library/react'
+import fetch from 'jest-fetch-mock'
+
+import { QueryClientProvider, QueryClient } from 'react-query'
 
 import { IStructureCell } from './structureUtils'
 import { StructureTable } from './structureTable'
 import { Structure3DViewer } from './structure3DViewer'
+import { StructurePanelAiiDA, StructurePanelOptimade } from './structurePanel'
 
 describe('structure components', () => {
   const exampleStructureData = {
@@ -34,11 +38,35 @@ describe('structure components', () => {
     const { container } = render(<StructureTable data={exampleStructureData} />)
     expect(container.firstChild).toHaveClass('structure-table')
   })
-  // TODO this doe not actually render the threejs scene
+  // TODO this does not actually render the threejs scene
   // tried using @react-three/test-renderer (see https://codesandbox.io/s/testing-forked-ptqr2?file=/src/App.test.js:164-170)
   // but getting react Warning about mocking the scheduler, and nothing in the output scene
   it('creates 3d viewer', async () => {
     const { container } = render(<Structure3DViewer data={exampleStructureData} />)
     expect(container.firstChild).toHaveClass('structure-3d-viewer')
+  })
+})
+
+describe('structure panels', () => {
+  beforeEach(() => {
+    fetch.resetMocks()
+  })
+  const queryClient = new QueryClient()
+  it('creates StructurePanelAiiDA', async () => {
+    const { container } = render(
+      <QueryClientProvider client={queryClient}>
+        <StructurePanelAiiDA />
+      </QueryClientProvider>
+    )
+
+    expect(fetch).toHaveBeenCalledTimes(0)
+  })
+  it('creates StructurePanelOptimade', async () => {
+    const { container } = render(
+      <QueryClientProvider client={queryClient}>
+        <StructurePanelOptimade />
+      </QueryClientProvider>
+    )
+    expect(fetch).toHaveBeenCalledTimes(0)
   })
 })
