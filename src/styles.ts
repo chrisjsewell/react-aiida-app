@@ -35,7 +35,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     inputRestUrl: {
       marginRight: theme.spacing(2),
-      minWidth: 200
+      minWidth: 200 // TODO better way to size this
     },
     inputRestUrlText: {
       color: 'white'
