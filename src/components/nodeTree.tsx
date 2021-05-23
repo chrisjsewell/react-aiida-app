@@ -217,6 +217,7 @@ function AiidaTreeElement(props: IAiidaTreeElementProps): JSX.Element {
   // not close it and open the "correct" context-menu for the position on the screen
   const handleRightClick = (event: React.MouseEvent<HTMLDivElement>) => {
     event.preventDefault()
+    event.stopPropagation()
     setContextPosition({
       mouseX: event.clientX - 2,
       mouseY: event.clientY - 4

@@ -89,7 +89,7 @@ export function OptimadePanel(): JSX.Element {
   return (
     <Grid container alignItems="center">
       <Grid item xs={12}>
-        <FormControl className={classes.formControl} fullWidth>
+        <FormControl fullWidth>
           <InputLabel id="optimade-provider-select-label">Provider</InputLabel>
           <Select
             id="optimade-provider-select"

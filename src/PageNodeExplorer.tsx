@@ -184,7 +184,7 @@ export function NodeExplorerFilters({
 
   return (
     <React.Fragment>
-      <FormControl className={classes.formControl}>
+      <FormControl fullWidth>
         <InputLabel id="node-prefix-select-label">Node Type Prefix</InputLabel>
         <Select
           labelId="node-prefix-select-label"

@@ -80,15 +80,11 @@ export const useStyles = makeStyles((theme: Theme) =>
     mainGrid: {
       paddingTop: theme.spacing(1),
       paddingLeft: theme.spacing(10),
-      paddingRight: theme.spacing(10)
+      paddingRight: theme.spacing(1)
     },
     paper: {
       padding: theme.spacing(2),
       color: theme.palette.text.secondary
-    },
-    formControl: {
-      margin: theme.spacing(1),
-      minWidth: 200
     },
     InlineIcon: {
       verticalAlign: 'middle',
