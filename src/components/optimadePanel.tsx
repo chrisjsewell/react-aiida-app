@@ -152,9 +152,9 @@ export function OptimadePanel(): JSX.Element {
   )
 }
 
-function OptimadeTable({ data }: { data: Types.Structure[] }): JSX.Element {
+export function OptimadeTable({ data }: { data: Types.Structure[] }): JSX.Element {
   return (
-    <Table>
+    <Table className="optimade-table">
       <TableHead>
         <TableRow key="_head">
           <TableCell>ID</TableCell>
