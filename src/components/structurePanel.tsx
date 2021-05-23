@@ -22,7 +22,6 @@ import { ResizableBox, ResizeCallbackData } from 'react-resizable'
 
 import { AiidaSettingsContext, getNode, uuidPattern } from '../clients/aiidaClient'
 import { useLocalStorage } from '../hooks'
-import { useStyles } from '../styles'
 import { IStructureDataAttrs, vectorLength } from './structureUtils'
 import { Structure3DViewer } from './structure3DViewer'
 import { StructureTable } from './structureTable'
@@ -134,8 +133,6 @@ export function StructurePanelAiiDA(): JSX.Element {
 }
 
 export function StructurePanelOptimade(): JSX.Element {
-  const classes = useStyles()
-
   const [provider, setProvider] = useLocalStorage('optimade-structure-provider', '')
   const [id, setID] = useLocalStorage('optimade-structure-id', '')
 

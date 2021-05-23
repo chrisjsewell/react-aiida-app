@@ -163,7 +163,6 @@ export function NodeExplorerFilters({
   nodePrefix: string
   setnodePrefix: React.Dispatch<React.SetStateAction<string>>
 }): JSX.Element {
-  const classes = useStyles()
   const aiidaSettings = useContext(AiidaSettingsContext)
   const result = useQuery(
     [aiidaSettings.baseUrl, 'statistics'],
