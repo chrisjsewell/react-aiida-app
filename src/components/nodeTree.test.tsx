@@ -1,5 +1,5 @@
-import fetch from 'jest-fetch-mock'
 import { render } from '@testing-library/react'
+import fetch from 'jest-fetch-mock'
 
 import { QueryClientProvider, QueryClient } from 'react-query'
 import { AiidaNodeTree } from './nodeTree'

@@ -19,7 +19,7 @@ import { Link } from 'react-router-dom'
 import { uuidPattern } from './clients/aiidaClient'
 import { useStyles } from './styles'
 import PageKeys from './pages'
-import { useLocalStorage } from './utils'
+import { useLocalStorage } from './hooks'
 import { AiidaProvenanceGraph, DagType } from './components/provenanceGraph'
 
 export function PageProvenanceGraph(): JSX.Element {

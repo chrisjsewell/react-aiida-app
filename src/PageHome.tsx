@@ -46,36 +46,53 @@ export function IntroBox(): JSX.Element {
       </p>
       <ul>
         <li>
-          <a href="https://reactjs.org/">React</a>: A library for building user
-          interfaces, maintained by Facebook and with users including Whatsapp, Dropbox,
-          Uber and Netflix.
+          <ExternalLink href="https://reactjs.org/">React</ExternalLink>: A library for
+          building user interfaces, maintained by Facebook and with users including
+          Whatsapp, Dropbox, Uber and Netflix.
         </li>
         <li>
-          <a href="https://material-ui.com">Material-UI</a>: A React component library
-          that implements{' '}
-          <a href="https://material.io/design">Google’s Material Design</a> guidelines.
+          <ExternalLink href="https://material-ui.com">Material-UI</ExternalLink>: A
+          React component library that implements{' '}
+          <ExternalLink href="https://material.io/design">
+            Google’s Material Design
+          </ExternalLink>{' '}
+          guidelines.
         </li>
         <li>
-          <a href="https://react-query.tanstack.com/">react-query</a>: A React component
-          for synchronizing server data (from AiiDA) with the UI.
+          <ExternalLink href="https://react-query.tanstack.com/">
+            react-query
+          </ExternalLink>
+          : A React component for synchronizing server data (from AiiDA) with the UI.
         </li>
       </ul>
       <p>
         AiiDA Dashboard can be used as a standalone Web UI, or it also provides React
         components and facilitates wrapping into a JupyterLab{' '}
-        <a href="https://jupyterlab.readthedocs.io/en/stable/extension/virtualdom.html">
+        <ExternalLink href="https://jupyterlab.readthedocs.io/en/stable/extension/virtualdom.html">
           extension widget
-        </a>
+        </ExternalLink>
         .
       </p>
       <p>
         Alongside work on an{' '}
-        <a href="https://github.com/aiidateam/AEP/pull/24">Extended REST API</a>, it is
-        hoped that this will offer not just ways to explore your profiles, but also to
-        actively interact them: creating/adding to groups, composing/running workchains,
-        etc.
+        <ExternalLink href="https://github.com/aiidateam/AEP/pull/24">
+          Extended REST API
+        </ExternalLink>
+        , it is hoped that this will offer not just ways to explore your profiles, but
+        also to actively interact them: creating/adding to groups, composing/running
+        workchains, etc.
       </p>
     </div>
+  )
+}
+
+function ExternalLink(
+  props: React.AnchorHTMLAttributes<HTMLAnchorElement>
+): JSX.Element {
+  return (
+    <a href={props.href} target="_blank" rel="noopener">
+      {props.children}
+    </a>
   )
 }
 
@@ -91,9 +108,9 @@ export function GettingStartedBox(): JSX.Element {
       <Alert variant="outlined" severity="info">
         If you want to try out this app but don't have your own AiiDA profile, you can
         use this demonstration server:{' '}
-        <a href="https://15.188.110.176:5000/api/v4">
+        <ExternalLink href="https://15.188.110.176:5000/api/v4">
           https://15.188.110.176:5000/api/v4
-        </a>
+        </ExternalLink>
         , although note currently you will first need to open this address in a separate
         tab and accept the security certificate (under Advanced).
       </Alert>
@@ -126,23 +143,25 @@ export function DetailedBox(): JSX.Element {
       <h2>Project Discussion</h2>
       <p>
         Source repository:{' '}
-        <a href="https://github.com/chrisjsewell/react-aiida-app">
+        <ExternalLink href="https://github.com/chrisjsewell/react-aiida-app">
           https://github.com/chrisjsewell/react-aiida-app
-        </a>
+        </ExternalLink>
       </p>
       <p>
         This project is a continuation of{' '}
-        <a href="https://github.com/chrisjsewell/jlab_aiidatree">jlab_aiidatree</a>, in
-        which we built a working prototype for a JupyterLab extension to interact with
-        AiiDA.
+        <ExternalLink href="https://github.com/chrisjsewell/jlab_aiidatree">
+          jlab_aiidatree
+        </ExternalLink>
+        , in which we built a working prototype for a JupyterLab extension to interact
+        with AiiDA.
       </p>
       <p>
         During development of <code>jlab_aiidatree</code> it was noted that you can
         embed <a href="https://reactjs.org/">React components</a> inside of JupyterLab
         (see{' '}
-        <a href="https://jupyterlab.readthedocs.io/en/stable/extension/virtualdom.html">
+        <ExternalLink href="https://jupyterlab.readthedocs.io/en/stable/extension/virtualdom.html">
           JupyterLab/React
-        </a>
+        </ExternalLink>
         ).
       </p>
       <p>

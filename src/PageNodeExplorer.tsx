@@ -20,7 +20,7 @@ import ReactJson from 'react-json-view'
 import { AiidaSettingsContext, getNodeStatistics, getNode } from './clients/aiidaClient'
 import { AiidaNodeTree } from './components/nodeTree'
 import { useStyles } from './styles'
-import { useLocalStorage } from './utils'
+import { useLocalStorage } from './hooks'
 
 export function PageNodeExplorer(): JSX.Element {
   const classes = useStyles()

@@ -1,17 +1,20 @@
 import React from 'react'
 
-import Accordion from '@material-ui/core/Accordion'
-import AccordionSummary from '@material-ui/core/AccordionSummary'
-import AccordionDetails from '@material-ui/core/AccordionDetails'
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Grid,
+  Paper
+} from '@material-ui/core'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import Grid from '@material-ui/core/Grid'
-import Paper from '@material-ui/core/Paper'
 
 import { Link } from 'react-router-dom'
 
 import { useStyles } from './styles'
 import PageKeys from './pages'
 import { StructurePanel } from './components/structurePanel'
+import { OptimadePanel } from './components/optimadePanel'
 
 export function PageStructures(): JSX.Element {
   const classes = useStyles()
@@ -34,7 +37,23 @@ export function PageStructures(): JSX.Element {
                   can resize the viewer, zoom in/out, rotate (left-click) and pan
                   (right-click).
                 </p>
+                <p>
+                  You can also search for and visualise structures from an{' '}
+                  <a href="https://www.optimade.org" target="_blank" rel="noopener">
+                    Optimade compliant database
+                  </a>
+                  . It is intended that eventually you will be able to import these
+                  structures directly into your AiiDA database.
+                </p>
               </div>
+            </AccordionDetails>
+          </Accordion>
+          <Accordion defaultExpanded>
+            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              <h3>Optimade Explorer</h3>
+            </AccordionSummary>
+            <AccordionDetails>
+              <OptimadePanel />
             </AccordionDetails>
           </Accordion>
         </Paper>

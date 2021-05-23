@@ -96,6 +96,10 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     padTop: {
       paddingTop: theme.spacing(2)
+    },
+    pagination: {
+      paddingTop: theme.spacing(2),
+      paddingBottom: theme.spacing(1)
     }
   })
 )

@@ -8,6 +8,7 @@ export interface IStructureKind {
   mass: number
   symbols: string[]
   weights: number[]
+  [key: string]: any
 }
 
 export type IStructureCell = [
@@ -16,18 +17,20 @@ export type IStructureCell = [
   [number, number, number]
 ]
 
+export interface IStructureDataAttrs {
+  cell: IStructureCell
+  kinds: IStructureKind[]
+  pbc1: boolean
+  pbc2: boolean
+  pbc3: boolean
+  sites: {
+    kind_name: string
+    position: [number, number, number]
+  }[]
+}
+
 export interface IStructureData extends IAiidaRestNode {
-  attributes: {
-    cell: IStructureCell
-    kinds: IStructureKind[]
-    pbc1: boolean
-    pbc2: boolean
-    pbc3: boolean
-    sites: {
-      kind_name: string
-      position: [number, number, number]
-    }[]
-  }
+  attributes: IStructureDataAttrs
 }
 
 /** Get the length of a 3D vector */

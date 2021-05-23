@@ -1,24 +1,25 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 
+import {
+  Avatar,
+  Button,
+  Chip,
+  CircularProgress,
+  Collapse,
+  List,
+  Divider,
+  ListItem,
+  ListItemAvatar,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+  MenuItem,
+  Tooltip
+} from '@material-ui/core'
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles'
-import Avatar from '@material-ui/core/Avatar'
-import Button from '@material-ui/core/Button'
-import Collapse from '@material-ui/core/Collapse'
-import Divider from '@material-ui/core/Divider'
 import * as MuiIcons from '@material-ui/icons'
-import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
-import ListItemAvatar from '@material-ui/core/ListItemAvatar'
-import ListItemIcon from '@material-ui/core/ListItemIcon'
-import ListItemText from '@material-ui/core/ListItemText'
-import CircularProgress from '@material-ui/core/CircularProgress'
-import Tooltip from '@material-ui/core/Tooltip'
-import Chip from '@material-ui/core/Chip'
-import Menu from '@material-ui/core/Menu'
-import MenuItem from '@material-ui/core/MenuItem'
 
-import Alert from '@material-ui/lab/Alert'
-import Pagination from '@material-ui/lab/Pagination'
+import { Alert, Pagination } from '@material-ui/lab'
 
 import { useQuery } from 'react-query'
 import copy from 'copy-to-clipboard'
@@ -88,7 +89,7 @@ export function AiidaNodeTree({ nodePrefix }: { nodePrefix: string }): JSX.Eleme
    */
 
   const classes = useStyles()
-  const [page, setPage] = React.useState(1)
+  const [page, setPage] = useState(1)
   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value)
   }
@@ -97,7 +98,7 @@ export function AiidaNodeTree({ nodePrefix }: { nodePrefix: string }): JSX.Eleme
   const result = useQuery(
     [aiidaSettings.baseUrl, 'nodes', nodePrefix, page],
     () => getNodes(aiidaSettings.baseUrl, nodePrefix, page),
-    { enabled: aiidaSettings.baseUrl !== null }
+    { enabled: aiidaSettings.baseUrl !== null, keepPreviousData: true }
   )
 
   let element = <CircularProgress />
@@ -110,28 +111,30 @@ export function AiidaNodeTree({ nodePrefix }: { nodePrefix: string }): JSX.Eleme
     )
   } else if (result.data !== undefined) {
     pages = Math.ceil(result.data.totalCount / result.data.perPage)
-    element = (
-      <List component="nav" aria-label="main aiida tree">
-        {result.data.nodes.map(value => {
-          return (
-            <AiidaTreeElement
-              key={`aiida-tree-el-${value.uuid}`}
-              pk={value.id}
-              uuid={value.uuid}
-              header={`${value.id} ${
-                value.attributes?.process_label || value.label || ''
-              }`}
-              elementName={value.node_type.split('.').slice(0, 2).join('.')}
-              info={`${value.mtime}, ${value.node_type}, ${value.process_type || ''}`}
-              tooltip={`UUID: ${value.uuid}`}
-              procLabel={value.attributes?.process_label}
-              procState={value.attributes?.process_state}
-              procExit={value.attributes?.exit_status}
-            />
-          )
-        })}
-      </List>
-    )
+    if (!result.isPreviousData) {
+      element = (
+        <List component="nav" aria-label="main aiida tree">
+          {result.data.nodes.map(value => {
+            return (
+              <AiidaTreeElement
+                key={`aiida-tree-el-${value.uuid}`}
+                pk={value.id}
+                uuid={value.uuid}
+                header={`${value.id} ${
+                  value.attributes?.process_label || value.label || ''
+                }`}
+                elementName={value.node_type.split('.').slice(0, 2).join('.')}
+                info={`${value.mtime}, ${value.node_type}, ${value.process_type || ''}`}
+                tooltip={`UUID: ${value.uuid}`}
+                procLabel={value.attributes?.process_label}
+                procState={value.attributes?.process_state}
+                procExit={value.attributes?.exit_status}
+              />
+            )
+          })}
+        </List>
+      )
+    }
   } else if (result.isError) {
     const error = result.error as { message: string }
     element = <Alert severity="error">{error.message}</Alert>
@@ -157,6 +160,7 @@ export function AiidaNodeTree({ nodePrefix }: { nodePrefix: string }): JSX.Eleme
       </Button>
       {updateInfo}
       <Pagination
+        disabled={result.isPreviousData}
         className={classes.pagination}
         color="primary"
         count={pages}
@@ -234,13 +238,7 @@ function AiidaTreeElement(props: IAiidaTreeElementProps): JSX.Element {
   // TODO react-markdown for tooltip
   if (props.tooltip !== undefined) {
     icon = (
-      <Tooltip
-        title={
-          <React.Fragment>
-            <p>{props.tooltip}</p>
-          </React.Fragment>
-        }
-      >
+      <Tooltip title={<p>{props.tooltip}</p>}>
         <span>{icon}</span>
       </Tooltip>
     )
