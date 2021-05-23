@@ -53,7 +53,7 @@ describe('structure panels', () => {
   })
   const queryClient = new QueryClient()
   it('creates StructurePanelAiiDA', async () => {
-    const { container } = render(
+    render(
       <QueryClientProvider client={queryClient}>
         <StructurePanelAiiDA />
       </QueryClientProvider>
@@ -62,7 +62,7 @@ describe('structure panels', () => {
     expect(fetch).toHaveBeenCalledTimes(0)
   })
   it('creates StructurePanelOptimade', async () => {
-    const { container } = render(
+    render(
       <QueryClientProvider client={queryClient}>
         <StructurePanelOptimade />
       </QueryClientProvider>
