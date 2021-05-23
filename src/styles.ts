@@ -6,7 +6,7 @@ const drawerWidth = 240
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    root: {
+    flexGrow: {
       flexGrow: 1
     },
     appBar: {
@@ -25,20 +25,31 @@ export const useStyles = makeStyles((theme: Theme) =>
       })
     },
     menuButton: {
-      marginRight: theme.spacing(2)
+      marginRight: theme.spacing(1),
+      [theme.breakpoints.up('sm')]: {
+        marginRight: theme.spacing(2)
+      }
     },
-    title: {
-      flexGrow: 1
-    },
-    inputRestUrlIcon: {
+    aiidaIcon: {
       marginRight: theme.spacing(1)
     },
     inputRestUrl: {
-      marginRight: theme.spacing(2),
-      minWidth: 200 // TODO better way to size this
+      position: 'relative',
+      marginRight: theme.spacing(1),
+      marginLeft: 0,
+      width: '100%',
+      [theme.breakpoints.up('sm')]: {
+        marginLeft: theme.spacing(3),
+        width: 'auto',
+        minWidth: 200
+      },
+      [theme.breakpoints.up('md')]: {
+        minWidth: 300
+      }
     },
+    inputRestUrlIcon: {},
     inputRestUrlText: {
-      color: 'white'
+      color: theme.palette.primary.contrastText
     },
     hide: {
       display: 'none'
@@ -79,7 +90,10 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     mainGrid: {
       paddingTop: theme.spacing(1),
-      paddingLeft: theme.spacing(10),
+      paddingLeft: theme.spacing(8),
+      [theme.breakpoints.up('sm')]: {
+        paddingLeft: theme.spacing(10)
+      },
       paddingRight: theme.spacing(1)
     },
     paper: {
