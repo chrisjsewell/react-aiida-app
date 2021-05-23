@@ -2,12 +2,12 @@ import { DataGrid, GridColDef, GridCellParams } from '@material-ui/data-grid'
 import { useTheme } from '@material-ui/core/styles'
 import Avatar from '@material-ui/core/Avatar'
 
-import { IStructureData, element2colorCss, kinds2elMap } from './structureUtils'
+import { IStructureDataAttrs, element2colorCss, kinds2elMap } from './structureUtils'
 
 /** Create a table of the atoms */
-export function StructureTable({ data }: { data: IStructureData }): JSX.Element {
+export function StructureTable({ data }: { data: IStructureDataAttrs }): JSX.Element {
   const theme = useTheme()
-  const kindMap = kinds2elMap(data.attributes.kinds)
+  const kindMap = kinds2elMap(data.kinds)
   const columns: GridColDef[] = [
     {
       field: 'element',
@@ -32,7 +32,7 @@ export function StructureTable({ data }: { data: IStructureData }): JSX.Element 
     { field: 'y', headerName: 'Y', type: 'number' },
     { field: 'z', headerName: 'Z', type: 'number' }
   ]
-  const rows = data.attributes.sites.map((site, index) => {
+  const rows = data.sites.map((site, index) => {
     return {
       id: index,
       element: kindMap[site.kind_name],

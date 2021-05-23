@@ -41,7 +41,7 @@ import { PageHome } from './PageHome'
 import { PageNodeExplorer } from './PageNodeExplorer'
 import { PageProvenanceGraph } from './PageProvenanceGraph'
 import { PageStructures } from './PageStructures'
-import { useLocalStorage } from './utils'
+import { useLocalStorage } from './hooks'
 
 interface ListItemLinkProps {
   icon?: React.ReactElement

@@ -14,6 +14,7 @@
     "copy-to-clipboard": "^3.3.1",
     "d3-force": "^2.1.1",
     "lodash.get": "^4.4.2",
+    "optimade": "^1.1.4",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-force-graph-2d": "^1.23.4",

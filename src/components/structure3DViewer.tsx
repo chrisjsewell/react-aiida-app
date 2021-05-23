@@ -5,7 +5,7 @@ import { Center, Line, OrbitControls } from '@react-three/drei'
 import { Vector3 } from 'three'
 
 import {
-  IStructureData,
+  IStructureDataAttrs,
   IStructureCell,
   element2radius,
   element2colorThree,
@@ -14,7 +14,7 @@ import {
 
 /** Create a 3D scene for a single StructureData  */
 export function Structure3DViewer(props: {
-  data: IStructureData
+  data: IStructureDataAttrs
   withBox: boolean
   images: [number, number, number][]
   height?: number | undefined
@@ -47,13 +47,13 @@ Structure3DViewer.defaultProps = {
 
 /** Render a single AiiDA StructureData */
 export function Structure(props: {
-  data: IStructureData
+  data: IStructureDataAttrs
   withBox: boolean
   images: [number, number, number][]
 }): JSX.Element {
-  const [[ax, ay, az], [bx, by, bz], [cx, cy, cz]] = props.data.attributes.cell
-  const sites = props.data.attributes.sites
-  const kindMap = kinds2elMap(props.data.attributes.kinds)
+  const [[ax, ay, az], [bx, by, bz], [cx, cy, cz]] = props.data.cell
+  const sites = props.data.sites
+  const kindMap = kinds2elMap(props.data.kinds)
   let boxes = null
   if (props.withBox) {
     boxes = (

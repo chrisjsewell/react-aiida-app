@@ -6,9 +6,11 @@
 This project is a continuation of [jlab_aiidatree](https://github.com/chrisjsewell/jlab_aiidatree),
 in which we built a working prototype for a JupyterLab extension to interact with AiiDA.
 
-Some awesome features:
+Some cool features:
 
-- Persists aspects of the page in-between tab changes and refreshes
+- Responsive layout grid that adapts to window size
+- Persistence of key input fields in-between page changes, refreshes and multiple sessions
+- Paginated and cached data queries
 
 During development of `jlab_aiidatree` it was noted that you can embed [React components](https://reactjs.org/) inside of JupyterLab (see [JupyterLab/React](https://jupyterlab.readthedocs.io/en/stable/extension/virtualdom.html)).
 
