@@ -163,7 +163,6 @@ export function NodeExplorerFilters({
   nodePrefix: string
   setnodePrefix: React.Dispatch<React.SetStateAction<string>>
 }): JSX.Element {
-  const classes = useStyles()
   const aiidaSettings = useContext(AiidaSettingsContext)
   const result = useQuery(
     [aiidaSettings.baseUrl, 'statistics'],
@@ -184,7 +183,7 @@ export function NodeExplorerFilters({
 
   return (
     <React.Fragment>
-      <FormControl className={classes.formControl}>
+      <FormControl fullWidth>
         <InputLabel id="node-prefix-select-label">Node Type Prefix</InputLabel>
         <Select
           labelId="node-prefix-select-label"

@@ -65,7 +65,7 @@ export function PageProvenanceGraph(): JSX.Element {
             // helperText={!result.error ? undefined : `${result.error}`}
             fullWidth
           />
-          <FormControl className={classes.formControl}>
+          <FormControl fullWidth>
             <InputLabel id="dag-mode-select-label">DAG Mode</InputLabel>
             <Select
               labelId="dag-mode-select-label"

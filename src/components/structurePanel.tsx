@@ -22,7 +22,6 @@ import { ResizableBox, ResizeCallbackData } from 'react-resizable'
 
 import { AiidaSettingsContext, getNode, uuidPattern } from '../clients/aiidaClient'
 import { useLocalStorage } from '../hooks'
-import { useStyles } from '../styles'
 import { IStructureDataAttrs, vectorLength } from './structureUtils'
 import { Structure3DViewer } from './structure3DViewer'
 import { StructureTable } from './structureTable'
@@ -134,8 +133,6 @@ export function StructurePanelAiiDA(): JSX.Element {
 }
 
 export function StructurePanelOptimade(): JSX.Element {
-  const classes = useStyles()
-
   const [provider, setProvider] = useLocalStorage('optimade-structure-provider', '')
   const [id, setID] = useLocalStorage('optimade-structure-id', '')
 
@@ -180,7 +177,7 @@ export function StructurePanelOptimade(): JSX.Element {
       }
       view = <StructurePanelBase node={nodeData as IStructureDataAttrs} />
     } catch (err) {
-      uuidErrorMessage = `Structure parse failed: ${err}`
+      uuidErrorMessage = `Fetch failed: ${err}`
     }
   } else if (resultStructure.isLoading) {
     view = <CircularProgress />
@@ -192,7 +189,7 @@ export function StructurePanelOptimade(): JSX.Element {
     <React.Fragment>
       <Grid container spacing={4} alignItems="center">
         <Grid item sm={6}>
-          <FormControl className={classes.formControl} fullWidth>
+          <FormControl fullWidth>
             <InputLabel id="optimade-provider-view-select-label">Provider</InputLabel>
             <Select
               id="optimade-provider-view-select"

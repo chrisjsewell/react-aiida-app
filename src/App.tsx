@@ -2,17 +2,20 @@ import React from 'react'
 import clsx from 'clsx'
 
 import { useTheme } from '@material-ui/core/styles'
-import AppBar from '@material-ui/core/AppBar'
-import Toolbar from '@material-ui/core/Toolbar'
-import Typography from '@material-ui/core/Typography'
-import TextField from '@material-ui/core/TextField'
-import IconButton from '@material-ui/core/IconButton'
-import Drawer from '@material-ui/core/Drawer'
-import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
-import ListItemIcon from '@material-ui/core/ListItemIcon'
-import ListItemText from '@material-ui/core/ListItemText'
-import Divider from '@material-ui/core/Divider'
+import {
+  AppBar,
+  Divider,
+  Drawer,
+  Grid,
+  IconButton,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemIcon,
+  TextField,
+  Toolbar,
+  Typography
+} from '@material-ui/core'
 import * as MuiIcons from '@material-ui/icons'
 import { Omit } from '@material-ui/types'
 
@@ -207,12 +210,16 @@ export function App({ showDevTools = true }: { showDevTools?: boolean }): JSX.El
 }
 
 function NotFound(): JSX.Element {
-  // TODO Offset
+  const classes = useStyles()
   return (
-    <div>
-      <h1>404 - Not Found!</h1>
-      <RouterLink to="/">Go Home</RouterLink>
-    </div>
+    <Grid container spacing={4} className={classes.mainGrid}>
+      <Grid item>
+        <div>
+          <h1>404 - Not Found!</h1>
+          <RouterLink to="/">Go Home</RouterLink>
+        </div>
+      </Grid>
+    </Grid>
   )
 }
 
