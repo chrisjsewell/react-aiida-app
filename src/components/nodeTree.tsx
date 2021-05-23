@@ -14,7 +14,8 @@ import {
   ListItemText,
   Menu,
   MenuItem,
-  Tooltip
+  Tooltip,
+  Typography
 } from '@material-ui/core'
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles'
 import * as MuiIcons from '@material-ui/icons'
@@ -139,10 +140,14 @@ export function AiidaNodeTree({ nodePrefix }: { nodePrefix: string }): JSX.Eleme
     const error = result.error as { message: string }
     element = <Alert severity="error">{error.message}</Alert>
   }
-  let updateInfo = <span></span>
+  let updateInfo = null
   if (!!result.dataUpdatedAt) {
     const date = new Date(result.dataUpdatedAt)
-    updateInfo = <span>Updated: {date.toLocaleString()}</span>
+    updateInfo = (
+      <Typography display="inline" noWrap>
+        Updated: {date.toLocaleString()}
+      </Typography>
+    )
   }
 
   return (
