@@ -6,6 +6,7 @@ import {
   Chip,
   CircularProgress,
   Collapse,
+  IconButton,
   List,
   Divider,
   ListItem,
@@ -14,7 +15,7 @@ import {
   ListItemText,
   Menu,
   MenuItem,
-  Tooltip,
+  // Tooltip,
   Typography
 } from '@material-ui/core'
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles'
@@ -65,11 +66,6 @@ const useStyles = makeStyles((theme: Theme) =>
     }
   })
 )
-
-const initialMouseState = {
-  mouseX: null,
-  mouseY: null
-} as { mouseX: null | number; mouseY: null | number }
 
 interface IAiidaTreeElementProps {
   pk: number
@@ -204,51 +200,40 @@ function AiidaTreeElement(props: IAiidaTreeElementProps): JSX.Element {
   const classes = useStyles()
 
   const key = props.elementName === undefined ? 'default' : props.elementName
-  let icon = ElementIconMap[key] || <MuiIcons.DeviceUnknown />
+  const icon = ElementIconMap[key] || <MuiIcons.DeviceUnknown />
 
-  const [open, setOpen] = React.useState(false)
-  const handleClick = () => {
-    setOpen(!open)
+  const [menuOpen, setmenuOpen] = React.useState(false)
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
+  const [childrenOpen, setchildrenOpen] = React.useState(false)
+
+  const handleChildrenOpen = () => {
+    setchildrenOpen(!childrenOpen)
   }
 
-  const [contextPosition, setContextPosition] =
-    React.useState<{
-      mouseX: null | number
-      mouseY: null | number
-    }>(initialMouseState)
-
-  // TODO currently if you right-click a second time,
-  // it will simply move the current open menu,
-  // not close it and open the "correct" context-menu for the position on the screen
-  const handleRightClick = (event: React.MouseEvent<HTMLDivElement>) => {
-    event.preventDefault()
+  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     event.stopPropagation()
-    setContextPosition({
-      mouseX: event.clientX - 2,
-      mouseY: event.clientY - 4
-    })
+    setmenuOpen(true)
+    setAnchorEl(event.currentTarget)
   }
-
-  const handleContextClose = (event: React.MouseEvent) => {
-    event.preventDefault()
+  const handleMenuClose = (event: React.MouseEvent<HTMLElement>) => {
     event.stopPropagation()
-    setContextPosition(initialMouseState)
+    setAnchorEl(null)
+    setmenuOpen(false)
   }
   const copyUUIDtoClipboard = (event: React.MouseEvent) => {
-    event.preventDefault()
     event.stopPropagation()
-    setContextPosition(initialMouseState)
     copy(`${props.uuid}`)
+    handleMenuClose(event as any)
   }
 
   // TODO react-markdown for tooltip
-  if (props.tooltip !== undefined) {
-    icon = (
-      <Tooltip title={<p>{props.tooltip}</p>}>
-        <span>{icon}</span>
-      </Tooltip>
-    )
-  }
+  //   if (props.tooltip !== undefined) {
+  //     icon = (
+  //       <Tooltip title={<p>{props.tooltip}</p>}>
+  //         <span>{icon}</span>
+  //       </Tooltip>
+  //     )
+  //   }
 
   let title = <span>{props.header}</span>
   if (['excepted', 'killed'].includes(props.procState || '')) {
@@ -281,37 +266,43 @@ function AiidaTreeElement(props: IAiidaTreeElementProps): JSX.Element {
     <React.Fragment>
       <ListItem
         button
-        onClick={handleClick}
-        onContextMenu={handleRightClick}
+        onClick={handleChildrenOpen}
         className={props.nested ? classes.nested2 : undefined}
       >
         <ListItemAvatar>
-          <Avatar>{icon}</Avatar>
+          <IconButton onClick={handleMenuOpen}>
+            <Avatar>{icon}</Avatar>
+          </IconButton>
         </ListItemAvatar>
-        <ListItemText className={classes.item} primary={title} secondary={props.info} />
-        {/* TODO context menu does not close on a right-click not over the node */}
         <Menu
           keepMounted
-          open={contextPosition.mouseY !== null}
-          onClose={handleContextClose}
-          anchorReference="anchorPosition"
-          anchorPosition={
-            contextPosition.mouseY !== null && contextPosition.mouseX !== null
-              ? { top: contextPosition.mouseY, left: contextPosition.mouseX }
-              : undefined
-          }
+          open={menuOpen}
+          onClose={handleMenuClose}
+          anchorEl={anchorEl}
+          getContentAnchorEl={null}
+          anchorOrigin={{ vertical: 'center', horizontal: 'center' }}
+          // transformOrigin={{ vertical: 'top', horizontal: 'left' }}
         >
-          <ListItem>
+          {/* <ListItem>
             <b>PK {props.pk} Menu</b>
-          </ListItem>
+          </ListItem> */}
           <MenuItem onClick={copyUUIDtoClipboard}>Copy UUID to Clipboard</MenuItem>
-          <MenuItem onClick={handleContextClose}>Close</MenuItem>
+          <MenuItem onClick={handleMenuClose}>
+            <b>Close</b>
+          </MenuItem>
           {/* <MenuItem onClick={handleContextClose}>Open Data</MenuItem>
                     <MenuItem onClick={handleContextClose}>Add to Group</MenuItem> */}
         </Menu>
-        {props.nested ? null : open ? <MuiIcons.ExpandMore /> : <MuiIcons.ExpandLess />}
+        <ListItemText className={classes.item} primary={title} secondary={props.info} />
+        {props.nested ? null : childrenOpen ? (
+          <MuiIcons.ExpandMore />
+        ) : (
+          <MuiIcons.ExpandLess />
+        )}
       </ListItem>
-      {props.nested ? null : <AiidaNodeChildren nodeUUID={props.uuid} open={open} />}
+      {props.nested ? null : (
+        <AiidaNodeChildren nodeUUID={props.uuid} open={childrenOpen} />
+      )}
       <Divider light />
     </React.Fragment>
   )
@@ -337,6 +328,7 @@ function AiidaNodeChildren({
   const handleOutgoingClick = () => {
     setOpenOutgoing(!openOutgoing)
   }
+  // TODO don't show list item if it does not contain any content
   return (
     <Collapse in={open} timeout="auto">
       <List component="div" disablePadding>

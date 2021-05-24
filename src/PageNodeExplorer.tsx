@@ -123,11 +123,11 @@ export function NodeExplorerIntroduction(): JSX.Element {
     <div>
       <p>
         The node explorer allows you to visualise the nodes in your AiiDA profile as a
-        filtered tree.
+        filtered tree. Click on the chevron to reveal its child links.
       </p>
       <p>Use the filter section below to select which node type you want to explore.</p>
       <p>
-        You can right-click on a node to see additional actions, including copying its
+        You can click on a node's icon to see additional actions, including copying its
         UUID to the clipboard. You can use this to show all of if its content in the
         "Database Fields" section.
       </p>
