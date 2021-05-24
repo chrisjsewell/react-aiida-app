@@ -96,6 +96,27 @@ export function App({ showDevTools = true }: { showDevTools?: boolean }): JSX.El
     defaultRestUrl
   )
 
+  const tabs = (
+    <List>
+      <ListItemLink to={PageKeys.home} primary="Home" icon={<MuiIcons.Home />} />
+      <ListItemLink
+        to={PageKeys.nodeExplorer}
+        primary="Node Explorer"
+        icon={<MuiIcons.Explore />}
+      />
+      <ListItemLink
+        to={PageKeys.provenanceGraph}
+        primary="Provenance Graph"
+        icon={<GitBranchIcon />}
+      />
+      <ListItemLink
+        to={PageKeys.structures}
+        primary="Structure Explorer"
+        icon={<OptimadeIcon />}
+      />
+    </List>
+  )
+
   return (
     <div className={classes.flexGrow}>
       <QueryClientProvider client={queryAiidaClient}>
@@ -105,6 +126,7 @@ export function App({ showDevTools = true }: { showDevTools?: boolean }): JSX.El
           drawerOpen={drawerOpen}
           setDrawerOpen={setDrawerOpen}
         />
+        {/* TODO use the temporary drawer on mobile */}
         <Drawer
           variant="permanent"
           className={clsx(classes.drawer, {
@@ -128,25 +150,7 @@ export function App({ showDevTools = true }: { showDevTools?: boolean }): JSX.El
             </IconButton>
           </div>
           <Divider />
-
-          <List>
-            <ListItemLink to={PageKeys.home} primary="Home" icon={<MuiIcons.Home />} />
-            <ListItemLink
-              to={PageKeys.nodeExplorer}
-              primary="Node Explorer"
-              icon={<MuiIcons.Explore />}
-            />
-            <ListItemLink
-              to={PageKeys.provenanceGraph}
-              primary="Provenance Graph"
-              icon={<GitBranchIcon />}
-            />
-            <ListItemLink
-              to={PageKeys.structures}
-              primary="Structure Explorer"
-              icon={<OptimadeIcon />}
-            />
-          </List>
+          {tabs}
         </Drawer>
 
         <AiidaSettingsContext.Provider

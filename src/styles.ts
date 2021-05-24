@@ -75,9 +75,12 @@ export const useStyles = makeStyles((theme: Theme) =>
         duration: theme.transitions.duration.leavingScreen
       }),
       overflowX: 'hidden',
-      width: theme.spacing(7) + 1,
-      [theme.breakpoints.up('sm')]: {
-        width: theme.spacing(9) + 1
+      width: theme.spacing(9) + 1,
+      [theme.breakpoints.down('sm')]: {
+        width: theme.spacing(7) + 1
+      },
+      [theme.breakpoints.down('xs')]: {
+        width: 0
       }
     },
     toolbar: {
@@ -90,9 +93,12 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     mainGrid: {
       paddingTop: theme.spacing(1),
-      paddingLeft: theme.spacing(8),
-      [theme.breakpoints.up('sm')]: {
-        paddingLeft: theme.spacing(10)
+      paddingLeft: theme.spacing(10),
+      [theme.breakpoints.down('sm')]: {
+        paddingLeft: theme.spacing(8)
+      },
+      [theme.breakpoints.down('xs')]: {
+        paddingLeft: theme.spacing(1)
       },
       paddingRight: theme.spacing(1)
     },
