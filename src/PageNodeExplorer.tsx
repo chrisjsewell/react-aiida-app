@@ -231,7 +231,7 @@ export function NodeExplorerAttributes({
   }
   return (
     <Grid container>
-      <Grid xs={12}>
+      <Grid item xs={12}>
         <TextField
           label="UUID"
           value={nodeFieldsUUID}
@@ -241,7 +241,7 @@ export function NodeExplorerAttributes({
           fullWidth
         />
       </Grid>
-      <Grid xs={12} className={classes.padTop}>
+      <Grid item xs={12} className={classes.padTop}>
         {view}
       </Grid>
     </Grid>
