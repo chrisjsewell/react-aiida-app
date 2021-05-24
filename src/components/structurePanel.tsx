@@ -75,11 +75,7 @@ function TabPanel(props: TabPanelProps) {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value === index && (
-        <Box p={3}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
+      {value === index && <Box p={3}>{children}</Box>}
     </div>
   )
 }
@@ -246,7 +242,7 @@ function StructurePanelBase({ node }: { node: IStructureDataAttrs }): JSX.Elemen
 
   return (
     <React.Fragment>
-      <Grid container spacing={4}>
+      <Grid container spacing={2}>
         <RepeatSlider name={'a'} value={aImages} setter={setaImages} />
         <RepeatSlider name={'b'} value={bImages} setter={setbImages} />
         <RepeatSlider name={'c'} value={cImages} setter={setcImages} />
@@ -326,7 +322,7 @@ function RepeatSlider(props: {
         step={1}
         marks
         min={1}
-        max={10}
+        max={8}
         onChange={(event: React.ChangeEvent<unknown>, value: number | number[]) => {
           props.setter(value as number)
         }}

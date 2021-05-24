@@ -14,7 +14,8 @@ import {
   ListItemIcon,
   TextField,
   Toolbar,
-  Typography
+  Typography,
+  useMediaQuery
 } from '@material-ui/core'
 import * as MuiIcons from '@material-ui/icons'
 import { Omit } from '@material-ui/types'
@@ -50,10 +51,11 @@ interface ListItemLinkProps {
   icon?: React.ReactElement
   primary: string
   to: string
+  onClick: React.MouseEventHandler<HTMLAnchorElement>
 }
 
 function ListItemLink(props: ListItemLinkProps) {
-  const { icon, primary, to } = props
+  const { icon, primary, to, onClick } = props
   const location = useLocation()
 
   const renderLink = React.useMemo(
@@ -66,7 +68,12 @@ function ListItemLink(props: ListItemLinkProps) {
 
   return (
     <li>
-      <ListItem button component={renderLink} selected={to === location.pathname}>
+      <ListItem
+        button
+        component={renderLink}
+        selected={to === location.pathname}
+        onClick={onClick}
+      >
         {icon ? <ListItemIcon>{icon}</ListItemIcon> : null}
         <ListItemText primary={primary} />
       </ListItem>
@@ -81,9 +88,7 @@ export function App({ showDevTools = true }: { showDevTools?: boolean }): JSX.El
 
   // component state for the left menu
   const [drawerOpen, setDrawerOpen] = React.useState(false)
-  const handleDrawerOpen = () => {
-    setDrawerOpen(true)
-  }
+
   const handleDrawerClose = () => {
     setDrawerOpen(false)
   }
@@ -96,56 +101,46 @@ export function App({ showDevTools = true }: { showDevTools?: boolean }): JSX.El
     'react-aiida-rest-url',
     defaultRestUrl
   )
-  const handleUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setRestUrlBase(event.target.value)
-  }
+
+  const tabs = (
+    <List>
+      <ListItemLink
+        to={PageKeys.home}
+        primary="Home"
+        icon={<MuiIcons.Home />}
+        onClick={handleDrawerClose}
+      />
+      <ListItemLink
+        to={PageKeys.nodeExplorer}
+        primary="Node Explorer"
+        icon={<MuiIcons.Explore />}
+        onClick={handleDrawerClose}
+      />
+      <ListItemLink
+        to={PageKeys.provenanceGraph}
+        primary="Provenance Graph"
+        icon={<GitBranchIcon />}
+        onClick={handleDrawerClose}
+      />
+      <ListItemLink
+        to={PageKeys.structures}
+        primary="Structure Explorer"
+        icon={<OptimadeIcon />}
+        onClick={handleDrawerClose}
+      />
+    </List>
+  )
 
   return (
-    <div className={classes.root}>
+    <div className={classes.flexGrow}>
       <QueryClientProvider client={queryAiidaClient}>
-        <AppBar
-          position="sticky"
-          className={clsx(classes.appBar, {
-            [classes.appBarShift]: drawerOpen
-          })}
-        >
-          <Toolbar>
-            <IconButton
-              edge="start"
-              onClick={handleDrawerOpen}
-              className={clsx(classes.menuButton, {
-                [classes.hide]: drawerOpen
-              })}
-              color="inherit"
-              aria-label="open drawer"
-            >
-              <MuiIcons.Menu />
-            </IconButton>
-            <Typography variant="h6" className={classes.title} id="app-header">
-              AiiDA Dashboard
-            </Typography>
-            {/* TODO periodically update connection status */}
-            <RestUrlConnection
-              url={urlPattern.test(restUrlBase) ? restUrlBase : null}
-              className={classes.inputRestUrlIcon}
-            />
-            <TextField
-              id="rest-url"
-              className={classes.inputRestUrl}
-              label="REST URL"
-              value={restUrlBase}
-              error={!urlPattern.test(restUrlBase)}
-              helperText={urlPattern.test(restUrlBase) ? undefined : 'Invalid URL'}
-              onChange={handleUrlChange}
-              autoComplete={defaultRestUrl}
-              InputProps={{
-                className: classes.inputRestUrlText
-              }}
-            />
-            <AiiDAIcon200 width={40} height={40} />
-          </Toolbar>
-        </AppBar>
-
+        <TopBar
+          restUrlBase={restUrlBase}
+          setRestUrlBase={setRestUrlBase}
+          drawerOpen={drawerOpen}
+          setDrawerOpen={setDrawerOpen}
+        />
+        {/* TODO use the temporary drawer on mobile */}
         <Drawer
           variant="permanent"
           className={clsx(classes.drawer, {
@@ -169,25 +164,7 @@ export function App({ showDevTools = true }: { showDevTools?: boolean }): JSX.El
             </IconButton>
           </div>
           <Divider />
-
-          <List>
-            <ListItemLink to={PageKeys.home} primary="Home" icon={<MuiIcons.Home />} />
-            <ListItemLink
-              to={PageKeys.nodeExplorer}
-              primary="Node Explorer"
-              icon={<MuiIcons.Explore />}
-            />
-            <ListItemLink
-              to={PageKeys.provenanceGraph}
-              primary="Provenance Graph"
-              icon={<GitBranchIcon />}
-            />
-            <ListItemLink
-              to={PageKeys.structures}
-              primary="Structure Explorer"
-              icon={<OptimadeIcon />}
-            />
-          </List>
+          {tabs}
         </Drawer>
 
         <AiidaSettingsContext.Provider
@@ -209,6 +186,82 @@ export function App({ showDevTools = true }: { showDevTools?: boolean }): JSX.El
   )
 }
 
+function TopBar({
+  restUrlBase,
+  setRestUrlBase,
+  drawerOpen,
+  setDrawerOpen
+}: {
+  restUrlBase: string
+  setRestUrlBase: React.Dispatch<React.SetStateAction<string>>
+  drawerOpen: boolean
+  setDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>
+}): JSX.Element {
+  const classes = useStyles()
+  const theme = useTheme()
+  const isDesktop = useMediaQuery(theme.breakpoints.up('sm'))
+
+  const handleDrawerOpen = () => {
+    setDrawerOpen(true)
+  }
+  const handleUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRestUrlBase(event.target.value)
+  }
+
+  const title = isDesktop ? (
+    <Typography id="app-header" variant="h6" noWrap>
+      AiiDA Dashboard
+    </Typography>
+  ) : null
+
+  return (
+    <AppBar
+      position="sticky"
+      className={clsx(classes.appBar, {
+        [classes.appBarShift]: drawerOpen
+      })}
+    >
+      <Toolbar>
+        <IconButton
+          edge="start"
+          onClick={handleDrawerOpen}
+          className={clsx(classes.menuButton, {
+            [classes.hide]: drawerOpen
+          })}
+          color="inherit"
+          aria-label="open drawer"
+        >
+          <MuiIcons.Menu />
+        </IconButton>
+        <div className={classes.aiidaIcon}>
+          <AiiDAIcon200 width={40} height={40} />
+        </div>
+        {title}
+        <div className={classes.flexGrow} />
+        <TextField
+          id="rest-url"
+          className={classes.inputRestUrl}
+          label="REST URL"
+          value={restUrlBase}
+          error={!urlPattern.test(restUrlBase)}
+          helperText={urlPattern.test(restUrlBase) ? undefined : 'Invalid URL'}
+          onChange={handleUrlChange}
+          autoComplete={defaultRestUrl}
+          InputProps={{
+            className: classes.inputRestUrlText
+          }}
+        />
+        <RestUrlConnection
+          url={urlPattern.test(restUrlBase) ? restUrlBase : null}
+          className={classes.inputRestUrlIcon}
+        />
+      </Toolbar>
+    </AppBar>
+  )
+}
+
+// className={classes.flexGrow}
+
 function NotFound(): JSX.Element {
   const classes = useStyles()
   return (
@@ -223,6 +276,7 @@ function NotFound(): JSX.Element {
   )
 }
 
+// TODO periodically update connection status
 function RestUrlConnection({
   url,
   className = undefined
