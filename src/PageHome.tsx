@@ -1,6 +1,6 @@
 import React from 'react'
-import Grid from '@material-ui/core/Grid'
-import Paper from '@material-ui/core/Paper'
+
+import { Grid, Paper } from '@material-ui/core'
 import * as MuiIcons from '@material-ui/icons'
 import Alert from '@material-ui/lab/Alert'
 
@@ -106,13 +106,17 @@ export function GettingStartedBox(): JSX.Element {
         API server.
       </p>
       <Alert variant="outlined" severity="info">
-        If you want to try out this app but don't have your own AiiDA profile, you can
-        use this demonstration server:{' '}
-        <ExternalLink href="https://15.188.110.176:5000/api/v4">
-          https://15.188.110.176:5000/api/v4
-        </ExternalLink>
-        , although note currently you will first need to open this address in a separate
-        tab and accept the security certificate (under Advanced).
+        <p>
+          If you want to try out this app but don't have your own AiiDA profile, you can
+          use this demonstration server:{' '}
+          <ExternalLink href="https://15.188.110.176:5000/api/v4">
+            https://15.188.110.176:5000/api/v4
+          </ExternalLink>
+        </p>
+        <p>
+          Although note currently you will first need to open this address in a separate
+          tab and accept the security certificate (under Advanced).
+        </p>
       </Alert>
       <p>
         To start a server for your own profile, you must have aiida-core installed with

@@ -51,10 +51,11 @@ interface ListItemLinkProps {
   icon?: React.ReactElement
   primary: string
   to: string
+  onClick: React.MouseEventHandler<HTMLAnchorElement>
 }
 
 function ListItemLink(props: ListItemLinkProps) {
-  const { icon, primary, to } = props
+  const { icon, primary, to, onClick } = props
   const location = useLocation()
 
   const renderLink = React.useMemo(
@@ -67,7 +68,12 @@ function ListItemLink(props: ListItemLinkProps) {
 
   return (
     <li>
-      <ListItem button component={renderLink} selected={to === location.pathname}>
+      <ListItem
+        button
+        component={renderLink}
+        selected={to === location.pathname}
+        onClick={onClick}
+      >
         {icon ? <ListItemIcon>{icon}</ListItemIcon> : null}
         <ListItemText primary={primary} />
       </ListItem>
@@ -98,21 +104,29 @@ export function App({ showDevTools = true }: { showDevTools?: boolean }): JSX.El
 
   const tabs = (
     <List>
-      <ListItemLink to={PageKeys.home} primary="Home" icon={<MuiIcons.Home />} />
+      <ListItemLink
+        to={PageKeys.home}
+        primary="Home"
+        icon={<MuiIcons.Home />}
+        onClick={handleDrawerClose}
+      />
       <ListItemLink
         to={PageKeys.nodeExplorer}
         primary="Node Explorer"
         icon={<MuiIcons.Explore />}
+        onClick={handleDrawerClose}
       />
       <ListItemLink
         to={PageKeys.provenanceGraph}
         primary="Provenance Graph"
         icon={<GitBranchIcon />}
+        onClick={handleDrawerClose}
       />
       <ListItemLink
         to={PageKeys.structures}
         primary="Structure Explorer"
         icon={<OptimadeIcon />}
+        onClick={handleDrawerClose}
       />
     </List>
   )
