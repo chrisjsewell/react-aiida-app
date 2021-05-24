@@ -11,8 +11,8 @@ test('renders homepage', () => {
       <App showDevTools={false} />
     </HashRouter>
   )
-  const linkElement = screen.getByText(/AiiDA Dashboard/i, {
-    selector: '#app-header'
+  const linkElement = screen.getByText(/Getting Started/i, {
+    selector: '#getting-started'
   })
   expect(linkElement).toBeInTheDocument()
 })

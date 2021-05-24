@@ -100,7 +100,7 @@ export function GettingStartedBox(): JSX.Element {
   const classes = useStyles()
   return (
     <div>
-      <h2>Getting Started</h2>
+      <h2 id="getting-started">Getting Started</h2>
       <p>
         To use this application, you need to be able to connect to a running AiiDA REST
         API server.
