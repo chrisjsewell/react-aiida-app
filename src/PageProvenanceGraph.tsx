@@ -14,12 +14,10 @@ import Select from '@material-ui/core/Select'
 import Typography from '@material-ui/core/Typography'
 import Slider from '@material-ui/core/Slider'
 
-import { Link } from 'react-router-dom'
-
 import { uuidPattern } from './clients/aiidaClient'
 import { useStyles } from './styles'
 import { LocalStorageKeys, PageKeys } from './constants'
-import { useLocalStorage } from './hooks'
+import { LinkInternal, useLocalStorage } from './hooks'
 import { AiidaProvenanceGraph, DagType } from './components/provenanceGraph'
 
 export function PageProvenanceGraph(): JSX.Element {
@@ -46,8 +44,11 @@ export function PageProvenanceGraph(): JSX.Element {
       <Grid item xs={12} sm={12} md={6}>
         <Paper variant="outlined" className={classes.paper}>
           <Accordion defaultExpanded>
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-              <h3>Provenance Graph Visualisation</h3>
+            <AccordionSummary
+              classes={{ content: classes.accordSumContent }}
+              expandIcon={<ExpandMoreIcon />}
+            >
+              <h2>Provenance Graph Visualisation</h2>
             </AccordionSummary>
             <AccordionDetails>
               <ProvenanceGraphIntroduction />
@@ -116,8 +117,8 @@ export function ProvenanceGraphIntroduction(): JSX.Element {
       <p>This is a work in progress!</p>
       <p>
         Input a root node UUID (you can copy one from the{' '}
-        <Link to={PageKeys.nodeExplorer}>Node explorer</Link>) and you will see a
-        visualisation of its local provenance graph.
+        <LinkInternal to={PageKeys.nodeExplorer}>Node explorer</LinkInternal>) and you
+        will see a visualisation of its local provenance graph.
       </p>
       <p>
         Hover over a node or link to see more information about it (you may have to

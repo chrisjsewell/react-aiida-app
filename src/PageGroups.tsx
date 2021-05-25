@@ -39,8 +39,11 @@ export function PageGroups(): JSX.Element {
       <Grid item xs={12} sm={12} md={6}>
         <Paper variant="outlined" className={classes.paper}>
           <Accordion defaultExpanded>
-            <AccordionSummary expandIcon={<MuiIcons.ExpandMore />}>
-              <h3>Node Bookmarks</h3>
+            <AccordionSummary
+              classes={{ content: classes.accordSumContent }}
+              expandIcon={<MuiIcons.ExpandMore />}
+            >
+              <h2>Node Bookmarks</h2>
             </AccordionSummary>
             <AccordionDetails>
               <Bookmarks />
@@ -52,8 +55,11 @@ export function PageGroups(): JSX.Element {
       <Grid item xs={12} sm={12} md={6}>
         <Paper variant="outlined" className={classes.paper}>
           <Accordion defaultExpanded>
-            <AccordionSummary expandIcon={<MuiIcons.ExpandMore />}>
-              <h3>Node Groups</h3>
+            <AccordionSummary
+              classes={{ content: classes.accordSumContent }}
+              expandIcon={<MuiIcons.ExpandMore />}
+            >
+              <h2>Node Groups</h2>
             </AccordionSummary>
             <AccordionDetails>
               <div>
@@ -285,7 +291,7 @@ export function GroupTree(): JSX.Element {
     <div>
       <Button
         variant="outlined"
-        color="primary"
+        color="default"
         style={{ marginRight: theme.spacing(1) }}
         startIcon={<MuiIcons.Refresh />}
         onClick={() => {

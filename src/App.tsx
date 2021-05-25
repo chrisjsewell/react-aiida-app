@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import clsx from 'clsx'
 
+import { ThemeProvider } from '@material-ui/styles'
+import { createMuiTheme } from '@material-ui/core/styles'
 import { useTheme } from '@material-ui/core/styles'
 import {
   AppBar,
@@ -8,12 +10,15 @@ import {
   Drawer,
   Grid,
   IconButton,
+  InputAdornment,
   List,
   ListItem,
   ListItemText,
   ListItemIcon,
+  Paper,
   TextField,
   Toolbar,
+  Tooltip,
   Typography,
   useMediaQuery
 } from '@material-ui/core'
@@ -85,11 +90,23 @@ function ListItemLink(props: ListItemLinkProps) {
 export function App({ showDevTools = true }: { showDevTools?: boolean }): JSX.Element {
   // style hooks
   const classes = useStyles()
-  const theme = useTheme()
+
+  const [darkMode, setDarkMode] = useState(false)
+  const theme = React.useMemo(
+    () =>
+      createMuiTheme({
+        palette: {
+          type: darkMode ? 'dark' : 'light'
+        }
+      }),
+    [darkMode]
+  )
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode)
+  }
 
   // component state for the left menu
-  const [drawerOpen, setDrawerOpen] = React.useState(false)
-
+  const [drawerOpen, setDrawerOpen] = useState(false)
   const handleDrawerClose = () => {
     setDrawerOpen(false)
   }
@@ -139,66 +156,76 @@ export function App({ showDevTools = true }: { showDevTools?: boolean }): JSX.El
   )
 
   return (
-    <div className={classes.flexGrow}>
-      <QueryClientProvider client={queryAiidaClient}>
-        <SnackbarProvider
-          SnackbarProps={{
-            autoHideDuration: 4000,
-            anchorOrigin: { vertical: 'bottom', horizontal: 'right' }
-          }}
-        >
-          <TopBar
-            restUrlBase={restUrlBase}
-            setRestUrlBase={setRestUrlBase}
-            drawerOpen={drawerOpen}
-            setDrawerOpen={setDrawerOpen}
-          />
-          {/* TODO use the temporary drawer on mobile */}
-          <Drawer
-            variant="permanent"
-            className={clsx(classes.drawer, {
-              [classes.drawerOpen]: drawerOpen,
-              [classes.drawerClose]: !drawerOpen
-            })}
-            classes={{
-              paper: clsx({
-                [classes.drawerOpen]: drawerOpen,
-                [classes.drawerClose]: !drawerOpen
-              })
+    <ThemeProvider theme={theme}>
+      <Paper>
+        <QueryClientProvider client={queryAiidaClient}>
+          <SnackbarProvider
+            SnackbarProps={{
+              autoHideDuration: 4000,
+              anchorOrigin: { vertical: 'bottom', horizontal: 'right' }
             }}
           >
-            <div className={classes.toolbar}>
-              <IconButton onClick={handleDrawerClose}>
-                {theme.direction === 'rtl' ? (
-                  <MuiIcons.ChevronRight />
-                ) : (
-                  <MuiIcons.ChevronLeft />
-                )}
-              </IconButton>
-            </div>
-            <Divider />
-            {tabs}
-          </Drawer>
+            <TopBar
+              restUrlBase={restUrlBase}
+              setRestUrlBase={setRestUrlBase}
+              drawerOpen={drawerOpen}
+              setDrawerOpen={setDrawerOpen}
+            />
+            {/* TODO use the temporary drawer on mobile */}
+            <Drawer
+              variant="permanent"
+              className={clsx(classes.drawer, {
+                [classes.drawerOpen]: drawerOpen,
+                [classes.drawerClose]: !drawerOpen
+              })}
+              classes={{
+                paper: clsx({
+                  [classes.drawerOpen]: drawerOpen,
+                  [classes.drawerClose]: !drawerOpen
+                })
+              }}
+            >
+              <div className={classes.toolbar}>
+                <Tooltip title="Toggle light/dark theme">
+                  <IconButton onClick={toggleDarkMode}>
+                    {darkMode ? <MuiIcons.Brightness4 /> : <MuiIcons.BrightnessHigh />}
+                  </IconButton>
+                </Tooltip>
+                <IconButton onClick={handleDrawerClose}>
+                  {theme.direction === 'rtl' ? (
+                    <MuiIcons.ChevronRight />
+                  ) : (
+                    <MuiIcons.ChevronLeft />
+                  )}
+                </IconButton>
+              </div>
+              <Divider />
+              {tabs}
+            </Drawer>
 
-          <AiidaSettingsContext.Provider
-            value={{ baseUrl: urlPattern.test(restUrlBase) ? restUrlBase : null }}
-          >
-            <Switch>
-              <Route exact path={PageKeys.home} component={PageHome} />
-              <Route path={PageKeys.nodeExplorer} component={PageNodeExplorer} />
-              <Route path={PageKeys.provenanceGraph} component={PageProvenanceGraph} />
-              <Route path={PageKeys.structures} component={PageStructures} />
-              <Route path={PageKeys.groups} component={PageGroups} />
+            <AiidaSettingsContext.Provider
+              value={{ baseUrl: urlPattern.test(restUrlBase) ? restUrlBase : null }}
+            >
+              <Switch>
+                <Route exact path={PageKeys.home} component={PageHome} />
+                <Route path={PageKeys.nodeExplorer} component={PageNodeExplorer} />
+                <Route
+                  path={PageKeys.provenanceGraph}
+                  component={PageProvenanceGraph}
+                />
+                <Route path={PageKeys.structures} component={PageStructures} />
+                <Route path={PageKeys.groups} component={PageGroups} />
 
-              <Route path={PageKeys.unknown} component={NotFound} />
-              <Redirect to={PageKeys.unknown} />
-            </Switch>
-          </AiidaSettingsContext.Provider>
+                <Route path={PageKeys.unknown} component={NotFound} />
+                <Redirect to={PageKeys.unknown} />
+              </Switch>
+            </AiidaSettingsContext.Provider>
 
-          {showDevTools ? <ReactQueryDevtools initialIsOpen={false} /> : null}
-        </SnackbarProvider>
-      </QueryClientProvider>
-    </div>
+            {showDevTools ? <ReactQueryDevtools initialIsOpen={false} /> : null}
+          </SnackbarProvider>
+        </QueryClientProvider>
+      </Paper>
+    </ThemeProvider>
   )
 }
 
@@ -264,19 +291,20 @@ function TopBar({
           onChange={handleUrlChange}
           autoComplete={defaultRestUrl}
           InputProps={{
-            className: classes.inputRestUrlText
+            className: classes.inputRestUrlText,
+            endAdornment: (
+              <InputAdornment position="end">
+                <RestUrlConnection
+                  url={urlPattern.test(restUrlBase) ? restUrlBase : null}
+                />
+              </InputAdornment>
+            )
           }}
-        />
-        <RestUrlConnection
-          url={urlPattern.test(restUrlBase) ? restUrlBase : null}
-          className={classes.inputRestUrlIcon}
         />
       </Toolbar>
     </AppBar>
   )
 }
-
-// className={classes.flexGrow}
 
 function NotFound(): JSX.Element {
   const classes = useStyles()

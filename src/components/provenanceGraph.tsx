@@ -1,5 +1,7 @@
 import React, { useContext, useEffect, useRef } from 'react'
 
+import { Theme, useTheme } from '@material-ui/core/styles'
+
 import ForceGraph2D, {
   NodeObject,
   LinkObject
@@ -36,6 +38,7 @@ export function AiidaProvenanceGraph({
   dagMode: DagType
   dagLevelDistance: number
 }): JSX.Element {
+  const theme = useTheme()
   const fgRef = useRef()
   const aiidaSettings = useContext(AiidaSettingsContext)
   const resultIncoming = useQuery(
@@ -65,7 +68,8 @@ export function AiidaProvenanceGraph({
     name: 'root',
     label: 'ROOT',
     val: 2,
-    color: 'red'
+    color: 'red',
+    fillColor: theme.palette.action.selected
   } as Node2dObject
   const nodes = [rootNode] as Node2dObject[]
   const links = [] as LinkObject[]
@@ -73,7 +77,7 @@ export function AiidaProvenanceGraph({
   if (resultIncoming.data) {
     nodes.push(
       ...resultIncoming.data.map(node => {
-        return createNodeData(node)
+        return createNodeData(node, theme)
       })
     )
     links.push(
@@ -81,7 +85,8 @@ export function AiidaProvenanceGraph({
         return {
           target: 'root',
           source: `${node.id}`,
-          name: `${node.link_label}`
+          name: `${node.link_label}`,
+          color: theme.palette.text.secondary
         }
       })
     )
@@ -89,7 +94,7 @@ export function AiidaProvenanceGraph({
   if (resultOutgoing.data) {
     nodes.push(
       ...resultOutgoing.data.map(node => {
-        return createNodeData(node)
+        return createNodeData(node, theme)
       })
     )
     links.push(
@@ -97,7 +102,8 @@ export function AiidaProvenanceGraph({
         return {
           source: 'root',
           target: `${node.id}`,
-          name: `${node.link_label}`
+          name: `${node.link_label}`,
+          color: theme.palette.text.secondary
         }
       })
     )
@@ -126,7 +132,7 @@ export function AiidaProvenanceGraph({
   )
 }
 
-function createNodeData(node: IAiidaRestNodeLinkItem): Node2dObject {
+function createNodeData(node: IAiidaRestNodeLinkItem, theme: Theme): Node2dObject {
   const node_type = node.node_type.split('.')
   node_type.pop()
   return {
@@ -134,7 +140,11 @@ function createNodeData(node: IAiidaRestNodeLinkItem): Node2dObject {
     name: `${node.id}${node.process_type ? ', ' + node.process_type : ''}`,
     label: node_type.pop(),
     val: 40,
-    color: 'blue'
+    color:
+      theme.palette.type === 'dark'
+        ? theme.palette.primary.light
+        : theme.palette.primary.dark,
+    fillColor: theme.palette.action.selected
   }
 }
 
@@ -147,14 +157,14 @@ function nodeCanvasObject(
   const fontSize = 12 / globalScale
   ctx.font = `${fontSize}px Sans-Serif`
   const textWidth = ctx.measureText(label).width
-  const bckgDimensions = [textWidth, fontSize].map(n => n + fontSize * 0.2) // some padding
+  const bckgDimensions = [textWidth, fontSize].map(n => n + fontSize * 0.5) // some padding
 
   ctx.textAlign = 'center'
   ctx.textBaseline = 'middle'
   ctx.strokeStyle = 'rgba(0, 0, 0, 0.1)'
   if (node.x !== undefined && node.y !== undefined) {
     if (node.fillColor) {
-      ctx.fillStyle = node.fillColor || 'rgba(255, 255, 255, 0.8)'
+      ctx.fillStyle = node.fillColor
       ctx.fillRect(
         node.x - bckgDimensions[0] / 2,
         node.y - bckgDimensions[1] / 2,
