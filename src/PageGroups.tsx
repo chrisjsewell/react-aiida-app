@@ -160,10 +160,16 @@ function Bookmarks(): JSX.Element {
   )
 }
 
-function BookmarkItem({ uuid }: { uuid: string }): JSX.Element {
+export function BookmarkItem({
+  uuid,
+  initialOpen
+}: {
+  uuid: string
+  initialOpen: boolean
+}): JSX.Element {
   const theme = useTheme()
   const classes = useStyles()
-  const [childOpen, setchildOpen] = useState(false)
+  const [childOpen, setchildOpen] = useState(initialOpen)
   const handleChildrenOpen = () => {
     setchildOpen(!childOpen)
   }
@@ -185,7 +191,11 @@ function BookmarkItem({ uuid }: { uuid: string }): JSX.Element {
   )
 }
 
-function BookmarkNodeItem({ uuid }: { uuid: string }): JSX.Element {
+BookmarkItem.defaultProps = {
+  initialOpen: false
+}
+
+export function BookmarkNodeItem({ uuid }: { uuid: string }): JSX.Element {
   const aiidaSettings = useContext(AiidaSettingsContext)
   const result = useQuery(
     [aiidaSettings.baseUrl, 'node', uuid],
@@ -213,7 +223,7 @@ function BookmarkNodeItem({ uuid }: { uuid: string }): JSX.Element {
   return <Alert severity="info">Disabled</Alert>
 }
 
-function GroupTree(): JSX.Element {
+export function GroupTree(): JSX.Element {
   const theme = useTheme()
   const classes = useStyles()
 
