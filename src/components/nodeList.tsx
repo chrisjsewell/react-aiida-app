@@ -109,7 +109,7 @@ export function AiidaNodeTree({ nodePrefix }: { nodePrefix: string }): JSX.Eleme
     <div className={classes.nodeTree}>
       <Button
         variant="outlined"
-        color="primary"
+        color="default"
         style={{ marginRight: theme.spacing(1) }}
         startIcon={<MuiIcons.Refresh />}
         onClick={() => {

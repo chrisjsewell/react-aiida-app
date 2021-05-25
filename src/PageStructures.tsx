@@ -9,10 +9,9 @@ import {
 } from '@material-ui/core'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 
-import { Link } from 'react-router-dom'
-
 import { useStyles } from './styles'
 import { PageKeys } from './constants'
+import { LinkInternal } from './hooks'
 import { StructurePanel } from './components/structurePanel'
 import { OptimadePanel } from './components/optimadePanel'
 
@@ -23,8 +22,11 @@ export function PageStructures(): JSX.Element {
       <Grid item xs={12} sm={12} md={6}>
         <Paper variant="outlined" className={classes.paper}>
           <Accordion defaultExpanded>
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-              <h3>Structure Visualisation</h3>
+            <AccordionSummary
+              classes={{ content: classes.accordSumContent }}
+              expandIcon={<ExpandMoreIcon />}
+            >
+              <h2>Structure Visualisation</h2>
             </AccordionSummary>
             <AccordionDetails>
               <div>
@@ -33,9 +35,10 @@ export function PageStructures(): JSX.Element {
                 </p>
                 <p>
                   Simply enter a <code>StructureData</code> UUID (you can copy one from
-                  the <Link to={PageKeys.nodeExplorer}>Node explorer</Link>). Then you
-                  can resize the viewer, zoom in/out, rotate (left-click) and pan
-                  (right-click).
+                  the{' '}
+                  <LinkInternal to={PageKeys.nodeExplorer}>Node explorer</LinkInternal>
+                  ). Then you can resize the viewer, zoom in/out, rotate (left-click)
+                  and pan (right-click).
                 </p>
                 <p>
                   You can also search for and visualise structures from an{' '}
@@ -49,8 +52,11 @@ export function PageStructures(): JSX.Element {
             </AccordionDetails>
           </Accordion>
           <Accordion defaultExpanded>
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-              <h3>Optimade Explorer</h3>
+            <AccordionSummary
+              classes={{ content: classes.accordSumContent }}
+              expandIcon={<ExpandMoreIcon />}
+            >
+              <h2>Optimade Explorer</h2>
             </AccordionSummary>
             <AccordionDetails>
               <OptimadePanel />

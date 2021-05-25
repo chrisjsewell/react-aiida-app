@@ -25,7 +25,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       })
     },
     menuButton: {
-      marginRight: theme.spacing(1),
+      marginRight: theme.spacing(0),
       [theme.breakpoints.up('sm')]: {
         marginRight: theme.spacing(2)
       }
@@ -41,13 +41,12 @@ export const useStyles = makeStyles((theme: Theme) =>
       [theme.breakpoints.up('sm')]: {
         marginLeft: theme.spacing(3),
         width: 'auto',
-        minWidth: 200
+        minWidth: 250
       },
       [theme.breakpoints.up('md')]: {
         minWidth: 300
       }
     },
-    inputRestUrlIcon: {},
     inputRestUrlText: {
       color: theme.palette.primary.contrastText
     },
@@ -103,8 +102,11 @@ export const useStyles = makeStyles((theme: Theme) =>
       paddingRight: theme.spacing(1)
     },
     paper: {
-      padding: theme.spacing(2),
-      color: theme.palette.text.secondary
+      padding: theme.spacing(2)
+      // color: theme.palette.text.secondary
+    },
+    accordSumContent: {
+      margin: '0 12px!important'
     },
     InlineIcon: {
       verticalAlign: 'middle',

@@ -1,5 +1,7 @@
 import React, { useRef } from 'react'
 
+import { useTheme } from '@material-ui/core/styles'
+
 import { Canvas } from '@react-three/fiber'
 import { Center, Line, OrbitControls } from '@react-three/drei'
 import { Vector3 } from 'three'
@@ -20,9 +22,13 @@ export function Structure3DViewer(props: {
   height?: number | undefined
   width?: number | undefined
 }): JSX.Element {
+  const theme = useTheme()
+
   // TODO I would like to add a PerspectiveCamera, to change the FoV,
   // but can't work out how to integrate it with the OrbitControls
   // https://github.com/pmndrs/drei/issues/402
+
+  // Note contexts are not forwarded to the canvas, unless you use https://github.com/pmndrs/drei#usecontextbridge
   return (
     <Canvas
       className="structure-3d-viewer"
@@ -34,7 +40,12 @@ export function Structure3DViewer(props: {
       <pointLight position={[10, 10, 10]} />
 
       <Center alignTop={false}>
-        <Structure data={props.data} images={props.images} withBox={props.withBox} />
+        <Structure
+          data={props.data}
+          images={props.images}
+          withBox={props.withBox}
+          boxColor={theme.palette.text.primary}
+        />
       </Center>
     </Canvas>
   )
@@ -48,8 +59,9 @@ Structure3DViewer.defaultProps = {
 /** Render a single AiiDA StructureData */
 export function Structure(props: {
   data: IStructureDataAttrs
-  withBox: boolean
   images: [number, number, number][]
+  withBox: boolean
+  boxColor: string
 }): JSX.Element {
   const [[ax, ay, az], [bx, by, bz], [cx, cy, cz]] = props.data.cell
   const sites = props.data.sites
@@ -64,7 +76,7 @@ export function Structure(props: {
             [bx + bx * nb, by + by * nb, bz + bz * nb],
             [cx + cx * nc, cy + cy * nc, cz + cz * nc]
           ]
-          return <BoundingBox cell={newCell as IStructureCell} />
+          return <BoundingBox cell={newCell as IStructureCell} color={props.boxColor} />
         })}
       </>
     )
@@ -131,7 +143,13 @@ function add(v1: Vector3, v2: Vector3): Vector3 {
 }
 
 /** Draw the boundary box for the unit cell */
-function BoundingBox({ cell }: { cell: IStructureCell }): JSX.Element {
+function BoundingBox({
+  cell,
+  color
+}: {
+  cell: IStructureCell
+  color: string
+}): JSX.Element {
   const root = new Vector3(0, 0, 0)
   const x = new Vector3(...cell[0])
   const y = new Vector3(...cell[1])
@@ -152,19 +170,23 @@ function BoundingBox({ cell }: { cell: IStructureCell }): JSX.Element {
           y,
           root
         ]}
-        color="black"
+        color={color}
         lineWidth={1}
         transparent={true}
         opacity={0.9}
         dashed={true}
       />
-      <Line points={[z, add(y, z)]} color="black" lineWidth={1} dashed={true} />
+      <Line points={[z, add(y, z)]} color={color} lineWidth={1} dashed={true} />
       <Line
         points={[add(x, z), add(add(y, x), z)]}
-        color="black"
+        color={color}
         lineWidth={1}
         dashed={true}
       />
     </>
   )
+}
+
+BoundingBox.defaultProps = {
+  color: 'black'
 }

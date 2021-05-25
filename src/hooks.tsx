@@ -1,6 +1,14 @@
 import React, { createContext, useContext, useState } from 'react'
 import { ReactElementLike } from 'prop-types'
-import { Button, ButtonProps, Snackbar, SnackbarProps } from '@material-ui/core'
+import {
+  Button,
+  ButtonProps,
+  Link,
+  LinkProps,
+  Snackbar,
+  SnackbarProps
+} from '@material-ui/core'
+import { Link as RouterLink, LinkProps as RouterLinkProps } from 'react-router-dom'
 
 /**
  * A wrapper for useState, which syncs the state to local storage,
@@ -159,4 +167,18 @@ SnackbarProvider.defaultProps = {
  */
 export function useSnackbar(): snackbarMessenger {
   return useContext(SnackbarContext)
+}
+
+// TODO better colors for dark mode?
+
+export function LinkInternal(props: RouterLinkProps): JSX.Element {
+  return <RouterLink {...props}>{props.children}</RouterLink>
+}
+
+export function LinkExternal(props: LinkProps): JSX.Element {
+  return (
+    <Link target="_blank" rel="noopener" {...props}>
+      {props.children}
+    </Link>
+  )
 }

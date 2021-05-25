@@ -16,12 +16,11 @@ import TextField from '@material-ui/core/TextField'
 
 import { useQuery } from 'react-query'
 import ReactJson from 'react-json-view'
-import { Link } from 'react-router-dom'
 
 import { AiidaSettingsContext, getNodeStatistics, getNode } from './clients/aiidaClient'
 import { AiidaNodeTree } from './components/nodeList'
 import { useStyles } from './styles'
-import { useLocalStorage } from './hooks'
+import { LinkInternal, useLocalStorage } from './hooks'
 import { LocalStorageKeys, PageKeys } from './constants'
 
 export function PageNodeExplorer(): JSX.Element {
@@ -58,8 +57,11 @@ export function PageNodeExplorer(): JSX.Element {
               changeExpanded('intro', expanded)
             }}
           >
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-              <h3>AiiDA Node Explorer</h3>
+            <AccordionSummary
+              classes={{ content: classes.accordSumContent }}
+              expandIcon={<ExpandMoreIcon />}
+            >
+              <h2>AiiDA Node Explorer</h2>
             </AccordionSummary>
             <AccordionDetails>
               <NodeExplorerIntroduction />
@@ -71,8 +73,11 @@ export function PageNodeExplorer(): JSX.Element {
               changeExpanded('filters', expanded)
             }}
           >
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-              <h3>Filters</h3>
+            <AccordionSummary
+              classes={{ content: classes.accordSumContent }}
+              expandIcon={<ExpandMoreIcon />}
+            >
+              <h2>Filters</h2>
             </AccordionSummary>
             <AccordionDetails>
               <NodeExplorerFilters
@@ -87,8 +92,11 @@ export function PageNodeExplorer(): JSX.Element {
               changeExpanded('fields', expanded)
             }}
           >
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-              <h3>Database Fields</h3>
+            <AccordionSummary
+              classes={{ content: classes.accordSumContent }}
+              expandIcon={<ExpandMoreIcon />}
+            >
+              <h2>Database Fields</h2>
             </AccordionSummary>
             <AccordionDetails className={classes.overflowAuto}>
               <NodeExplorerAttributes
@@ -103,8 +111,11 @@ export function PageNodeExplorer(): JSX.Element {
               changeExpanded('files', expanded)
             }}
           >
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-              <h3>File Contents</h3>
+            <AccordionSummary
+              classes={{ content: classes.accordSumContent }}
+              expandIcon={<ExpandMoreIcon />}
+            >
+              <h2>File Contents</h2>
             </AccordionSummary>
             <AccordionDetails>TODO ...</AccordionDetails>
           </Accordion>
@@ -130,9 +141,9 @@ export function NodeExplorerIntroduction(): JSX.Element {
       <p>Use the filter section below to select which node type you want to explore.</p>
       <p>
         You can click on a node's icon to see additional actions, including bookmarking
-        the node (see <Link to={PageKeys.groups}>Node groups</Link>) and copying its
-        UUID to the clipboard. You can use the UUID to show all of if its content in the
-        "Database Fields" section.
+        the node (see <LinkInternal to={PageKeys.groups}>Node groups</LinkInternal>) and
+        copying its UUID to the clipboard. You can use the UUID to show all of if its
+        content in the "Database Fields" section.
       </p>
     </div>
   )
