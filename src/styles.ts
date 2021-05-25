@@ -116,6 +116,19 @@ export const useStyles = makeStyles((theme: Theme) =>
     pagination: {
       paddingTop: theme.spacing(2),
       paddingBottom: theme.spacing(1)
+    },
+    nodeTree: {
+      width: '100%',
+      backgroundColor: theme.palette.background.paper
+    },
+    nodeItemChip: {
+      marginLeft: theme.spacing(1),
+      marginBottom: theme.spacing(1),
+      float: 'right'
+    },
+    nodeListItem: {
+      // maxWidth: 480,
+      overflow: 'hidden'
     }
   })
 )

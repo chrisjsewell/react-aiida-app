@@ -207,3 +207,31 @@ export async function getNodeOutgoing(
     ? null
     : (Object.values(responseJson.data?.outgoing) as IAiidaRestNodeLinkItem[])
 }
+
+export interface IAiidaRestGroupItem {
+  description: string
+  extras: { [key: string]: any }
+  id: number
+  label: string
+  time: string
+  type_string: string
+  user_id: number
+  uuid: string
+}
+export interface IAiidaRestResponseGroups extends IAiidaRestResponse {
+  data: { groups: { [key: number]: IAiidaRestGroupItem } }
+}
+
+export async function getGroups(
+  baseUrl: string | null
+): Promise<null | IAiidaRestGroupItem[]> {
+  if (baseUrl === null) {
+    return null
+  }
+  // TODO deal with pagination
+  const response = await fetch(`${baseUrl}/groups?orderby=type_string`)
+  const responseJson = (await response.json()) as IAiidaRestResponseGroups
+  return responseJson.data?.groups === undefined
+    ? null
+    : (Object.values(responseJson.data?.groups) as IAiidaRestGroupItem[])
+}

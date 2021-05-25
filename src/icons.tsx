@@ -1,6 +1,7 @@
 // From https://primer.style/octicons
-
+import React from 'react'
 import SvgIcon from '@material-ui/core/SvgIcon'
+import * as MuiIcons from '@material-ui/icons'
 
 export function AiiDAIcon200({
   width = 200,
@@ -63,6 +64,29 @@ export function AiiDAIcon200({
       </g>
     </svg>
   )
+}
+
+// TODO better value type, custom icons (https://primer.style/octicons/packages/react)
+export const ElementIconMap: { [key: string]: JSX.Element } = {
+  default: <MuiIcons.DeviceUnknown />,
+  folder: <MuiIcons.Inbox />,
+  'data.array': <MuiIcons.GridOn />,
+  'data.bool': <MuiIcons.CheckCircle />,
+  'data.cif': <MuiIcons.ScatterPlot />,
+  'data.code': <MuiIcons.Code />,
+  'data.dict': <MuiIcons.ViewList />,
+  'data.float': <MuiIcons.AllInclusive />,
+  'data.folder': <MuiIcons.Inbox />,
+  'data.int': <MuiIcons.LooksOne />,
+  'data.list': <MuiIcons.List />,
+  'data.numeric': <MuiIcons.PlusOne />,
+  'data.orbital': <MuiIcons.BlurOn />,
+  'data.remote': <MuiIcons.OpenInNew />,
+  'data.str': <MuiIcons.FormatColorText />,
+  'data.structure': <MuiIcons.Grain />,
+  'process.calculation': <RocketIcon />,
+  'process.process': <RocketIcon />,
+  'process.workflow': <GitBranchIcon /> // <MuiIcons.Share />,
 }
 
 export function RocketIcon(): JSX.Element {

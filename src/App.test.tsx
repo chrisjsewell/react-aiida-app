@@ -64,3 +64,15 @@ test('landing on structure page', () => {
 
   expect(screen.getByText(/Structure Visualisation/i)).toBeInTheDocument()
 })
+
+test('landing on groups page', () => {
+  const history = createMemoryHistory()
+  history.push('/groups')
+  render(
+    <Router history={history}>
+      <App showDevTools={false} />
+    </Router>
+  )
+
+  expect(screen.getByText(/Node Bookmarks/i)).toBeInTheDocument()
+})

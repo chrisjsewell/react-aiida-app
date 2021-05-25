@@ -12,7 +12,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { Link } from 'react-router-dom'
 
 import { useStyles } from './styles'
-import PageKeys from './pages'
+import { PageKeys } from './constants'
 import { StructurePanel } from './components/structurePanel'
 import { OptimadePanel } from './components/optimadePanel'
 

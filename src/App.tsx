@@ -40,12 +40,13 @@ import {
 } from './clients/aiidaClient'
 import { useStyles } from './styles'
 import { AiiDAIcon200, GitBranchIcon, OptimadeIcon } from './icons'
-import PageKeys from './pages'
+import { PageKeys, LocalStorageKeys } from './constants'
 import { PageHome } from './PageHome'
 import { PageNodeExplorer } from './PageNodeExplorer'
 import { PageProvenanceGraph } from './PageProvenanceGraph'
 import { PageStructures } from './PageStructures'
-import { useLocalStorage } from './hooks'
+import { PageGroups } from './PageGroups'
+import { SnackbarProvider, useLocalStorage } from './hooks'
 
 interface ListItemLinkProps {
   icon?: React.ReactElement
@@ -98,7 +99,7 @@ export function App({ showDevTools = true }: { showDevTools?: boolean }): JSX.El
   // we also validate to only allow http/https schema, and no ? which start the query string
   // TODO better URL validation (to guard against attacks)
   const [restUrlBase, setRestUrlBase] = useLocalStorage(
-    'react-aiida-rest-url',
+    LocalStorageKeys.restUrlBase,
     defaultRestUrl
   )
 
@@ -123,6 +124,12 @@ export function App({ showDevTools = true }: { showDevTools?: boolean }): JSX.El
         onClick={handleDrawerClose}
       />
       <ListItemLink
+        to={PageKeys.groups}
+        primary="Node Groups"
+        icon={<MuiIcons.Bookmarks />}
+        onClick={handleDrawerClose}
+      />
+      <ListItemLink
         to={PageKeys.structures}
         primary="Structure Explorer"
         icon={<OptimadeIcon />}
@@ -134,53 +141,62 @@ export function App({ showDevTools = true }: { showDevTools?: boolean }): JSX.El
   return (
     <div className={classes.flexGrow}>
       <QueryClientProvider client={queryAiidaClient}>
-        <TopBar
-          restUrlBase={restUrlBase}
-          setRestUrlBase={setRestUrlBase}
-          drawerOpen={drawerOpen}
-          setDrawerOpen={setDrawerOpen}
-        />
-        {/* TODO use the temporary drawer on mobile */}
-        <Drawer
-          variant="permanent"
-          className={clsx(classes.drawer, {
-            [classes.drawerOpen]: drawerOpen,
-            [classes.drawerClose]: !drawerOpen
-          })}
-          classes={{
-            paper: clsx({
-              [classes.drawerOpen]: drawerOpen,
-              [classes.drawerClose]: !drawerOpen
-            })
+        <SnackbarProvider
+          SnackbarProps={{
+            autoHideDuration: 4000,
+            anchorOrigin: { vertical: 'bottom', horizontal: 'right' }
           }}
         >
-          <div className={classes.toolbar}>
-            <IconButton onClick={handleDrawerClose}>
-              {theme.direction === 'rtl' ? (
-                <MuiIcons.ChevronRight />
-              ) : (
-                <MuiIcons.ChevronLeft />
-              )}
-            </IconButton>
-          </div>
-          <Divider />
-          {tabs}
-        </Drawer>
+          <TopBar
+            restUrlBase={restUrlBase}
+            setRestUrlBase={setRestUrlBase}
+            drawerOpen={drawerOpen}
+            setDrawerOpen={setDrawerOpen}
+          />
+          {/* TODO use the temporary drawer on mobile */}
+          <Drawer
+            variant="permanent"
+            className={clsx(classes.drawer, {
+              [classes.drawerOpen]: drawerOpen,
+              [classes.drawerClose]: !drawerOpen
+            })}
+            classes={{
+              paper: clsx({
+                [classes.drawerOpen]: drawerOpen,
+                [classes.drawerClose]: !drawerOpen
+              })
+            }}
+          >
+            <div className={classes.toolbar}>
+              <IconButton onClick={handleDrawerClose}>
+                {theme.direction === 'rtl' ? (
+                  <MuiIcons.ChevronRight />
+                ) : (
+                  <MuiIcons.ChevronLeft />
+                )}
+              </IconButton>
+            </div>
+            <Divider />
+            {tabs}
+          </Drawer>
 
-        <AiidaSettingsContext.Provider
-          value={{ baseUrl: urlPattern.test(restUrlBase) ? restUrlBase : null }}
-        >
-          <Switch>
-            <Route exact path={PageKeys.home} component={PageHome} />
-            <Route path={PageKeys.nodeExplorer} component={PageNodeExplorer} />
-            <Route path={PageKeys.provenanceGraph} component={PageProvenanceGraph} />
-            <Route path={PageKeys.structures} component={PageStructures} />
-            <Route path={PageKeys.unknown} component={NotFound} />
-            <Redirect to={PageKeys.unknown} />
-          </Switch>
-        </AiidaSettingsContext.Provider>
+          <AiidaSettingsContext.Provider
+            value={{ baseUrl: urlPattern.test(restUrlBase) ? restUrlBase : null }}
+          >
+            <Switch>
+              <Route exact path={PageKeys.home} component={PageHome} />
+              <Route path={PageKeys.nodeExplorer} component={PageNodeExplorer} />
+              <Route path={PageKeys.provenanceGraph} component={PageProvenanceGraph} />
+              <Route path={PageKeys.structures} component={PageStructures} />
+              <Route path={PageKeys.groups} component={PageGroups} />
 
-        {showDevTools ? <ReactQueryDevtools initialIsOpen={false} /> : null}
+              <Route path={PageKeys.unknown} component={NotFound} />
+              <Redirect to={PageKeys.unknown} />
+            </Switch>
+          </AiidaSettingsContext.Provider>
+
+          {showDevTools ? <ReactQueryDevtools initialIsOpen={false} /> : null}
+        </SnackbarProvider>
       </QueryClientProvider>
     </div>
   )

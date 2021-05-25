@@ -57,7 +57,7 @@ export function Structure(props: {
   let boxes = null
   if (props.withBox) {
     boxes = (
-      <React.Fragment>
+      <>
         {props.images.map(([na, nb, nc]) => {
           const newCell = [
             [ax + ax * na, ay + ay * na, az + az * na],
@@ -66,11 +66,11 @@ export function Structure(props: {
           ]
           return <BoundingBox cell={newCell as IStructureCell} />
         })}
-      </React.Fragment>
+      </>
     )
   }
   return (
-    <React.Fragment>
+    <>
       {boxes}
       {props.images.map(([na, nb, nc]) => {
         return sites.map(site => {
@@ -90,7 +90,7 @@ export function Structure(props: {
           )
         })
       })}
-    </React.Fragment>
+    </>
   )
 }
 
@@ -137,7 +137,7 @@ function BoundingBox({ cell }: { cell: IStructureCell }): JSX.Element {
   const y = new Vector3(...cell[1])
   const z = new Vector3(...cell[2])
   return (
-    <React.Fragment>
+    <>
       <Line
         points={[
           root,
@@ -165,6 +165,6 @@ function BoundingBox({ cell }: { cell: IStructureCell }): JSX.Element {
         lineWidth={1}
         dashed={true}
       />
-    </React.Fragment>
+    </>
   )
 }

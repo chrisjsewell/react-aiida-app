@@ -6,7 +6,8 @@ import {
   getNodes,
   getNodeRepoList,
   getNodeIncoming,
-  getNodeOutgoing
+  getNodeOutgoing,
+  getGroups
 } from './aiidaClient'
 
 beforeEach(() => {
@@ -68,4 +69,13 @@ it('runs getNodeOutgoing query', async () => {
 
   expect(fetch).toHaveBeenCalledTimes(1)
   expect(fetch.mock.calls[0][0]).toEqual('url/nodes/uuid/links/outgoing/page/1')
+})
+
+it('runs getGroups query', async () => {
+  fetch.mockResponseOnce(JSON.stringify({ data: { groups: { 0: 'result' } } }))
+
+  await getGroups('url')
+
+  expect(fetch).toHaveBeenCalledTimes(1)
+  expect(fetch.mock.calls[0][0]).toEqual('url/groups?orderby=type_string')
 })
