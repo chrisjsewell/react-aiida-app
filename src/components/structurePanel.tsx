@@ -22,6 +22,7 @@ import { ResizableBox, ResizeCallbackData } from 'react-resizable'
 
 import { AiidaSettingsContext, getNode, uuidPattern } from '../clients/aiidaClient'
 import { useLocalStorage } from '../hooks'
+import { LocalStorageKeys } from '../constants'
 import { IStructureDataAttrs, vectorLength } from './structureUtils'
 import { Structure3DViewer } from './structure3DViewer'
 import { StructureTable } from './structureTable'
@@ -36,7 +37,7 @@ export function StructurePanel({ initTab }: { initTab?: number }): JSX.Element {
   }
 
   return (
-    <React.Fragment>
+    <>
       <Tabs
         value={tabIndex}
         onChange={handleChange}
@@ -54,7 +55,7 @@ export function StructurePanel({ initTab }: { initTab?: number }): JSX.Element {
       <TabPanel value={tabIndex} index={1}>
         <StructurePanelOptimade />
       </TabPanel>
-    </React.Fragment>
+    </>
   )
 }
 
@@ -82,7 +83,7 @@ function TabPanel(props: TabPanelProps) {
 
 export function StructurePanelAiiDA(): JSX.Element {
   const [rootUUID, setrootUUID] = useLocalStorage(
-    'aiida-structure-uuid',
+    LocalStorageKeys.aiidaStructureUUID,
     null as null | string
   )
   const handleUUIDChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -113,7 +114,7 @@ export function StructurePanelAiiDA(): JSX.Element {
   }
 
   return (
-    <React.Fragment>
+    <>
       <TextField
         label="StructureData UUID"
         value={rootUUID || ''}
@@ -124,13 +125,16 @@ export function StructurePanelAiiDA(): JSX.Element {
         style={{ paddingBottom: 10 }}
       />
       {view}
-    </React.Fragment>
+    </>
   )
 }
 
 export function StructurePanelOptimade(): JSX.Element {
-  const [provider, setProvider] = useLocalStorage('optimade-structure-provider', '')
-  const [id, setID] = useLocalStorage('optimade-structure-id', '')
+  const [provider, setProvider] = useLocalStorage(
+    LocalStorageKeys.optimadeStructureProvider,
+    ''
+  )
+  const [id, setID] = useLocalStorage(LocalStorageKeys.optimadeStructureId, '')
 
   const resultProviders = useQuery(['optimade', 'providers'], () =>
     new OptimadeClient().getStructureProviders()
@@ -182,7 +186,7 @@ export function StructurePanelOptimade(): JSX.Element {
   }
 
   return (
-    <React.Fragment>
+    <>
       <Grid container spacing={4} alignItems="center">
         <Grid item sm={6}>
           <FormControl fullWidth>
@@ -214,7 +218,7 @@ export function StructurePanelOptimade(): JSX.Element {
         </Grid>
       </Grid>
       {view}
-    </React.Fragment>
+    </>
   )
 }
 
@@ -241,7 +245,7 @@ function StructurePanelBase({ node }: { node: IStructureDataAttrs }): JSX.Elemen
   const cell = node.cell
 
   return (
-    <React.Fragment>
+    <>
       <Grid container spacing={2}>
         <RepeatSlider name={'a'} value={aImages} setter={setaImages} />
         <RepeatSlider name={'b'} value={bImages} setter={setbImages} />
@@ -301,7 +305,7 @@ function StructurePanelBase({ node }: { node: IStructureDataAttrs }): JSX.Elemen
         </Grid>
       </Grid>
       <StructureTable data={node} />
-    </React.Fragment>
+    </>
   )
 }
 

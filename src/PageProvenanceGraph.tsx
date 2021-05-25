@@ -18,22 +18,22 @@ import { Link } from 'react-router-dom'
 
 import { uuidPattern } from './clients/aiidaClient'
 import { useStyles } from './styles'
-import PageKeys from './pages'
+import { LocalStorageKeys, PageKeys } from './constants'
 import { useLocalStorage } from './hooks'
 import { AiidaProvenanceGraph, DagType } from './components/provenanceGraph'
 
 export function PageProvenanceGraph(): JSX.Element {
   const classes = useStyles()
   const [rootUUID, setrootUUID] = useLocalStorage(
-    'aiida-provenence-graph-root-uuid',
+    LocalStorageKeys.aiidaProvenanceRootUUID,
     null as null | string
   )
   const [dagMode, setdagMode] = useLocalStorage(
-    'aiida-provenence-graph-dag-mode',
+    LocalStorageKeys.aiidaProvenanceDagMode,
     'lr' as DagType
   )
   const [dagLevelDistance, setdagLevelDistance] = useLocalStorage(
-    'aiida-provenence-graph-dag-level-dist',
+    LocalStorageKeys.aiidaProvenanceDagLevel,
     50
   )
 

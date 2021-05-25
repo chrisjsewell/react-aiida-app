@@ -16,24 +16,26 @@ import TextField from '@material-ui/core/TextField'
 
 import { useQuery } from 'react-query'
 import ReactJson from 'react-json-view'
+import { Link } from 'react-router-dom'
 
 import { AiidaSettingsContext, getNodeStatistics, getNode } from './clients/aiidaClient'
-import { AiidaNodeTree } from './components/nodeTree'
+import { AiidaNodeTree } from './components/nodeList'
 import { useStyles } from './styles'
 import { useLocalStorage } from './hooks'
+import { LocalStorageKeys, PageKeys } from './constants'
 
 export function PageNodeExplorer(): JSX.Element {
   const classes = useStyles()
   const [nodePrefix, setnodePrefix] = useLocalStorage(
-    'aiida-node-explorer-type-prefix',
+    LocalStorageKeys.aiidaNodeXTypePrefix,
     ''
   )
   const [nodeFieldsUUID, setnodeFieldsUUID] = useLocalStorage(
-    'aiida-node-explorer-field-uuid',
+    LocalStorageKeys.aiidaNodeXFieldUUID,
     null as string | null
   )
   const [expandedTabs, setExpandedTabs] = useLocalStorage(
-    'aiida-node-explorer-expanded',
+    LocalStorageKeys.aiidaNodeXExpanded,
     ['intro']
   )
   function changeExpanded(tab: string, expanded: boolean) {
@@ -123,12 +125,13 @@ export function NodeExplorerIntroduction(): JSX.Element {
     <div>
       <p>
         The node explorer allows you to visualise the nodes in your AiiDA profile as a
-        filtered tree. Click on the chevron to reveal its child links.
+        filtered tree. Click on the right-hand <code>^</code> to reveal its child links.
       </p>
       <p>Use the filter section below to select which node type you want to explore.</p>
       <p>
-        You can click on a node's icon to see additional actions, including copying its
-        UUID to the clipboard. You can use this to show all of if its content in the
+        You can click on a node's icon to see additional actions, including bookmarking
+        the node (see <Link to={PageKeys.groups}>Node groups</Link>) and copying its
+        UUID to the clipboard. You can use the UUID to show all of if its content in the
         "Database Fields" section.
       </p>
     </div>
@@ -182,7 +185,7 @@ export function NodeExplorerFilters({
   }
 
   return (
-    <React.Fragment>
+    <>
       <FormControl fullWidth>
         <InputLabel id="node-prefix-select-label">Node Type Prefix</InputLabel>
         <Select
@@ -202,7 +205,7 @@ export function NodeExplorerFilters({
             ))}
         </Select>
       </FormControl>
-    </React.Fragment>
+    </>
   )
 }
 
