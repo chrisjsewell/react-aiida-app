@@ -1,6 +1,8 @@
 import React from 'react'
 
-import { Grid, Paper } from '@material-ui/core'
+import { Avatar, Box, Grid, Paper, Typography, useMediaQuery } from '@material-ui/core'
+// import { blue } from '@material-ui/core/colors'
+import { useTheme } from '@material-ui/core/styles'
 import * as MuiIcons from '@material-ui/icons'
 import Alert from '@material-ui/lab/Alert'
 
@@ -8,17 +10,26 @@ import SyntaxHighlighter from 'react-syntax-highlighter'
 
 import { useStyles } from './styles'
 import { LinkExternal } from './hooks'
+import {
+  AiiDAIcon200,
+  aiidaBlue,
+  aiidaGreen,
+  aiidaOrange,
+  OptimadeIcon,
+  ReactIcon
+} from './icons'
 
 export function PageHome(): JSX.Element {
   const classes = useStyles()
   return (
     <Grid container spacing={2} className={classes.mainGrid}>
-      <Grid item xs={12} sm={12} md={6}>
-        <Paper variant="outlined" className={classes.paper}>
-          <IntroBox />
-        </Paper>
+      <Grid item xs={12} alignItems="center">
+        <Header />
       </Grid>
-      <Grid item xs={12} sm={12} md={6}>
+      <Grid item xs={12}>
+        <Features />
+      </Grid>
+      <Grid item xs={12} sm={12} md={12}>
         <Paper variant="outlined" className={classes.paper}>
           <GettingStartedBox />
         </Paper>
@@ -32,15 +43,121 @@ export function PageHome(): JSX.Element {
   )
 }
 
-export function IntroBox(): JSX.Element {
+function Header(): JSX.Element {
+  const classes = useStyles()
+  const theme = useTheme()
+  const matches = useMediaQuery(theme.breakpoints.down('xs'))
+  return (
+    <>
+      <Grid container alignItems="center" spacing={matches ? 1 : 2}>
+        <Grid item xs={12} sm={4}>
+          <Box className={classes.landingIcon}>
+            <AiiDAIcon200 arcColor={theme.palette.text.primary} />
+          </Box>
+        </Grid>
+        <Grid item xs={12} sm={8}>
+          <Typography
+            variant={matches ? 'h6' : 'h4'}
+            align={matches ? 'center' : 'left'}
+          >
+            A web-based UI for interfacing with AiiDA.
+          </Typography>
+        </Grid>
+      </Grid>
+    </>
+  )
+}
+
+const featuresList = [
+  {
+    name: 'Cached queries',
+    description: 'Fast access to data as you work',
+    icon: <MuiIcons.Cached />,
+    color: aiidaGreen
+  },
+  {
+    name: 'Optimade Integration',
+    description: 'For structure searching and visualisation',
+    icon: <OptimadeIcon width={200} height={200} />,
+    color: '#FFFFFF'
+  },
+  {
+    name: 'Server-less App',
+    description: 'Means quick and inexpensive deployment',
+    icon: <ReactIcon />,
+    color: aiidaOrange
+  },
+  {
+    name: 'Mobile Friendly',
+    description: 'Responsive layout that adapts to any window size',
+    icon: <MuiIcons.MobileFriendly />,
+    color: aiidaBlue
+  },
+  {
+    name: 'Dark Mode',
+    description: 'Customisable theming',
+    icon: <MuiIcons.Brightness4 />,
+    color: aiidaGreen
+  }
+]
+
+function Features(): JSX.Element {
+  return (
+    <Grid container spacing={1} justify="center">
+      {featuresList.map(value => (
+        <FeatureCard {...value} />
+      ))}
+    </Grid>
+  )
+}
+
+function FeatureCard({
+  icon,
+  name,
+  description,
+  color
+}: {
+  icon: JSX.Element
+  name: string
+  description: string
+  color: string
+}): JSX.Element {
+  const classes = useStyles()
+  const theme = useTheme()
+  const matches = useMediaQuery(theme.breakpoints.down('xs'))
+  return (
+    <Grid item xs={12} sm={6} md={4} lg={3}>
+      <Paper variant="outlined" className={classes.featureCard}>
+        <Avatar
+          alt={name}
+          style={{
+            color: theme.palette.getContrastText(color),
+            backgroundColor: color,
+            width: theme.spacing(matches ? 5 : 7),
+            height: theme.spacing(matches ? 5 : 7),
+            marginRight: theme.spacing(2)
+          }}
+        >
+          {icon}
+        </Avatar>
+        <Typography
+          variant="body1"
+          align="left"
+          style={{ marginRight: theme.spacing(1) }}
+        >
+          {name}
+        </Typography>
+        <Typography variant="caption" align="left">
+          {description}
+        </Typography>
+      </Paper>
+    </Grid>
+  )
+}
+
+export function IntroBox2(): JSX.Element {
   return (
     <div>
-      <h2>Introduction</h2>
-      <p>
-        This is a demonstration of the AiiDA Dashboard:
-        <br />A web-based UI for interfacing with AiiDA, that can also act as an
-        extension for JupyterLab.
-      </p>
       <p>
         AiiDA Dashboard uses industry leading libraries, to create a beautiful and
         responsive UI:
