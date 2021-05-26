@@ -1,6 +1,18 @@
 import React from 'react'
 
-import { Grid, Paper } from '@material-ui/core'
+import {
+  Avatar,
+  Box,
+  Grid,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  Paper,
+  Typography,
+  useMediaQuery
+} from '@material-ui/core'
+// import { blue } from '@material-ui/core/colors'
+import { useTheme } from '@material-ui/core/styles'
 import * as MuiIcons from '@material-ui/icons'
 import Alert from '@material-ui/lab/Alert'
 
@@ -8,17 +20,26 @@ import SyntaxHighlighter from 'react-syntax-highlighter'
 
 import { useStyles } from './styles'
 import { LinkExternal } from './hooks'
+import {
+  AiiDAIcon200,
+  aiidaBlue,
+  aiidaGreen,
+  aiidaOrange,
+  OptimadeIcon
+  // ReactIcon
+} from './icons'
 
 export function PageHome(): JSX.Element {
   const classes = useStyles()
   return (
     <Grid container spacing={2} className={classes.mainGrid}>
-      <Grid item xs={12} sm={12} md={6}>
-        <Paper variant="outlined" className={classes.paper}>
-          <IntroBox />
-        </Paper>
+      <Grid item xs={12} alignItems="center">
+        <Header />
       </Grid>
-      <Grid item xs={12} sm={12} md={6}>
+      <Grid item xs={12}>
+        <Features />
+      </Grid>
+      <Grid item xs={12} sm={12} md={12}>
         <Paper variant="outlined" className={classes.paper}>
           <GettingStartedBox />
         </Paper>
@@ -32,58 +53,128 @@ export function PageHome(): JSX.Element {
   )
 }
 
-export function IntroBox(): JSX.Element {
+function Header(): JSX.Element {
+  const classes = useStyles()
+  const theme = useTheme()
+  const matches = useMediaQuery(theme.breakpoints.down('xs'))
   return (
-    <div>
-      <h2>Introduction</h2>
-      <p>
-        This is a demonstration of the AiiDA Dashboard:
-        <br />A web-based UI for interfacing with AiiDA, that can also act as an
-        extension for JupyterLab.
-      </p>
-      <p>
-        AiiDA Dashboard uses industry leading libraries, to create a beautiful and
-        responsive UI:
-      </p>
-      <ul>
-        <li>
-          <LinkExternal href="https://reactjs.org/">React</LinkExternal>: A library for
-          building user interfaces, maintained by Facebook and with users including
-          Whatsapp, Dropbox, Uber and Netflix.
-        </li>
-        <li>
-          <LinkExternal href="https://material-ui.com">Material-UI</LinkExternal>: A
-          React component library that implements{' '}
-          <LinkExternal href="https://material.io/design">
-            Google’s Material Design
-          </LinkExternal>{' '}
-          guidelines.
-        </li>
-        <li>
-          <LinkExternal href="https://react-query.tanstack.com/">
-            react-query
-          </LinkExternal>
-          : A React component for synchronizing server data (from AiiDA) with the UI.
-        </li>
-      </ul>
-      <p>
-        AiiDA Dashboard can be used as a standalone Web UI, or it also provides React
-        components and facilitates wrapping into a JupyterLab{' '}
-        <LinkExternal href="https://jupyterlab.readthedocs.io/en/stable/extension/virtualdom.html">
-          extension widget
-        </LinkExternal>
-        .
-      </p>
-      <p>
-        Alongside work on an{' '}
-        <LinkExternal href="https://github.com/aiidateam/AEP/pull/24">
-          Extended REST API
-        </LinkExternal>
-        , it is hoped that this will offer not just ways to explore your profiles, but
-        also to actively interact them: creating/adding to groups, composing/running
-        workchains, etc.
-      </p>
-    </div>
+    <>
+      <Grid container alignItems="center" spacing={matches ? 1 : 2}>
+        <Grid item xs={12} sm={4}>
+          <Box className={classes.landingIcon}>
+            <AiiDAIcon200 arcColor={theme.palette.text.primary} />
+          </Box>
+        </Grid>
+        <Grid item xs={12} sm={8}>
+          <Typography
+            variant={matches ? 'h6' : 'h4'}
+            align={matches ? 'center' : 'left'}
+          >
+            A web-based UI for interfacing with AiiDA.
+          </Typography>
+        </Grid>
+      </Grid>
+    </>
+  )
+}
+
+const featuresList = [
+  {
+    name: 'Quick Setup',
+    description: 'Start AiiDA REST, connect and go',
+    icon: <MuiIcons.FlashOn />,
+    color: aiidaOrange
+  },
+  {
+    name: 'Access anywhere',
+    description: 'Access AiiDA from any cloud/HPC service',
+    icon: <MuiIcons.CloudOutlined />,
+    color: aiidaGreen
+  },
+  {
+    name: 'Cached queries',
+    description: 'Fast access to data as you work',
+    icon: <MuiIcons.Cached />,
+    color: aiidaBlue
+  },
+  {
+    name: 'Persisted inputs',
+    description: 'Key fields saved over page changes and multiple sessions',
+    icon: <MuiIcons.Bookmarks />,
+    color: aiidaOrange
+  },
+  {
+    name: 'Optimade Integration',
+    description: 'For structure searching and visualisation',
+    icon: <OptimadeIcon width={200} height={200} singleColor="black" />,
+    color: aiidaGreen
+  },
+  {
+    name: 'Mobile Friendly',
+    description: 'Responsive layout that adapts to any window size',
+    icon: <MuiIcons.MobileFriendly />,
+    color: aiidaBlue
+  },
+  {
+    name: 'Dark Mode',
+    description: 'Accessed in the menu bar.',
+    icon: <MuiIcons.Brightness4 />,
+    color: aiidaOrange
+  }
+  // {
+  //   name: 'Server-less App',
+  //   description: 'Means quick and inexpensive deployment',
+  //   icon: <ReactIcon />,
+  //   color: aiidaGreen
+  // }
+]
+
+function Features(): JSX.Element {
+  return (
+    <Grid container spacing={1} justify="center">
+      {featuresList.map(value => (
+        <FeatureCard {...value} />
+      ))}
+    </Grid>
+  )
+}
+
+function FeatureCard({
+  icon,
+  name,
+  description,
+  color
+}: {
+  icon: JSX.Element
+  name: string
+  description: string
+  color: string
+}): JSX.Element {
+  const classes = useStyles()
+  const theme = useTheme()
+  const matches = useMediaQuery(theme.breakpoints.down('xs'))
+  return (
+    <Grid item xs={12} sm={6} md={4} lg={3}>
+      <Paper variant="outlined" className={classes.featureCard}>
+        <ListItem>
+          <ListItemAvatar>
+            <Avatar
+              alt={name}
+              style={{
+                color: theme.palette.getContrastText(color),
+                backgroundColor: color,
+                width: theme.spacing(matches ? 5 : 7),
+                height: theme.spacing(matches ? 5 : 7),
+                marginRight: theme.spacing(2)
+              }}
+            >
+              {icon}
+            </Avatar>
+          </ListItemAvatar>
+          <ListItemText primary={name} secondary={matches ? undefined : description} />
+        </ListItem>
+      </Paper>
+    </Grid>
   )
 }
 
@@ -93,8 +184,8 @@ export function GettingStartedBox(): JSX.Element {
     <div>
       <h2 id="getting-started">Getting Started</h2>
       <p>
-        To use this application, you need to be able to connect to a running AiiDA REST
-        API server.
+        To use this application, you simply need to be able to connect to a running
+        AiiDA REST API server.
       </p>
       <Alert variant="outlined" severity="info">
         <p>
@@ -135,13 +226,14 @@ export function GettingStartedBox(): JSX.Element {
 export function DetailedBox(): JSX.Element {
   return (
     <div>
-      <h2>Project Discussion</h2>
+      <h2>Project Details</h2>
       <p>
-        Source repository:{' '}
+        <b>Source repository:</b>{' '}
         <LinkExternal href="https://github.com/chrisjsewell/react-aiida-app">
           https://github.com/chrisjsewell/react-aiida-app
         </LinkExternal>
       </p>
+      <h3>Project History</h3>
       <p>
         This project is a continuation of{' '}
         <LinkExternal href="https://github.com/chrisjsewell/jlab_aiidatree">
@@ -183,34 +275,48 @@ export function DetailedBox(): JSX.Element {
           framework (e.g. Notebooks)
         </li>
       </ol>
-      <h3 id="about-react">About React</h3>
       <p>
-        React is an industry leading library, for creating beautiful and responsive UIs,
-        maintained by Facebook and with users including Whatsapp, Dropbox, Uber and
-        Netflix. We also utilise other “best-practice” React components:
+        Alongside work on an{' '}
+        <LinkExternal href="https://github.com/aiidateam/AEP/pull/24">
+          Extended REST API
+        </LinkExternal>
+        , it is hoped that this will offer not just ways to explore your profiles, but
+        also to actively interact them: creating/adding to groups, composing/running
+        workchains, etc.
+      </p>
+      <h3 id="about-react">App Technologies</h3>
+      <p>
+        AiiDA Dashboard uses React, an industry leading library, for creating beautiful
+        and responsive UIs, maintained by Facebook and with users including Whatsapp,
+        Dropbox, Uber and Netflix. We also utilise other “best-practice” React
+        components:
       </p>
       <ul>
         <li>
-          <a href="https://material-ui.com">Material-UI</a>: A React component library
-          that implements Google’s{' '}
-          <a href="https://material.io/design">Material Design guidelines</a>
+          <LinkExternal href="https://material-ui.com">Material-UI</LinkExternal>: A
+          React component library that implements Google’s{' '}
+          <LinkExternal href="https://material.io/design">
+            Material Design guidelines
+          </LinkExternal>
         </li>
         <li>
-          <a href="https://react-query.tanstack.com/">react-query</a>: A React component
-          for synchronizing server data (from AiiDA) with the UI.
+          <LinkExternal href="https://react-query.tanstack.com/">
+            react-query
+          </LinkExternal>
+          : A React component for synchronizing server data (from AiiDA) with the UI.
         </li>
       </ul>
       <p>
         React itself is really user-friendly to get started with, even with only a small
         familiarity with HTML and JavaScript, see{' '}
-        <a href="https://reactjs.org/tutorial/tutorial.html">
+        <LinkExternal href="https://reactjs.org/tutorial/tutorial.html">
           https://reactjs.org/tutorial/tutorial.html
-        </a>
+        </LinkExternal>
         . Once learned, it is also incredibly intuitive to generate web elements with,
         using the{' '}
-        <a href="https://reactjs.org/docs/introducing-jsx.html">
+        <LinkExternal href="https://reactjs.org/docs/introducing-jsx.html">
           <code>.jsx</code> file format
-        </a>
+        </LinkExternal>
         . For example a simple React component would look like:
       </p>
       <SyntaxHighlighter language="jsx">
@@ -227,16 +333,20 @@ export function DetailedBox(): JSX.Element {
         This app vs Materials Cloud Explore
       </h3>
       <p>
-        <b>Update:</b> Materials Cloud is in fact now looking to move to React.
+        <b>Update:</b> Materials Cloud is in fact now also looking to move to React.
       </p>
       <p>
         Note, initial features of this app are quite similar to{' '}
-        <a href="https://www.materialscloud.org/explore/connect">
+        <LinkExternal href="https://www.materialscloud.org/explore/connect">
           https://www.materialscloud.org/explore/connect
-        </a>
+        </LinkExternal>
         : using the AiiDA REST API as a backend for visualising its data. However, this
-        is built with <a href="https://angularjs.org/">https://angularjs.org/</a> which,
-        although also well used in industry, has two major drawbacks for our use case:
+        is built with{' '}
+        <LinkExternal href="https://angularjs.org/">
+          https://angularjs.org/
+        </LinkExternal>{' '}
+        which, although also well used in industry, has two major drawbacks for our use
+        case:
       </p>
       <ol type="1">
         <li>You cannot integrate it with JupyterLab (see benefits above)</li>
@@ -245,46 +355,52 @@ export function DetailedBox(): JSX.Element {
           allow us to eventually build an extensible app with “pluggable” extensions.
         </li>
       </ol>
+      <p>
+        Materials Cloud is also more focussed on access to pre-existing data (stored in
+        their archive), whereas this application is focussed on interaction with
+        "in-use" databases.
+      </p>
       <h3 id="this-app-vs-aiidalab">This app vs AiiDALab</h3>
       <p>
-        <a href="https://www.materialscloud.org/work/aiidalab">AiiDALab</a> uses the
-        Jupyter Notebook server to build its frontend, via{' '}
-        <a href="https://ipywidgets.readthedocs.io">ipywidgets</a>, which dynamically
-        generates the HTML/Javascript from python code cells, and appmode/voila which
-        executes the Notebook on page load, then converts the notebook interface to look
-        more like a web app (hiding code cells, etc). Note, despite its name, it does
-        not use JupyterLab per se.
+        <LinkExternal href="https://www.materialscloud.org/work/aiidalab">
+          AiiDALab
+        </LinkExternal>{' '}
+        uses the Jupyter Notebook server to build its frontend, via{' '}
+        <LinkExternal href="https://ipywidgets.readthedocs.io">ipywidgets</LinkExternal>
+        , which dynamically generates the HTML/Javascript from python code cells, and
+        appmode/voila which executes the Notebook on page load, then converts the
+        notebook interface to look more like a web app (hiding code cells, etc). Note,
+        despite its name, it does not use JupyterLab per se.
       </p>
       <p>The benefits of this approach, is that:</p>
       <ol type="1">
         <li>
-          You can code everything in Python/Jupyter Notebooks, which is obviously the
-          background of many working on AiiDA (being a Python package), albeit that, if
-          you want to do anything substantial with these apps you inevitably have to
-          learn some HTML/JavaScript.
+          You can, in theory, code everything in Python/Jupyter Notebooks, the same
+          language which aiida itself is written in (in practice some HTML/JavaScript is
+          required).
         </li>
         <li>You can interface directly with the AiiDA Python API</li>
       </ol>
-      <p>
-        The disadvantage though is that the apps which it creates are substantially
-        limited in the user interfaces (UI) and user experience (UX) they can create.
-      </p>
+      <p>The disadvantage though are:</p>
       <ol type="1">
         <li>
-          On every page load you need to first execute the notebook, then render it,
-          meaning loads times are extremely poor by web standards.
+          AiiDALab is strongly coupled to an aiida python environment, making
+          deployments more complex and costly, compared to the free and unlimited
+          scaling of this apps deployment on Github Pages.
         </li>
         <li>
-          You are restricted by the semantics/layout of the Notebook, i.e. each app has
-          to be a set of separate pages and in each page you have a set of vertically
-          sequential cells.
+          Because the notebooks must first be executed, then rendered, on every page
+          load, page load times are very poor, negatively impacting the user experience.
         </li>
         <li>
-          You are restricted by the semantics/functionality of ipywidgets, by industry
-          standard, a very niche/bespoke tool. In practice, you end up taking a lot of
-          time to learn/create a lot of HTML widgets that have little to no practical
-          reusability, rather than being able to utilise the massive React ecosystem of
-          libraries and components.
+          The user interface is restricted by the semantics/layout of the Notebook,
+          i.e. each app has to be a set of separate pages and in each page you have a
+          set of vertically sequential cells.
+        </li>
+        <li>
+          ipywidgets is a relatively niche/bespoke tool (by industry standard), meaning
+          limited user/developer support and existing packages, in comparison to the
+          massive React ecosystem of libraries and components.
         </li>
       </ol>
     </div>

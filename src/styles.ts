@@ -6,6 +6,21 @@ const drawerWidth = 240
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    landingIcon: {
+      marginLeft: theme.spacing(2),
+      float: 'right',
+      [theme.breakpoints.down('xs')]: {
+        float: 'none',
+        display: 'flex',
+        justifyContent: 'center'
+      }
+    },
+    featureCard: {
+      height: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center'
+    },
     flexGrow: {
       flexGrow: 1
     },

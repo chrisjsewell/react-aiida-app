@@ -277,7 +277,7 @@ function TopBar({
           <MuiIcons.Menu />
         </IconButton>
         <div className={classes.aiidaIcon}>
-          <AiiDAIcon200 width={40} height={40} />
+          <AiiDAIcon200 width={40} height={40} arcColor={theme.palette.text.primary} />
         </div>
         {title}
         <div className={classes.flexGrow} />
