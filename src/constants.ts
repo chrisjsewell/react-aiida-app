@@ -8,6 +8,7 @@ export const PageKeys = {
 }
 
 export const LocalStorageKeys = {
+  darkMode: 'react-aiida-dark-mode',
   restUrlBase: 'react-aiida-rest-url',
   aiidaUUIDbookmarks: 'aiida-uuid-bookmarks',
   aiidaNodeXTypePrefix: 'aiida-node-explorer-type-prefix',

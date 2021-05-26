@@ -91,7 +91,7 @@ export function App({ showDevTools = true }: { showDevTools?: boolean }): JSX.El
   // style hooks
   const classes = useStyles()
 
-  const [darkMode, setDarkMode] = useState(false)
+  const [darkMode, setDarkMode] = useLocalStorage(LocalStorageKeys.darkMode, false)
   const theme = React.useMemo(
     () =>
       createMuiTheme({
