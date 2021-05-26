@@ -263,6 +263,7 @@ function TopBar({
       className={clsx(classes.appBar, {
         [classes.appBarShift]: drawerOpen
       })}
+      style={{ opacity: 0.9 }}
     >
       <Toolbar>
         <IconButton
