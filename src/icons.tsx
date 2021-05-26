@@ -166,10 +166,12 @@ export function GitBranchIcon(): JSX.Element {
 
 export function OptimadeIcon({
   width = 180,
-  height = 180
+  height = 180,
+  singleColor
 }: {
   width?: number
   height?: number
+  singleColor?: string
 }): JSX.Element {
   return (
     <SvgIcon>
@@ -188,124 +190,197 @@ export function OptimadeIcon({
             x2="38"
             y1="14.5"
             x1="27"
-            style={{ stroke: '#9ed700', strokeWidth: 1.14999998 }}
+            style={{
+              stroke: singleColor ? singleColor : '#9ed700',
+              strokeWidth: 1.14999998
+            }}
           />
           <line
             y2="46.052559"
             x2="38"
             y1="33.25"
             x1="37.825317"
-            style={{ stroke: '#00acd9', strokeWidth: 1.14999998 }}
+            style={{
+              stroke: singleColor ? singleColor : '#00acd9',
+              strokeWidth: 1.14999998
+            }}
           />
           <line
             y2="27"
             x2="5"
             y1="33.25"
             x1="16.174683"
-            style={{ stroke: '#7a2dd0', strokeWidth: 1.14999998 }}
+            style={{
+              stroke: singleColor ? singleColor : '#7a2dd0',
+              strokeWidth: 1.14999998
+            }}
           />
           <line
             y2="46.052559"
             x2="38"
             y1="27"
             x1="49"
-            style={{ stroke: '#00acd9', strokeWidth: 1.14999998 }}
+            style={{
+              stroke: singleColor ? singleColor : '#00acd9',
+              strokeWidth: 1.14999998
+            }}
           />
           <line
             y2="46.052559"
             x2="16"
             y1="46.052559"
             x1="38"
-            style={{ stroke: '#e8e8e8', strokeWidth: 2 }}
+            style={{ stroke: singleColor ? singleColor : '#e8e8e8', strokeWidth: 2 }}
           />
           <line
             y2="27"
             x2="5"
             y1="46.052559"
             x1="16"
-            style={{ stroke: '#7a2dd0', strokeWidth: 1.14999998 }}
+            style={{
+              stroke: singleColor ? singleColor : '#7a2dd0',
+              strokeWidth: 1.14999998
+            }}
           />
           <line
             y2="7.9474411"
             x2="16"
             y1="27"
             x1="5"
-            style={{ stroke: '#e8e8e8', strokeWidth: 2 }}
+            style={{ stroke: singleColor ? singleColor : '#e8e8e8', strokeWidth: 2 }}
           />
           <line
             y2="7.9474411"
             x2="38"
             y1="7.9474411"
             x1="16"
-            style={{ stroke: '#9ed700', strokeWidth: 1.14999998 }}
+            style={{
+              stroke: singleColor ? singleColor : '#9ed700',
+              strokeWidth: 1.14999998
+            }}
           />
           <line
             y2="27"
             x2="49"
             y1="7.9474411"
             x1="38"
-            style={{ stroke: '#e8e8e8', strokeWidth: 2 }}
+            style={{ stroke: singleColor ? singleColor : '#e8e8e8', strokeWidth: 2 }}
           />
-          <circle r="3.5" cy="27" cx="49" style={{ fill: '#00acd9' }} />
-          <circle r="3.5" cy="46.052559" cx="38" style={{ fill: '#00acd9' }} />
+          <circle
+            r="3.5"
+            cy="27"
+            cx="49"
+            style={{ fill: singleColor ? singleColor : '#00acd9' }}
+          />
+          <circle
+            r="3.5"
+            cy="46.052559"
+            cx="38"
+            style={{ fill: singleColor ? singleColor : '#00acd9' }}
+          />
           <circle
             id="circle367"
             r="3.5"
             cy="46.052559"
             cx="16"
-            style={{ fill: '#7a2dd0' }}
+            style={{ fill: singleColor ? singleColor : '#7a2dd0' }}
           />
-          <circle r="3.5" cy="27" cx="5" style={{ fill: '#7a2dd0' }} />
-          <circle r="3.5" cy="7.9474411" cx="16" style={{ fill: '#9ed700' }} />
-          <circle r="3.5" cy="7.9474411" cx="38" style={{ fill: '#9ed700' }} />
+          <circle
+            r="3.5"
+            cy="27"
+            cx="5"
+            style={{ fill: singleColor ? singleColor : '#7a2dd0' }}
+          />
+          <circle
+            r="3.5"
+            cy="7.9474411"
+            cx="16"
+            style={{ fill: singleColor ? singleColor : '#9ed700' }}
+          />
+          <circle
+            r="3.5"
+            cy="7.9474411"
+            cx="38"
+            style={{ fill: singleColor ? singleColor : '#9ed700' }}
+          />
           <line
             y2="33.25"
             x2="16.174683"
             y1="39.5"
             x1="27"
-            style={{ stroke: '#ff414d', strokeWidth: 1 }}
+            style={{ stroke: singleColor ? singleColor : '#ff414d', strokeWidth: 1 }}
           />
           <line
             y2="20.75"
             x2="16.174683"
             y1="33.25"
             x1="16.174683"
-            style={{ stroke: '#ff414d', strokeWidth: 1 }}
+            style={{ stroke: singleColor ? singleColor : '#ff414d', strokeWidth: 1 }}
           />
           <line
             y2="14.5"
             x2="27"
             y1="20.75"
             x1="16.174683"
-            style={{ stroke: '#ff414d', strokeWidth: 1 }}
+            style={{ stroke: singleColor ? singleColor : '#ff414d', strokeWidth: 1 }}
           />
           <line
             y2="20.75"
             x2="37.825317"
             y1="14.5"
             x1="27"
-            style={{ stroke: '#ff414d', strokeWidth: 1 }}
+            style={{ stroke: singleColor ? singleColor : '#ff414d', strokeWidth: 1 }}
           />
           <line
             y2="33.25"
             x2="37.825317"
             y1="20.75"
             x1="37.825317"
-            style={{ stroke: '#ff414d', strokeWidth: 1 }}
+            style={{ stroke: singleColor ? singleColor : '#ff414d', strokeWidth: 1 }}
           />
           <line
             y2="39.5"
             x2="27"
             y1="33.25"
             x1="37.825317"
-            style={{ stroke: '#ff414d', strokeWidth: 1 }}
+            style={{ stroke: singleColor ? singleColor : '#ff414d', strokeWidth: 1 }}
           />
-          <circle r="2.5" cy="39.5" cx="27" style={{ fill: '#ff414d' }} />
-          <circle r="2.5" cy="33.25" cx="16.174683" style={{ fill: '#ff414d' }} />
-          <circle r="2.5" cy="20.75" cx="16.174683" style={{ fill: '#ff414d' }} />
-          <circle r="2.5" cy="14.5" cx="27" style={{ fill: '#ff414d' }} />
-          <circle r="2.5" cy="20.75" cx="37.825317" style={{ fill: '#ff414d' }} />
-          <circle r="2.5" cy="33.25" cx="37.825317" style={{ fill: '#ff414d' }} />
+          <circle
+            r="2.5"
+            cy="39.5"
+            cx="27"
+            style={{ fill: singleColor ? singleColor : '#ff414d' }}
+          />
+          <circle
+            r="2.5"
+            cy="33.25"
+            cx="16.174683"
+            style={{ fill: singleColor ? singleColor : '#ff414d' }}
+          />
+          <circle
+            r="2.5"
+            cy="20.75"
+            cx="16.174683"
+            style={{ fill: singleColor ? singleColor : '#ff414d' }}
+          />
+          <circle
+            r="2.5"
+            cy="14.5"
+            cx="27"
+            style={{ fill: singleColor ? singleColor : '#ff414d' }}
+          />
+          <circle
+            r="2.5"
+            cy="20.75"
+            cx="37.825317"
+            style={{ fill: singleColor ? singleColor : '#ff414d' }}
+          />
+          <circle
+            r="2.5"
+            cy="33.25"
+            cx="37.825317"
+            style={{ fill: singleColor ? singleColor : '#ff414d' }}
+          />
         </g>
       </svg>
     </SvgIcon>

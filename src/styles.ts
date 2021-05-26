@@ -16,15 +16,21 @@ export const useStyles = makeStyles((theme: Theme) =>
       }
     },
     featureCard: {
-      borderRadius: theme.spacing(1),
-      padding: theme.spacing(2),
+      height: '100%',
       display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'flex-start',
-      alignItems: 'center',
-      textAlign: 'center',
-      overflow: 'hidden'
+      flexDirection: 'column',
+      justifyContent: 'center'
     },
+    // featureCard: {
+    //   borderRadius: theme.spacing(1),
+    //   padding: theme.spacing(2),
+    //   display: 'flex',
+    //   flexDirection: 'row',
+    //   justifyContent: 'flex-start',
+    //   alignItems: 'center',
+    //   textAlign: 'center',
+    //   overflow: 'hidden'
+    // },
     flexGrow: {
       flexGrow: 1
     },
