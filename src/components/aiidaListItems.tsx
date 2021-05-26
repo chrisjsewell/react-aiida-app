@@ -128,7 +128,9 @@ export function AiidaNodeListItem(props: IAiidaNodeListItemProps): JSX.Element {
   }
 
   let child
+  let LisItemProps = {}
   if (props.child) {
+    LisItemProps = { button: true, onClick: handleChildrenOpen }
     child = (
       <Collapse in={childOpen} timeout="auto" mountOnEnter unmountOnExit>
         <props.child uuid={props.uuid} indent={props.indent + 4} />
@@ -139,8 +141,7 @@ export function AiidaNodeListItem(props: IAiidaNodeListItemProps): JSX.Element {
   return (
     <>
       <ListItem
-        button
-        onClick={handleChildrenOpen}
+        {...LisItemProps}
         style={props.indent ? { paddingLeft: theme.spacing(props.indent) } : {}}
       >
         <ListItemAvatar>
