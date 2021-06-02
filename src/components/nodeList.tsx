@@ -127,7 +127,7 @@ export function AiidaNodeTree({ nodePrefix }: { nodePrefix: string }): JSX.Eleme
         page={page}
         onChange={handlePageChange}
       />
-      {element}
+      <div className={classes.independentScroll}>{element}</div>
     </div>
   )
 }

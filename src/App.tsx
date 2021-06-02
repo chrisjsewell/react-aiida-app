@@ -157,7 +157,7 @@ export function App({ showDevTools = true }: { showDevTools?: boolean }): JSX.El
 
   return (
     <ThemeProvider theme={theme}>
-      <Paper>
+      <Paper style={{ height: '100vh', overflow: 'auto' }}>
         <QueryClientProvider client={queryAiidaClient}>
           <SnackbarProvider
             SnackbarProps={{

@@ -50,7 +50,7 @@ export function PageNodeExplorer(): JSX.Element {
   return (
     <Grid container spacing={2} className={classes.mainGrid} direction="row-reverse">
       <Grid item xs={12} sm={12} md={6}>
-        <Paper variant="outlined" className={classes.paper}>
+        <Paper variant="outlined" className={classes.paper} style={{ height: '100%' }}>
           <Accordion
             defaultExpanded={expandedTabs.includes('intro')}
             onChange={(event: React.ChangeEvent<unknown>, expanded: boolean) => {
@@ -123,7 +123,7 @@ export function PageNodeExplorer(): JSX.Element {
       </Grid>
 
       <Grid item xs={12} sm={12} md={6}>
-        <Paper variant="outlined" className={classes.paper}>
+        <Paper variant="outlined" className={classes.paper} style={{ height: '100%' }}>
           <AiidaNodeTree nodePrefix={nodePrefix} />
         </Paper>
       </Grid>

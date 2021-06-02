@@ -24,6 +24,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     flexGrow: {
       flexGrow: 1
     },
+    independentScroll: { maxHeight: '70vh', overflow: 'auto' },
     appBar: {
       zIndex: theme.zIndex.drawer + 1,
       transition: theme.transitions.create(['width', 'margin'], {
@@ -106,6 +107,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       ...theme.mixins.toolbar
     },
     mainGrid: {
+      minHeight: '80%',
       paddingTop: theme.spacing(1),
       paddingLeft: theme.spacing(10),
       [theme.breakpoints.down('sm')]: {
