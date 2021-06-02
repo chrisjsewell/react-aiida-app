@@ -145,16 +145,8 @@ export function AiidaNodeListItem(props: IAiidaNodeListItemProps): JSX.Element {
         style={props.indent ? { paddingLeft: theme.spacing(props.indent) } : {}}
       >
         <ListItemAvatar>
-          <IconButton onClick={handleMenuOpen}>
-            <Avatar>{icon}</Avatar>
-          </IconButton>
+          <Avatar>{icon}</Avatar>
         </ListItemAvatar>
-        <props.contextMenu
-          open={menuOpen}
-          uuid={props.uuid}
-          anchorEl={anchorEl}
-          handleClose={handleMenuClose}
-        />
         <ListItemText
           className={classes.nodeListItem}
           primary={title}
@@ -165,6 +157,15 @@ export function AiidaNodeListItem(props: IAiidaNodeListItemProps): JSX.Element {
         ) : (
           <MuiIcons.ExpandLess style={{ marginLeft: theme.spacing(1) }} />
         )}
+        <IconButton onClick={handleMenuOpen}>
+          <MuiIcons.MoreVert />
+        </IconButton>
+        <props.contextMenu
+          open={menuOpen}
+          uuid={props.uuid}
+          anchorEl={anchorEl}
+          handleClose={handleMenuClose}
+        />
       </ListItem>
       {child}
       <Divider light />
