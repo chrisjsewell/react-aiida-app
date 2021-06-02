@@ -34,6 +34,7 @@ maintained by Facebook and with users including Whatsapp, Dropbox, Uber and Netf
 We also utilise other "best-practice" React components:
 
 - [Material-UI](https://material-ui.com): A React component library that implements Google’s [Material Design guidelines](https://material.io/design)
+  - Additional guidance was taken from GitHub's design system: [Primer](https://primer.style/)
 - [react-query](https://react-query.tanstack.com/): A React component for synchronizing server data (from AiiDA) with the UI.
 
 React itself is really user-friendly to get started with, even with only a small familiarity with HTML and JavaScript, see <https://reactjs.org/tutorial/tutorial.html>.
