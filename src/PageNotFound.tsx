@@ -1,4 +1,6 @@
-import { Grid } from '@material-ui/core'
+import React from 'react'
+
+import { Grid, Tab, Tabs } from '@material-ui/core'
 import { Link as RouterLink } from 'react-router-dom'
 
 import { Stage, Component, RepresentationDescriptor } from 'react-ngl'
@@ -9,11 +11,36 @@ import './periodicTable.css'
 
 export function NotFoundPage(): JSX.Element {
   const classes = useStyles()
+
+  const [value, setValue] = React.useState('ptable')
+  const handleChange = (event: React.ChangeEvent<any>, newValue: string) => {
+    console.log(value)
+    setValue(newValue)
+  }
   const reprList: RepresentationDescriptor[] = [
     {
       type: 'cartoon'
     }
   ]
+  let tab: JSX.Element = <></>
+  switch (value) {
+    case 'ptable':
+      tab = (
+        <div style={{ maxWidth: '90vw', overflow: 'auto' }}>
+          <PeriodicTable />
+        </div>
+      )
+      break
+    case 'ngl':
+      tab = (
+        <Stage width="400px" height="400px">
+          <Component path="rcsb://4hhb.cif" reprList={reprList} />
+        </Stage>
+      )
+      break
+    default:
+      break
+  }
   return (
     <Grid container spacing={4} className={classes.mainGrid}>
       <Grid item>
@@ -24,14 +51,11 @@ export function NotFoundPage(): JSX.Element {
         <div>
           <p>But, while your here, below is some super secret prototyping:</p>
         </div>
-        <div style={{ maxWidth: '90vw', overflow: 'auto' }}>
-          <PeriodicTable />
-        </div>
-      </Grid>
-      <Grid item>
-        <Stage width="400px" height="400px">
-          <Component path="rcsb://4hhb.cif" reprList={reprList} />
-        </Stage>
+        <Tabs value={value} onChange={handleChange}>
+          <Tab label="Periodic Table" value="ptable" />
+          <Tab label="NGL Viewer" value="ngl" />
+        </Tabs>
+        {tab}
       </Grid>
     </Grid>
   )
