@@ -8,7 +8,6 @@ import {
   AppBar,
   Divider,
   Drawer,
-  Grid,
   IconButton,
   InputAdornment,
   List,
@@ -47,6 +46,7 @@ import { useStyles } from './styles'
 import { AiiDAIcon200, GitBranchIcon, OptimadeIcon } from './icons'
 import { PageKeys, LocalStorageKeys } from './constants'
 import { PageHome } from './PageHome'
+import { NotFoundPage } from './PageNotFound'
 import { PageNodeExplorer } from './PageNodeExplorer'
 import { PageProvenanceGraph } from './PageProvenanceGraph'
 import { PageStructures } from './PageStructures'
@@ -216,7 +216,7 @@ export function App({ showDevTools = true }: { showDevTools?: boolean }): JSX.El
                 <Route path={PageKeys.structures} component={PageStructures} />
                 <Route path={PageKeys.groups} component={PageGroups} />
 
-                <Route path={PageKeys.unknown} component={NotFound} />
+                <Route path={PageKeys.unknown} component={NotFoundPage} />
                 <Redirect to={PageKeys.unknown} />
               </Switch>
             </AiidaSettingsContext.Provider>
@@ -304,20 +304,6 @@ function TopBar({
         />
       </Toolbar>
     </AppBar>
-  )
-}
-
-function NotFound(): JSX.Element {
-  const classes = useStyles()
-  return (
-    <Grid container spacing={4} className={classes.mainGrid}>
-      <Grid item>
-        <div>
-          <h1>404 - Not Found!</h1>
-          <RouterLink to="/">Go Home</RouterLink>
-        </div>
-      </Grid>
-    </Grid>
   )
 }
 

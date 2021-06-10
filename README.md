@@ -216,6 +216,15 @@ $ sudo systemctl start aiidarest
 $ sudo systemctl enable aiidarest
 ```
 
+we also add a cron job, to restart the server every day, since in my experience the server can become unresponsive after running for many days (its still running, but not accepting connections):
+
+```console
+$ sudo crontab -e
+# m h  dom mon dow   command
+59 23 * * * /bin/systemctl restart aiidarest
+$ sudo crontab -l
+```
+
 **NOTE** I had to patch `venv/lib/python3.8/site-packages/aiida/restapi/run_api.py` to add `ssl_context='adhoc'` (see https://blog.miguelgrinberg.com/post/running-your-flask-application-over-https)
 
 **TODO:** How to properly set up this as a production server?
