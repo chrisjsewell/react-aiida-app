@@ -26,7 +26,7 @@ test('landing on a bad page', () => {
     </Router>
   )
 
-  expect(screen.getByText(/404 - Not Found!/i)).toBeInTheDocument()
+  expect(screen.getByText(/404 - Page Not Found!/i)).toBeInTheDocument()
 })
 
 test('landing on explore page', () => {
