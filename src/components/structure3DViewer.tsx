@@ -97,7 +97,7 @@ export function Structure(props: {
                 )
               }
               radius={element2radius(kindMap[site.kind_name])}
-              color={element2colorThree(kindMap[site.kind_name])}
+              color={element2colorThree(kindMap[site.kind_name]) as unknown as string}
             />
           )
         })
@@ -124,7 +124,7 @@ export function Atom(props: {
     <mesh ref={mesh} position={props.position}>
       <sphereBufferGeometry args={[props.radius, 30, 30]} />
       <meshLambertMaterial
-        color={props.color}
+        color={props.color as string}
         transparent={true}
         opacity={props.opacity}
       />

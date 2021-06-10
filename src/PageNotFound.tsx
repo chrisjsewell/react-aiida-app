@@ -3533,7 +3533,7 @@ function PeriodicTable(): JSX.Element {
       {PTableData.elements.map(element => (
         <button
           className="element"
-          onClick={event => console.log(element.name)}
+          onClick={() => console.log(element.name)}
           key={element.name}
           style={{
             gridRow: element.ypos,
